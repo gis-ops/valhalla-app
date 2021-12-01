@@ -1,0 +1,102 @@
+@import '~semantic-ui-css/semantic.css';
+@import '~leaflet/dist/leaflet.css';
+@import '~tachyons/css/tachyons.css';
+@import '~react-semantic-toasts/styles/react-semantic-alert.css';
+@import '~leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css';
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+i.help.grey.icon {
+  color: #9943f5 !important;
+}
+
+.fossgis-logo {
+  background-image: url('images/fossgis.png');
+  height: 31px; /* You must set a specified height */
+  width: 150px;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+}
+
+
+.ui.search input {
+  width: 250px;
+}
+
+.ui.checkbox label,
+.ui.checkbox + label,
+.custom-label {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.ui.toggle.checkbox input:focus:checked ~ .box:before, .ui.toggle.checkbox input:focus:checked ~ label:before {
+  background-color: #9943f5 !important;
+}
+
+.ui.toggle.checkbox input:checked ~ .box:before, .ui.toggle.checkbox input:checked ~ label:before {
+  background-color: #9943f5 !important;
+}
+
+.ui.toggle.checkbox input:focus:checked ~ .box:before, .ui.toggle.checkbox input:focus:checked ~ label:before {
+  background-color: #9943f5 !important;
+}
+
+.extra-marker i {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.results {
+  display: none;
+  position: absolute;
+  top: 23px;
+  left: 420px;
+  -webkit-transform-origin: center top;
+  transform-origin: center top;
+  white-space: normal;
+  text-align: left;
+  text-transform: none;
+  background: #ffffff;
+  margin-top: 0.5em;
+  width: 18em;
+  border-radius: 0.28571429rem;
+  box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12),
+    0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  border: 1px solid #d4d4d5;
+  z-index: 998;
+}
+
+.results .result {
+  cursor: pointer;
+  display: block;
+  overflow: hidden;
+  font-size: 1em;
+  padding: 0.85714286em 1.14285714em;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.33;
+  font-size: 0.95em;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.results > :first-child {
+  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+}
+
+.results .result:hover,
+.results .category .result:hover {
+  background: #f9fafb;
+}
+
+.results .result .title {
+  margin: -0.14285714em 0em 0em;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.85);
+}
