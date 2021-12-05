@@ -166,28 +166,18 @@ class Map extends React.Component {
       layerGroup: excludePolygonsLayer
     })
 
-    this.map.on('pm:create', e => {
-      const excludePolygons = []
-      excludePolygonsLayer.eachLayer(layer => {
-        const lngLatArray = []
-        for (const coords of layer._latlngs[0]) {
-          lngLatArray.push([coords.lng, coords.lat])
-        }
-        excludePolygons.push(lngLatArray)
+    this.map.on('pm:create', ({ layer }) => {
+      layer.on('pm:edit', e => {
+        this.updateExcludePolygons()
       })
-      this.updateExcludePolygons(excludePolygons)
+      layer.on('pm:dragend', e => {
+        this.updateExcludePolygons()
+      })
+      this.updateExcludePolygons()
     })
 
     this.map.on('pm:remove', e => {
-      const excludePolygons = []
-      excludePolygonsLayer.eachLayer(layer => {
-        const lngLatArray = []
-        for (const coords of layer._latlngs[0]) {
-          lngLatArray.push([coords.lng, coords.lat])
-        }
-        excludePolygons.push(lngLatArray)
-      })
-      this.updateExcludePolygons(excludePolygons)
+      this.updateExcludePolygons()
     })
 
     // this.map.on('moveend', () => {
@@ -479,12 +469,20 @@ class Map extends React.Component {
     this.updateIsoPosition(latLng)
   }
 
-  updateExcludePolygons(polygons) {
+  updateExcludePolygons() {
+    const excludePolygons = []
+    excludePolygonsLayer.eachLayer(layer => {
+      const lngLatArray = []
+      for (const coords of layer._latlngs[0]) {
+        lngLatArray.push([coords.lng, coords.lat])
+      }
+      excludePolygons.push(lngLatArray)
+    })
+
     const { dispatch } = this.props
-    console.log(polygons)
 
     const name = 'exclude_polygons'
-    const value = polygons
+    const value = excludePolygons
 
     dispatch(
       updateSettings({
