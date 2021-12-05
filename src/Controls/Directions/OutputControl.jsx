@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Segment, Button } from 'semantic-ui-react'
+import { Segment, Button, Icon } from 'semantic-ui-react'
 
 import { makeRequest } from '../../actions/directionsActions'
 import Summary from './Summary'
@@ -23,7 +23,7 @@ class OutputControl extends React.Component {
 
     // Set the state directly. Use props if necessary.
     this.state = {
-      showResults: true
+      showResults: false
     }
     this.showManeuvers = this.showManeuvers.bind(this)
   }
@@ -58,13 +58,19 @@ class OutputControl extends React.Component {
           <div className={'flex justify-between pb3 pointer'}>
             <Summary provider={VALHALLA_OSM_URL} />
           </div>
-          <Button
-            size="mini"
-            toggle
-            active={this.state.showResults}
-            onClick={this.showManeuvers}>
-            {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
-          </Button>
+          <div className={'flex justify-between'}>
+            <Button
+              size="mini"
+              toggle
+              active={this.state.showResults}
+              onClick={this.showManeuvers}>
+              {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
+            </Button>
+            <div className={'flex'} style={{ alignSelf: 'center' }}>
+              <Icon circular name={'download'} />
+              <div className={'pa1 b f6'}>{'Download'}</div>
+            </div>
+          </div>
 
           {this.state.showResults ? (
             <div className={'flex-column'}>

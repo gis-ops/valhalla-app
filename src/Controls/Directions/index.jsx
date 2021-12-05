@@ -66,20 +66,20 @@ class DirectionsControl extends React.Component {
               <ProfilePicker
                 group={'directions'}
                 profiles={[
+                  'bicycle',
+                  'pedestrian',
                   'car',
                   'truck',
                   'bus',
-                  'pedestrian',
-                  'bicycle',
                   'motor_scooter'
                 ]}
                 loading={loading}
                 popupContent={[
+                  'bicycle',
+                  'pedestrian',
                   'car',
                   'truck',
                   'bus',
-                  'pedestrian',
-                  'bicycle',
                   'motor scooter'
                 ]}
                 activeProfile={profile}

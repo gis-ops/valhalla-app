@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import L from 'leaflet'
+import '@geoman-io/leaflet-geoman-free'
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 import PropTypes from 'prop-types'
 import * as R from 'ramda'
 import ExtraMarkers from './extraMarkers'
@@ -9,6 +11,7 @@ import { Button } from 'semantic-ui-react'
 
 import { fetchReverseGeocode } from 'actions/directionsActions'
 import { fetchReverseGeocodeIso } from '../actions/isochronesActions'
+import { updateSettings } from '../actions/commonActions'
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
 
 const OSMTiles = L.tileLayer(
@@ -32,6 +35,7 @@ const routeMarkersLayer = L.featureGroup()
 const routeLineStringLayer = L.featureGroup()
 const highlightRouteSegmentlayer = L.featureGroup()
 const highlightRouteIndexLayer = L.featureGroup()
+const excludePolygonsLayer = L.featureGroup()
 
 // a leaflet map consumes parameters, I'd say they are quite self-explanatory
 const mapParams = {
@@ -47,6 +51,7 @@ const mapParams = {
     routeLineStringLayer,
     highlightRouteSegmentlayer,
     highlightRouteIndexLayer,
+    excludePolygonsLayer,
     OSMTiles
   ]
 }
@@ -140,6 +145,49 @@ class Map extends React.Component {
 
         popup.update()
       }, 20) //eslint-disable-line
+    })
+
+    // add Leaflet-Geoman controls with some options to the map
+    this.map.pm.addControls({
+      position: 'bottomright',
+      drawCircle: false,
+      drawMarker: false,
+      drawPolyline: false,
+      cutPolygon: false,
+      drawCircleMarker: false,
+      drawRectangle: false,
+      dragMode: true,
+      allowSelfIntersection: false,
+      editPolygon: true,
+      deleteLayer: true
+    })
+
+    this.map.pm.setGlobalOptions({
+      layerGroup: excludePolygonsLayer
+    })
+
+    this.map.on('pm:create', e => {
+      const excludePolygons = []
+      excludePolygonsLayer.eachLayer(layer => {
+        const lngLatArray = []
+        for (const coords of layer._latlngs[0]) {
+          lngLatArray.push([coords.lng, coords.lat])
+        }
+        excludePolygons.push(lngLatArray)
+      })
+      this.updateExcludePolygons(excludePolygons)
+    })
+
+    this.map.on('pm:remove', e => {
+      const excludePolygons = []
+      excludePolygonsLayer.eachLayer(layer => {
+        const lngLatArray = []
+        for (const coords of layer._latlngs[0]) {
+          lngLatArray.push([coords.lng, coords.lat])
+        }
+        excludePolygons.push(lngLatArray)
+      })
+      this.updateExcludePolygons(excludePolygons)
     })
 
     // this.map.on('moveend', () => {
@@ -254,7 +302,8 @@ class Map extends React.Component {
     })
 
     L.marker(coords[idx], {
-      icon: highlightMarker
+      icon: highlightMarker,
+      pmIgnore: true
     }).addTo(highlightRouteIndexLayer)
 
     setTimeout(() => {
@@ -305,7 +354,8 @@ class Map extends React.Component {
       L.polyline(coords.slice(startIndex, endIndex + 1), {
         color: 'yellow',
         weight: 4,
-        opacity: 1
+        opacity: 1,
+        pmIgnore: true
       }).addTo(highlightRouteSegmentlayer)
     } else {
       highlightRouteSegmentlayer.clearLayers()
@@ -332,7 +382,8 @@ class Map extends React.Component {
             color: 'white',
             weight: 2,
             opacity: 1.0,
-            pane: 'isochronesPane'
+            pane: 'isochronesPane',
+            pmIgnore: true
           })
             .bindTooltip(
               this.getIsoTooltip(
@@ -397,12 +448,14 @@ class Map extends React.Component {
       L.polyline(coords, {
         color: '#FFF',
         weight: 9,
-        opacity: 1
+        opacity: 1,
+        pmIgnore: true
       }).addTo(routeLineStringLayer)
       L.polyline(coords, {
         color: routeObjects[VALHALLA_OSM_URL].color,
         weight: 5,
-        opacity: 1
+        opacity: 1,
+        pmIgnore: true
       })
         .addTo(routeLineStringLayer)
         .bindTooltip(this.getRouteToolTip(summary, VALHALLA_OSM_URL), {
@@ -424,6 +477,21 @@ class Map extends React.Component {
     this.map.closePopup()
     const { latLng } = this.state
     this.updateIsoPosition(latLng)
+  }
+
+  updateExcludePolygons(polygons) {
+    const { dispatch } = this.props
+    console.log(polygons)
+
+    const name = 'exclude_polygons'
+    const value = polygons
+
+    dispatch(
+      updateSettings({
+        name,
+        value
+      })
+    )
   }
 
   updateWaypointPosition(object) {
@@ -451,7 +519,8 @@ class Map extends React.Component {
 
         L.marker([address.displaylnglat[1], address.displaylnglat[0]], {
           icon: isoMarker,
-          draggable: true
+          draggable: true,
+          pmIgnore: true
         })
           .addTo(isoCenterLayer)
           .bindTooltip(address.title, { permanent: false })
@@ -481,7 +550,8 @@ class Map extends React.Component {
           L.marker([address.displaylnglat[1], address.displaylnglat[0]], {
             icon: wpMarker,
             draggable: true,
-            index: index
+            index: index,
+            pmIgnore: true
           })
             .addTo(routeMarkersLayer)
             .bindTooltip(address.title, {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { Icon, Checkbox } from 'semantic-ui-react'
+import { Checkbox } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
 class Summary extends React.Component {
@@ -20,31 +20,13 @@ class Summary extends React.Component {
 
   render() {
     const { provider, results } = this.props
-
-    const summary = R.path([provider, 'data', 'trip', 'summary'], results)
-
+    const data = R.path([provider, 'data'], results)
     return (
       <React.Fragment>
-        {summary ? (
+        {'features' in data ? (
           <React.Fragment>
             <div className={'pr2'} style={{ alignSelf: 'center' }}>
-              <span className="b">Directions</span>
-            </div>
-            <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
-              <Icon
-                circular
-                name={'arrows alternate horizontal'}
-                size={'small'}
-              />
-              <div className={'dib v-mid pa1 b f6'}>
-                {summary.length.toFixed(1) + 'km'}
-              </div>
-            </div>
-            <div style={{ alignSelf: 'center', flexGrow: 1 }}>
-              <Icon circular name={'time'} size="small" />
-              <div className={'dib v-mid pa1 b f6'}>
-                {new Date(summary.time * 1000).toISOString().substr(11, 8)}
-              </div>
+              <span className="b">Isochrones</span>
             </div>
             <div style={{ alignSelf: 'center' }}>
               <Checkbox
@@ -57,7 +39,7 @@ class Summary extends React.Component {
             </div>
           </React.Fragment>
         ) : (
-          <div>No route found</div>
+          <div>No isochrones found</div>
         )}
       </React.Fragment>
     )
@@ -65,7 +47,7 @@ class Summary extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { results } = state.directions
+  const { results } = state.isochrones
   return {
     results
   }

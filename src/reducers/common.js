@@ -18,10 +18,11 @@ const initialState = {
     topic: null,
     description: null
   },
-  profile: 'car',
+  profile: 'bicycle',
   settings: {
     maneuver_penalty: 5,
     country_crossing_penalty: 0,
+    country_crossing_cost: 600,
     length: 21.5,
     width: 2.5,
     height: 4,
@@ -29,7 +30,34 @@ const initialState = {
     axle_load: 9,
     hazmat: false,
     use_highways: 1,
-    use_tolls: 1
+    use_tolls: 1,
+    use_ferry: 1,
+    ferry_cost: 300,
+    use_living_streets: 0.5,
+    use_tracks: 0,
+    private_access_penalty: 450,
+    ignore_closures: false,
+    closure_factor: 9,
+    service_penalty: 15,
+    service_factor: 1,
+    exclude_unpaved: 1,
+    shortest: false,
+    exclude_cash_only_tolls: false,
+    bicycle_type: 'Hybrid',
+    cycling_speed: 20,
+    use_roads: 0.5,
+    use_hills: 0.5,
+    avoid_bad_surfaces: 0.25,
+    top_speed: 140,
+    use_primary: 0.5,
+    walking_speed: 5.1,
+    walkway_factor: 1,
+    sidewalk_factor: 1,
+    alley_factor: 2,
+    driveway_factor: 5,
+    step_penalty: 0,
+    max_hiking_difficulty: 1,
+    exclude_polygons: []
   }
 }
 

@@ -60,36 +60,36 @@ export const makeRequest = () => (dispatch, getState) => {
 const fetchValhallaDirections = valhallaRequest => (dispatch, getState) => {
   dispatch(showLoading(true))
 
-  for (const URL of [VALHALLA_OSM_URL]) {
-    axios
-      .get(URL + '/route', {
-        params: valhallaRequest,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(({ data }) => {
-        const geometry = parseDirectionsGeometry(data)
-        data.decodedGeometry = geometry
-        dispatch(registerRouteResponse(URL, data))
-      })
-      .catch(({ response }) => {
-        dispatch(clearRoutes(URL))
-        dispatch(
-          sendMessage({
-            type: 'warning',
-            icon: 'warning',
-            description: `${serverMapping[URL]}: ${response.data.error}`,
-            title: `${response.data.status}`
-          })
-        )
-      })
-      .finally(() => {
-        setTimeout(() => {
-          dispatch(showLoading(false))
-        }, 500)
-      })
-  }
+  axios
+    .get(VALHALLA_OSM_URL + '/route', {
+      params: valhallaRequest,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(({ data }) => {
+      const geometry = parseDirectionsGeometry(data)
+      data.decodedGeometry = geometry
+      dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
+    })
+    .catch(({ response }) => {
+      dispatch(clearRoutes(VALHALLA_OSM_URL))
+      dispatch(
+        sendMessage({
+          type: 'warning',
+          icon: 'warning',
+          description: `${serverMapping[VALHALLA_OSM_URL]}: ${
+            response.data.error
+          }`,
+          title: `${response.data.status}`
+        })
+      )
+    })
+    .finally(() => {
+      setTimeout(() => {
+        dispatch(showLoading(false))
+      }, 500)
+    })
 }
 
 export const registerRouteResponse = (provider, data) => ({

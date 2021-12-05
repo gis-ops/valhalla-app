@@ -11,7 +11,8 @@ import {
   Icon,
   Popup,
   Segment,
-  Accordion
+  Accordion,
+  Dropdown
 } from 'semantic-ui-react'
 import { profile_settings, settings_general } from './settings-options'
 import { updateSettings, doShowSettings } from 'actions/commonActions'
@@ -71,7 +72,9 @@ class SettingsPanel extends React.Component {
     this.handleUpdateSettings = debounce(100, this.handleUpdateSettings)
     this.state = {
       activeIndexProfile: 0,
-      activeIndexGeneral: 0
+      activeIndexGeneral: 0,
+      generalSettings: {},
+      extraSettings: {}
     }
   }
 
@@ -85,18 +88,12 @@ class SettingsPanel extends React.Component {
     )
   }
 
-  handleAccordion = (e, { index, type }) => {
-    const activeIndex = this.state[type]
-    const newIndex = activeIndex === index ? -1 : index
-
-    this.setState({ [type]: newIndex })
-  }
-
   // the react slider will update the settings twice
   // we however only want this component to update if the
   // settings really change, therefor deep check with ramda
   shouldComponentUpdate(nextProps, nextState) {
     const { settings, profile, showSettings } = this.props
+
     if (!R.equals(settings, nextProps.settings)) {
       return true
     }
@@ -114,7 +111,18 @@ class SettingsPanel extends React.Component {
   // we really only want to call the valhalla backend if settings have changed
   // therefor using rambda for deep object comparison
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { dispatch, settings, activeTab } = this.props
+    const { dispatch, settings, activeTab, profile } = this.props
+
+    if (!R.equals(profile, nextProps.profile)) {
+      const { generalSettings } = this.state
+      Object.keys(generalSettings).forEach(v => (generalSettings[v] = false))
+
+      const { extraSettings } = this.state
+      Object.keys(extraSettings).forEach(v => (extraSettings[v] = false))
+
+      this.setState({ generalSettings, extraSettings })
+    }
+
     if (!R.equals(settings, nextProps.settings)) {
       activeTab == 0
         ? dispatch(makeRequest())
@@ -122,11 +130,30 @@ class SettingsPanel extends React.Component {
     }
   }
 
+  handleShowSettings = (settingsType, i) => {
+    const settings = { ...this.state[settingsType] }
+    settings[i] = !settings[i]
+    this.setState({ [settingsType]: settings })
+  }
+
+  handleBikeTypeChange = (e, data) => {
+    const { value, name } = data
+    const { dispatch } = this.props
+    dispatch(
+      updateSettings({
+        name,
+        value
+      })
+    )
+  }
+
   render() {
     const { dispatch, profile, settings, showSettings } = this.props
 
-    const no_profile_settings = profile_settings[profile].numeric.length === 0
+    const no_profile_settings = profile_settings[profile].boolean.length === 0
     const width = no_profile_settings ? 170 : 340
+
+    console.log(settings)
 
     return (
       <React.Fragment>
@@ -144,49 +171,86 @@ class SettingsPanel extends React.Component {
                 {!no_profile_settings && (
                   <Grid.Column width={8}>
                     <Form size={'small'}>
-                      <Header as="h4">Profile Settings</Header>
-                      <Accordion>
-                        {profile_settings[profile].numeric.map(
-                          (option, key) => (
-                            <Fragment key={key}>
-                              <Accordion.Title
-                                index={key}
-                                type="activeIndexProfile"
-                                active={key === this.state.activeIndexProfile}
-                                content={option.name}
-                                onClick={this.handleAccordion}
-                              />
-                              <Accordion.Content
-                                active={key === this.state.activeIndexProfile}
-                                content={
-                                  <CustomSlider
-                                    key={key}
-                                    option={option}
-                                    dispatch={dispatch}
-                                    settings={settings}
-                                    handleUpdateSettings={
-                                      this.handleUpdateSettings
-                                    }
-                                  />
+                      <Header as="h4">Extra Settings</Header>
+                      {profile_settings[profile].numeric.map((option, key) => (
+                        <Fragment key={key}>
+                          <div className="flex pointer">
+                            <Icon
+                              name={
+                                this.state.extraSettings[key]
+                                  ? 'caret down'
+                                  : 'caret right'
+                              }
+                            />
+                            <span
+                              className="b f6"
+                              onClick={() =>
+                                this.handleShowSettings('extraSettings', key)
+                              }>
+                              {option.name}
+                            </span>
+                            <div style={{ marginLeft: 'auto' }}>
+                              <Popup
+                                content={option.description}
+                                size={'tiny'}
+                                trigger={
+                                  <Icon color="grey" name="help circle" />
                                 }
                               />
-                            </Fragment>
-                          )
-                        )}
-                      </Accordion>
+                            </div>
+                          </div>
+                          {this.state.extraSettings[key] ? (
+                            <CustomSlider
+                              key={key}
+                              option={option}
+                              dispatch={dispatch}
+                              settings={settings}
+                              handleUpdateSettings={this.handleUpdateSettings}
+                            />
+                          ) : null}
+                        </Fragment>
+                      ))}
                       <Divider />
                       <Fragment>
                         {profile_settings[profile].boolean.map(
                           (option, key) => {
                             return (
-                              <div
-                                key={key}
-                                className="flex flex-row justify-start">
+                              <div key={key} className="flex">
                                 <Checkbox
                                   option={option}
                                   dispatch={dispatch}
                                   settings={settings}
                                 />
+                                <div style={{ marginLeft: 'auto' }}>
+                                  <Popup
+                                    content={option.description}
+                                    size={'tiny'}
+                                    trigger={
+                                      <Icon color="grey" name="help circle" />
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            )
+                          }
+                        )}
+                      </Fragment>
+                      <Divider />
+                      <Fragment>
+                        {profile_settings[profile].enum.map((option, key) => {
+                          return (
+                            <div key={key} className="flex">
+                              <Dropdown
+                                placeholder="Select Bicycle Type"
+                                fluid
+                                onChange={this.handleBikeTypeChange}
+                                value={settings.bicycle_type}
+                                selection
+                                name={'bicycle_type'}
+                                options={option.param}
+                              />
+
+                              <div style={{ marginLeft: 'auto' }}>
                                 <Popup
                                   content={option.description}
                                   size={'tiny'}
@@ -195,9 +259,9 @@ class SettingsPanel extends React.Component {
                                   }
                                 />
                               </div>
-                            )
-                          }
-                        )}
+                            </div>
+                          )
+                        })}
                       </Fragment>
                     </Form>
                   </Grid.Column>
@@ -213,45 +277,62 @@ class SettingsPanel extends React.Component {
                       />
                     </div>
                     <Accordion>
-                      {settings_general.numeric.map((option, key) => (
+                      {settings_general[profile].numeric.map((option, key) => (
                         <Fragment key={key}>
-                          <Accordion.Title
-                            index={key}
-                            type="activeIndexGeneral"
-                            active={key === this.state.activeIndexGeneral}
-                            content={option.name}
-                            onClick={this.handleAccordion}
-                          />
-                          <Accordion.Content
-                            active={key === this.state.activeIndexGeneral}
-                            content={
-                              <CustomSlider
-                                key={key}
-                                option={option}
-                                dispatch={dispatch}
-                                settings={settings}
-                                handleUpdateSettings={this.handleUpdateSettings}
+                          <div className="flex pointer">
+                            <Icon
+                              name={
+                                this.state.generalSettings[key]
+                                  ? 'caret down'
+                                  : 'caret right'
+                              }
+                            />
+                            <span
+                              className="b f6"
+                              onClick={() =>
+                                this.handleShowSettings('generalSettings', key)
+                              }>
+                              {option.name}
+                            </span>
+                            <div style={{ marginLeft: 'auto' }}>
+                              <Popup
+                                content={option.description}
+                                size={'tiny'}
+                                trigger={
+                                  <Icon color="grey" name="help circle" />
+                                }
                               />
-                            }
-                          />
+                            </div>
+                          </div>
+                          {this.state.generalSettings[key] ? (
+                            <CustomSlider
+                              key={key}
+                              option={option}
+                              dispatch={dispatch}
+                              settings={settings}
+                              handleUpdateSettings={this.handleUpdateSettings}
+                            />
+                          ) : null}
                         </Fragment>
                       ))}
                     </Accordion>
                     <Divider />
-                    {settings_general.boolean.map((option, key) => {
+                    {settings_general[profile].boolean.map((option, key) => {
                       return (
-                        <div key={key} className="flex flex-row justify-start">
+                        <div key={key} className="flex">
                           <Checkbox
                             key={key}
                             option={option}
                             dispatch={dispatch}
                             settings={settings}
                           />
-                          <Popup
-                            content={option.description}
-                            size={'tiny'}
-                            trigger={<Icon color="grey" name="help circle" />}
-                          />
+                          <div style={{ marginLeft: 'auto' }}>
+                            <Popup
+                              content={option.description}
+                              size={'tiny'}
+                              trigger={<Icon color="grey" name="help circle" />}
+                            />
+                          </div>
                         </div>
                       )
                     })}

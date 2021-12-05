@@ -26,11 +26,12 @@ export const buildDirectionsRequest = ({
       costing_options: {
         [profile]: { ...settings }
       },
+      exclude_polygons: settings.exclude_polygons,
       locations: makeLocations(activeWaypoints),
       directions_options: {
         units: 'kilometers'
       },
-      id: 'gis-ops-valhalla-tomtom-parser-directions'
+      id: 'valhalla-fossgiss-directions'
     }
   }
   return valhallaRequest
@@ -64,7 +65,7 @@ export const buildIsochronesRequest = ({
       directions_options: {
         units: 'kilometers'
       },
-      id: 'gis-ops-valhalla-tomtom-parser-isochrones'
+      id: 'valhalla-fossgis-isochrones'
     }
   }
   return valhallaRequest

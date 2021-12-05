@@ -10,7 +10,7 @@ const CustomSlider = props => {
   const handleChange = (e, { value }) => {
     handleUpdateSettings({
       name: option.param,
-      value: parseInt(value)
+      value: parseFloat(value)
     })
   }
 
@@ -22,7 +22,7 @@ const CustomSlider = props => {
     onChange: value => {
       handleUpdateSettings({
         name: option.param,
-        value: parseInt(value)
+        value: parseFloat(value)
       })
     }
   }
