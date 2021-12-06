@@ -242,7 +242,13 @@ const excludeUnpaved = {
   name: 'Exclude Unpaved',
   description:
     'This value indicates the whether or not the path may include unpaved roads. If exclude_unpaved is set to 1 it is allowed to start and end with unpaved roads, but is not allowed to have them in the middle of the route path, otherwise they are allowed.',
-  param: 'exclude_unpaved'
+  param: 'exclude_unpaved',
+  unit: 'Yes/No',
+  settings: {
+    min: 0,
+    max: 1,
+    step: 1
+  }
 }
 
 const shortest = {
@@ -256,7 +262,7 @@ const excludeCashOnlyTolls = {
   name: 'Exclude Cash Only Tolls',
   description:
     'A boolean value which indicates the desire to avoid routes with cash-only tolls.',
-  param: 'exclude_cash_only_tolls '
+  param: 'exclude_cash_only_tolls'
 }
 
 const bicycleType = {
@@ -266,7 +272,8 @@ const bicycleType = {
   Hybrid or City: a bicycle made mostly for city riding or casual riding on roads and paths with good surfaces.
   Cross: a cyclo-cross bicycle, which is similar to a road bicycle but with wider tires suitable to rougher surfaces.
   Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.`,
-  param: [
+  param: 'bicycle_type',
+  enums: [
     {
       key: 'Hybrid',
       text: 'Hybrid',
@@ -546,9 +553,11 @@ export const settings_general = {
       useFerry,
       ferryCost,
       useLivingStreets,
-      useTracks
+      useTracks,
+      excludeUnpaved
     ],
-    boolean: [ignoreClosures, excludeUnpaved, excludeCashOnlyTolls]
+    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    enum: []
   },
   car: {
     numeric: [
@@ -560,9 +569,11 @@ export const settings_general = {
       useFerry,
       ferryCost,
       useLivingStreets,
-      useTracks
+      useTracks,
+      excludeUnpaved
     ],
-    boolean: [ignoreClosures, excludeUnpaved, excludeCashOnlyTolls]
+    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    enum: []
   },
   bus: {
     numeric: [
@@ -573,17 +584,21 @@ export const settings_general = {
       useTollways,
       useFerry,
       ferryCost,
-      useTracks
+      useTracks,
+      excludeUnpaved
     ],
-    boolean: [ignoreClosures, excludeUnpaved, excludeCashOnlyTolls]
+    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    enum: []
   },
   pedestrian: {
     numeric: [useFerry, servicePenalty, serviceFactor],
-    boolean: []
+    boolean: [],
+    enum: []
   },
   motor_scooter: {
     numeric: [useFerry, useTracks],
-    boolean: []
+    boolean: [],
+    enum: []
   },
   bicycle: {
     numeric: [
@@ -595,6 +610,7 @@ export const settings_general = {
       servicePenalty,
       serviceFactor
     ],
-    boolean: []
+    boolean: [],
+    enum: []
   }
 }

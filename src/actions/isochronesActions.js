@@ -15,7 +15,11 @@ import {
 } from '../utils/nominatim'
 import { VALHALLA_OSM_URL, buildIsochronesRequest } from '../utils/valhalla'
 
-import { sendMessage, showLoading } from './commonActions'
+import {
+  sendMessage,
+  showLoading,
+  filterProfileSettings
+} from './commonActions'
 import { calcArea } from '../utils/geom'
 
 const serverMapping = {
@@ -24,7 +28,13 @@ const serverMapping = {
 
 export const makeIsochronesRequest = () => (dispatch, getState) => {
   const { geocodeResults, maxRange, interval } = getState().isochrones
-  const { settings, profile } = getState().common
+  const { profile } = getState().common
+  let { settings } = getState().common
+
+  settings = filterProfileSettings(profile, settings)
+
+  console.log(settings)
+
   // if center is selected
   let center = undefined
   if (geocodeResults.length > 0) {

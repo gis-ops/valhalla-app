@@ -12,10 +12,16 @@ import {
   Popup,
   Segment,
   Accordion,
-  Dropdown
+  Dropdown,
+  Button
 } from 'semantic-ui-react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { profile_settings, settings_general } from './settings-options'
-import { updateSettings, doShowSettings } from 'actions/commonActions'
+import {
+  updateSettings,
+  doShowSettings,
+  filterProfileSettings
+} from 'actions/commonActions'
 import CustomSlider from '../components/CustomSlider'
 import { makeRequest } from 'actions/directionsActions'
 import { makeIsochronesRequest } from 'actions/isochronesActions'
@@ -24,10 +30,7 @@ const Checkbox = props => {
   const { settings, option, dispatch } = props
 
   const handleChange = (e, { checked }) => {
-    let value = checked ? 1.0 : 0.0
-    if (option.param === 'hazmat') {
-      value = checked
-    }
+    const value = checked ? true : false
     dispatch(
       updateSettings({
         name: option.param,
@@ -42,7 +45,6 @@ const Checkbox = props => {
         width={10}
         label={option.name}
         checked={settings[option.param]}
-        placeholder="Enter Value"
         onChange={handleChange}
       />
     </Fragment>
@@ -74,7 +76,8 @@ class SettingsPanel extends React.Component {
       activeIndexProfile: 0,
       activeIndexGeneral: 0,
       generalSettings: {},
-      extraSettings: {}
+      extraSettings: {},
+      copied: false
     }
   }
 
@@ -147,13 +150,15 @@ class SettingsPanel extends React.Component {
     )
   }
 
+  extractSettings = (profile, settings) => {
+    return JSON.stringify(filterProfileSettings(profile, settings))
+  }
+
   render() {
     const { dispatch, profile, settings, showSettings } = this.props
 
     const no_profile_settings = profile_settings[profile].boolean.length === 0
     const width = no_profile_settings ? 170 : 340
-
-    console.log(settings)
 
     return (
       <React.Fragment>
@@ -175,20 +180,19 @@ class SettingsPanel extends React.Component {
                       {profile_settings[profile].numeric.map((option, key) => (
                         <Fragment key={key}>
                           <div className="flex pointer">
-                            <Icon
-                              name={
-                                this.state.extraSettings[key]
-                                  ? 'caret down'
-                                  : 'caret right'
-                              }
-                            />
-                            <span
-                              className="b f6"
+                            <div
                               onClick={() =>
                                 this.handleShowSettings('extraSettings', key)
                               }>
-                              {option.name}
-                            </span>
+                              <Icon
+                                name={
+                                  this.state.extraSettings[key]
+                                    ? 'caret down'
+                                    : 'caret right'
+                                }
+                              />
+                              <span className="b f6">{option.name}</span>
+                            </div>
                             <div style={{ marginLeft: 'auto' }}>
                               <Popup
                                 content={option.description}
@@ -247,7 +251,7 @@ class SettingsPanel extends React.Component {
                                 value={settings.bicycle_type}
                                 selection
                                 name={'bicycle_type'}
-                                options={option.param}
+                                options={option.enums}
                               />
 
                               <div style={{ marginLeft: 'auto' }}>
@@ -280,20 +284,19 @@ class SettingsPanel extends React.Component {
                       {settings_general[profile].numeric.map((option, key) => (
                         <Fragment key={key}>
                           <div className="flex pointer">
-                            <Icon
-                              name={
-                                this.state.generalSettings[key]
-                                  ? 'caret down'
-                                  : 'caret right'
-                              }
-                            />
-                            <span
-                              className="b f6"
+                            <div
                               onClick={() =>
                                 this.handleShowSettings('generalSettings', key)
                               }>
-                              {option.name}
-                            </span>
+                              <Icon
+                                name={
+                                  this.state.generalSettings[key]
+                                    ? 'caret down'
+                                    : 'caret right'
+                                }
+                              />
+                              <span className="b f6">{option.name}</span>
+                            </div>
                             <div style={{ marginLeft: 'auto' }}>
                               <Popup
                                 content={option.description}
@@ -337,6 +340,22 @@ class SettingsPanel extends React.Component {
                       )
                     })}
                   </Form>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={12}>
+                  <CopyToClipboard
+                    text={this.extractSettings(profile, settings)}
+                    onCopy={() => this.setState({ copied: true })}>
+                    <Button
+                      size="tiny"
+                      icon
+                      color={this.state.copied ? 'green' : ''}
+                      labelPosition="left">
+                      <Icon name="download" />
+                      Copy Settings to Clipboard
+                    </Button>
+                  </CopyToClipboard>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

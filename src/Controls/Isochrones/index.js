@@ -20,8 +20,9 @@ class IsochronesControl extends React.Component {
   }
 
   handleUpdateProfile = (event, data) => {
+
     const { dispatch } = this.props
-    dispatch(updateProfile({ profile: data.content }))
+    dispatch(updateProfile({ profile: data.valhalla_profile }))
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {

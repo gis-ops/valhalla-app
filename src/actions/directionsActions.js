@@ -25,7 +25,11 @@ import {
   parseDirectionsGeometry
 } from 'utils/valhalla'
 
-import { sendMessage, showLoading } from './commonActions'
+import {
+  sendMessage,
+  showLoading,
+  filterProfileSettings
+} from './commonActions'
 
 const serverMapping = {
   [VALHALLA_OSM_URL]: 'OSM'
@@ -33,7 +37,8 @@ const serverMapping = {
 
 export const makeRequest = () => (dispatch, getState) => {
   const { waypoints } = getState().directions
-  const { settings, profile } = getState().common
+  const { profile } = getState().common
+  let { settings } = getState().common
   // if 2 results are selected
   const activeWaypoints = []
 
@@ -48,6 +53,10 @@ export const makeRequest = () => (dispatch, getState) => {
     }
   }
   if (activeWaypoints.length >= 2) {
+    settings = filterProfileSettings(profile, settings)
+
+    console.log(settings)
+
     const valhallaRequest = buildDirectionsRequest({
       profile,
       activeWaypoints,

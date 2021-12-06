@@ -31,7 +31,7 @@ class OutputControl extends React.Component {
   }
 
   render() {
-    const { profile, successful } = this.props
+    const { successful } = this.props
 
     return (
       <Segment
