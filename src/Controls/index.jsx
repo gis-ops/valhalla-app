@@ -6,7 +6,7 @@ import DirectionsControl from './Directions'
 import IsochronesControl from './Isochrones'
 import DirectionOutputControl from './Directions/OutputControl'
 import IsochronesOutputControl from './Isochrones/OutputControl'
-import { Message, Segment, Tab } from 'semantic-ui-react'
+import { Segment, Tab } from 'semantic-ui-react'
 import { updateTab } from 'actions/commonActions'
 
 const controlStyle = {
@@ -30,6 +30,16 @@ class MainControl extends React.Component {
     visible: true
   }
 
+  componentDidMount = () => {
+    toast({
+      type: 'success',
+      icon: 'heart',
+      title: 'Welcome to Valhalla!',
+      description: 'Global Routing Service - sponsored by FOSSGIS e.V.',
+      time: 5000
+    })
+  }
+
   componentDidUpdate = prevProps => {
     const { message } = this.props
 
@@ -42,10 +52,6 @@ class MainControl extends React.Component {
         time: 5000
       })
     }
-  }
-
-  handleDismiss = () => {
-    this.setState({ visible: false })
   }
 
   handleTabChange = (event, data) => {
@@ -92,32 +98,6 @@ class MainControl extends React.Component {
         </Segment>
         <DirectionOutputControl />
         <IsochronesOutputControl />
-        {window._env_.WELCOME_MSG != 'false' && this.state.visible && (
-          <Segment basic>
-            <Message success onDismiss={this.handleDismiss}>
-              <Message.Header>
-                Global Valhalla Routing Service - sponsored by FOSSGIS e.V.
-              </Message.Header>
-              <p>
-                This web application provides means to compute routes and
-                isochrones using{' '}
-                <a
-                  href="https://github.com/valhalla/valhalla"
-                  rel="noopener noreferrer"
-                  target="_blank">
-                  Valhalla
-                </a>{' '}
-                consuming{' '}
-                <a
-                  href="https://openstreetmap.org"
-                  rel="noopener noreferrer"
-                  target="_blank">
-                  OpenStreetMap data.
-                </a>{' '}
-              </p>
-            </Message>
-          </Segment>
-        )}
         <SemanticToastContainer position="bottom-center" />
       </div>
     )
