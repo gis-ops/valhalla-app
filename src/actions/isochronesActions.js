@@ -33,7 +33,7 @@ export const makeIsochronesRequest = () => (dispatch, getState) => {
 
   settings = filterProfileSettings(profile, settings)
 
-  console.log(settings)
+  // console.log(settings)
 
   // if center is selected
   let center = undefined
@@ -46,7 +46,7 @@ export const makeIsochronesRequest = () => (dispatch, getState) => {
     }
   }
 
-  if (center != undefined) {
+  if (center !== undefined) {
     const valhallaRequest = buildIsochronesRequest({
       profile,
       center,

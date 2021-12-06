@@ -30,7 +30,7 @@
   "scripts": {
     "dev": "chmod +x env.sh && ./env.sh https://valhalla1.openstreetmap.de && mv env-config.js ./public/ && react-scripts start",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "chmod +x env.sh && ./env.sh https://valhalla1.openstreetmap.de && mv env-config.js ./public/ && react-scripts build",
     "test": "react-scripts test",
     "test:all": "yarn test:other && yarn test:js",
     "predeploy": "react-scripts build",
