@@ -27,7 +27,7 @@ class MainControl extends React.Component {
   }
 
   state = {
-    visible: true
+    activeIndex: 0
   }
 
   componentDidMount = () => {
@@ -38,6 +38,15 @@ class MainControl extends React.Component {
       description: 'Global Routing Service - sponsored by FOSSGIS e.V.',
       time: 5000
     })
+
+    if (
+      window.location.pathname === '/' ||
+      window.location.pathname === '/directions'
+    ) {
+      this.setState({ activeIndex: 0 })
+    } else if (window.location.pathname === '/isochrones') {
+      this.setState({ activeIndex: 1 })
+    }
   }
 
   componentDidUpdate = prevProps => {
@@ -57,6 +66,12 @@ class MainControl extends React.Component {
   handleTabChange = (event, data) => {
     const { dispatch } = this.props
     const activeTab = data.activeIndex
+
+    if (activeTab == 0) {
+      window.location.pathname = '/directions'
+    } else {
+      window.location.pathname = '/isochrones'
+    }
 
     dispatch(updateTab({ activeTab }))
   }
@@ -81,8 +96,9 @@ class MainControl extends React.Component {
       }
     ]
 
-    const DemoTabs = () => (
+    const ServiceTabs = () => (
       <Tab
+        activeIndex={this.state.activeIndex}
         onTabChange={this.handleTabChange}
         menu={{ pointing: true }}
         panes={appPanes}
@@ -93,7 +109,7 @@ class MainControl extends React.Component {
       <div style={controlStyle}>
         <Segment basic style={{ paddingBottom: 0 }}>
           <div>
-            <DemoTabs />
+            <ServiceTabs />
           </div>
         </Segment>
         <DirectionOutputControl />
