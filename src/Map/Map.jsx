@@ -128,6 +128,18 @@ class Map extends React.Component {
 
     this.map.addControl(brand)
 
+    const valhallaBrand = L.control({
+      position: 'bottomright'
+    })
+    valhallaBrand.onAdd = map => {
+      const div = L.DomUtil.create('div', 'brand')
+      div.innerHTML =
+        '<a href="https://github.com/valhalla/valhalla" target="_blank"><div class="valhalla-logo"></div></a>'
+      return div
+    }
+
+    this.map.addControl(valhallaBrand)
+
     const popup = L.popup({ className: 'add-job' })
 
     this.map.on('contextmenu', event => {
@@ -149,7 +161,7 @@ class Map extends React.Component {
 
     // add Leaflet-Geoman controls with some options to the map
     this.map.pm.addControls({
-      position: 'bottomright',
+      position: 'topright',
       drawCircle: false,
       drawMarker: false,
       drawPolyline: false,

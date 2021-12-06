@@ -15,10 +15,19 @@ i.help.grey.icon {
 
 .fossgis-logo {
   background-image: url('images/fossgis.png');
-  height: 31px; /* You must set a specified height */
+  height: 31px;
   width: 150px;
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.valhalla-logo {
+  background-image: url('images/valhalla.png');
+  height: 100px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 
