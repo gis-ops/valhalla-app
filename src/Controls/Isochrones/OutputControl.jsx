@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Segment } from 'semantic-ui-react'
-import Summary from './Summary'
+import { Segment, Divider } from 'semantic-ui-react'
 
-import { makeIsochronesRequest } from '../../actions/isochronesActions'
+import Summary from './Summary'
+import { makeIsochronesRequest } from 'actions/isochronesActions'
 import ContoursInformation from './ContoursInformation'
 import { VALHALLA_OSM_URL } from 'utils/valhalla'
 
@@ -37,9 +37,10 @@ class OutputControl extends React.Component {
       <Segment
         style={{ margin: '0 1rem', display: successful ? 'block' : 'none' }}>
         <div className={'flex-column'}>
-          <div className={'flex justify-between pb3 pointer'}>
+          <div className={'flex justify-between pointer'}>
             <Summary provider={VALHALLA_OSM_URL} />
           </div>
+          <Divider />
           <ContoursInformation provider={VALHALLA_OSM_URL} />
         </div>
       </Segment>

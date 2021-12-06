@@ -1,6 +1,6 @@
 import { decode } from './polyline'
 
-export const VALHALLA_OSM_URL = window._env_.VALHALLA_OSM
+export const VALHALLA_OSM_URL = 'https://valhalla1.openstreetmap.de'
 
 export const buildDirectionsRequest = ({
   profile,
@@ -23,7 +23,7 @@ export const buildDirectionsRequest = ({
       directions_options: {
         units: 'kilometers'
       },
-      id: 'valhalla-fossgiss-directions'
+      id: 'valhalla_directions'
     }
   }
 }
@@ -60,7 +60,7 @@ export const buildIsochronesRequest = ({
       directions_options: {
         units: 'kilometers'
       },
-      id: 'valhalla-fossgis-isochrones'
+      id: `valhalla_isochrones_lonlat_${center.displaylnglat.toString()}_range_${maxRange.toString()}_interval_${interval.toString()}`
     }
   }
 }

@@ -31,21 +31,19 @@ class ContoursInformation extends React.Component {
               <div className={'flex justify-between pb2'} key={key}>
                 <div
                   className={'flex'}
-                  style={{ alignSelf: 'center', flexBasis: '100px' }}>
+                  style={{ alignSelf: 'center', flexBasis: '120px' }}>
                   <Icon circular name={'time'} />
                   <div className={'pr2 f6 b pt1 pb1'}>
                     {feature.properties.contour + ' minutes'}
                   </div>
                 </div>
-                <div className={'flex'} style={{ alignSelf: 'center' }}>
+                <div
+                  className={'flex'}
+                  style={{ alignSelf: 'center', marginLeft: 'auto' }}>
                   <Icon circular name={'move'} />
                   <div className={'pa1 b f6'}>
                     {feature.properties.area.toFixed(0) + ' km²'}
                   </div>
-                </div>
-                <div className={'flex'} style={{ alignSelf: 'center' }}>
-                  <Icon circular name={'download'} />
-                  <div className={'pa1 b f6'}>{'Download'}</div>
                 </div>
               </div>
             )

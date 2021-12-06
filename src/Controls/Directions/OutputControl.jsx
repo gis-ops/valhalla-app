@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Segment, Button, Icon } from 'semantic-ui-react'
+import L from 'leaflet'
 
-import { makeRequest } from '../../actions/directionsActions'
+import { makeRequest } from 'actions/directionsActions'
+import { downloadFile } from 'actions/commonActions'
 import Summary from './Summary'
 import Maneuvers from './Maneuvers'
 import { VALHALLA_OSM_URL } from 'utils/valhalla'
@@ -18,10 +20,8 @@ class OutputControl extends React.Component {
   }
 
   constructor(props) {
-    // Required step: always call the parent class' constructor
     super(props)
 
-    // Set the state directly. Use props if necessary.
     this.state = {
       showResults: false
     }
@@ -35,14 +35,34 @@ class OutputControl extends React.Component {
     if (nextProps.activeTab === 0 && this.props.activeTab === 1) {
       nextProps.dispatch(makeRequest())
     }
-    if (nextProps.activeTab === 1) {
-      return false
-    }
+    // if (nextProps.activeTab === 1) {
+    //   return false
+    // }
     return true
   }
 
   showManeuvers() {
     this.setState({ showResults: !this.state.showResults })
+  }
+
+  exportToJson = e => {
+    const { results } = this.props
+    const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
+
+    const dateNow = new Date()
+    const dformat =
+      [dateNow.getMonth() + 1, dateNow.getDate(), dateNow.getFullYear()].join(
+        '/'
+      ) +
+      '_' +
+      [dateNow.getHours(), dateNow.getMinutes(), dateNow.getSeconds()].join(':')
+
+    e.preventDefault()
+    downloadFile({
+      data: JSON.stringify(L.polyline(coordinates).toGeoJSON()),
+      fileName: 'valhalla-directions_' + dformat + '.geojson',
+      fileType: 'text/json'
+    })
   }
 
   render() {
@@ -66,7 +86,10 @@ class OutputControl extends React.Component {
               onClick={this.showManeuvers}>
               {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
             </Button>
-            <div className={'flex'} style={{ alignSelf: 'center' }}>
+            <div
+              className={'flex pointer'}
+              style={{ alignSelf: 'center' }}
+              onClick={this.exportToJson}>
               <Icon circular name={'download'} />
               <div className={'pa1 b f6'}>{'Download'}</div>
             </div>

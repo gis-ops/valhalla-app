@@ -202,7 +202,7 @@ const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
   // to fit them on the screen, they will overflow otherwise
   if (addresses.length > 0) {
     for (const results of document.getElementsByClassName('results')) {
-      document.getElementById(window._env_.ROOT_ELEMENT).appendChild(results)
+      document.getElementById('valhalla-app-root').appendChild(results)
     }
   }
 

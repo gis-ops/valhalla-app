@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Popup } from 'semantic-ui-react'
 
-import { ReactComponent as BusSvg } from './bus.svg'
-import { ReactComponent as ScooterSvg } from './scooter.svg'
-import { ReactComponent as CarSvg } from './car.svg'
-import { ReactComponent as TruckSvg } from './truck.svg'
-import { ReactComponent as BikeSvg } from './bike.svg'
-import { ReactComponent as PedestrianSvg } from './pedestrian.svg'
+import { ReactComponent as BusSvg } from 'images/bus.svg'
+import { ReactComponent as ScooterSvg } from 'images/scooter.svg'
+import { ReactComponent as CarSvg } from 'images/car.svg'
+import { ReactComponent as TruckSvg } from 'images/truck.svg'
+import { ReactComponent as BikeSvg } from 'images/bike.svg'
+import { ReactComponent as PedestrianSvg } from 'images/pedestrian.svg'
 
 const iconMap = {
   truck: <TruckSvg />,

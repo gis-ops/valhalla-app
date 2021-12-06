@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { Checkbox } from 'semantic-ui-react'
-import { showProvider } from '../../actions/directionsActions'
+import { Checkbox, Icon } from 'semantic-ui-react'
+import { showProvider } from 'actions/directionsActions'
+
+import { downloadFile } from 'actions/commonActions'
 
 class Summary extends React.Component {
   static propTypes = {
@@ -18,6 +20,26 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
+  exportToJson = e => {
+    const { provider, results } = this.props
+    const data = R.path([provider, 'data'], results)
+
+    const dateNow = new Date()
+    const dformat =
+      [dateNow.getMonth() + 1, dateNow.getDate(), dateNow.getFullYear()].join(
+        '/'
+      ) +
+      '_' +
+      [dateNow.getHours(), dateNow.getMinutes(), dateNow.getSeconds()].join(':')
+
+    e.preventDefault()
+    downloadFile({
+      data: JSON.stringify(data),
+      fileName: 'valhalla-isochrones_' + dformat + '.geojson',
+      fileType: 'text/json'
+    })
+  }
+
   render() {
     const { provider, results } = this.props
     const data = R.path([provider, 'data'], results)
@@ -27,6 +49,13 @@ class Summary extends React.Component {
           <React.Fragment>
             <div className={'pr2'} style={{ alignSelf: 'center' }}>
               <span className="b">Isochrones</span>
+            </div>
+            <div
+              className={'flex pointer'}
+              style={{ alignSelf: 'center' }}
+              onClick={this.exportToJson}>
+              <Icon circular name={'download'} />
+              <div className={'pa1 b f6'}>{'Download'}</div>
             </div>
             <div style={{ alignSelf: 'center' }}>
               <Checkbox

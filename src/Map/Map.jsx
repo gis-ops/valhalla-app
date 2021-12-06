@@ -143,11 +143,7 @@ class Map extends React.Component {
     const popup = L.popup({ className: 'add-job' })
 
     this.map.on('contextmenu', event => {
-      popup
-        .setLatLng(event.latlng)
-        //.addTo(this.map)
-        //.setContent('lol')
-        .openOn(this.map)
+      popup.setLatLng(event.latlng).openOn(this.map)
 
       setTimeout(() => {
         // as setContent needs the react dom we are setting the state here

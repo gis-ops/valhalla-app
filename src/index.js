@@ -22,5 +22,5 @@ render(
     {' '}
     <App />
   </Provider>,
-  document.getElementById(window._env_.ROOT_ELEMENT)
+  document.getElementById('valhalla-app-root')
 )

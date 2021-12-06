@@ -31,6 +31,8 @@ class MainControl extends React.Component {
   }
 
   componentDidMount = () => {
+    const { dispatch } = this.props
+
     toast({
       type: 'success',
       icon: 'heart',
@@ -39,13 +41,18 @@ class MainControl extends React.Component {
       time: 5000
     })
 
+    let activeTab
     if (
       window.location.pathname === '/' ||
       window.location.pathname === '/directions'
     ) {
-      this.setState({ activeIndex: 0 })
+      activeTab = 0
+      this.setState({ activeIndex: activeTab })
+      dispatch(updateTab({ activeTab }))
     } else if (window.location.pathname === '/isochrones') {
-      this.setState({ activeIndex: 1 })
+      activeTab = 1
+      this.setState({ activeIndex: activeTab })
+      dispatch(updateTab({ activeTab }))
     }
   }
 
@@ -66,11 +73,20 @@ class MainControl extends React.Component {
   handleTabChange = (event, data) => {
     const { dispatch } = this.props
     const activeTab = data.activeIndex
+    this.setState({ activeIndex: activeTab })
 
     if (activeTab == 0) {
-      window.location.pathname = '/directions'
+      window.history.replaceState(
+        'directions',
+        'Valhalla Directions',
+        '/directions'
+      )
     } else {
-      window.location.pathname = '/isochrones'
+      window.history.replaceState(
+        'isochrones',
+        'Valhalla Isochrones',
+        '/isochrones'
+      )
     }
 
     dispatch(updateTab({ activeTab }))
