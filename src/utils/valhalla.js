@@ -7,20 +7,12 @@ export const buildDirectionsRequest = ({
   activeWaypoints,
   settings
 }) => {
-  let valhalla_profile = 'truck'
-  if (profile == 'car') {
+  let valhalla_profile = profile
+  if (profile === 'car') {
     valhalla_profile = 'auto'
-  } else if (profile == 'bus') {
-    valhalla_profile = 'bus'
-  } else if (profile == 'bicycle') {
-    valhalla_profile = 'bicycle'
-  } else if (profile == 'pedestrian') {
-    valhalla_profile = 'pedestrian'
-  } else if (profile == 'motor_scooter') {
-    valhalla_profile = 'motor_scooter'
   }
 
-  const valhallaRequest = {
+  return {
     json: {
       costing: valhalla_profile,
       costing_options: {
@@ -34,7 +26,6 @@ export const buildDirectionsRequest = ({
       id: 'valhalla-fossgiss-directions'
     }
   }
-  return valhallaRequest
 }
 
 export const parseDirectionsGeometry = data => {
@@ -54,9 +45,13 @@ export const buildIsochronesRequest = ({
   maxRange,
   interval
 }) => {
-  const valhallaRequest = {
+  let valhalla_profile = profile
+  if (profile === 'car') {
+    valhalla_profile = 'auto'
+  }
+  return {
     json: {
-      costing: profile == 'car' ? 'auto' : 'truck',
+      costing: valhalla_profile,
       costing_options: {
         [profile]: { ...settings }
       },
@@ -68,7 +63,6 @@ export const buildIsochronesRequest = ({
       id: 'valhalla-fossgis-isochrones'
     }
   }
-  return valhallaRequest
 }
 
 const makeContours = ({ maxRange, interval }) => {

@@ -55,7 +55,7 @@ export const makeRequest = () => (dispatch, getState) => {
   if (activeWaypoints.length >= 2) {
     settings = filterProfileSettings(profile, settings)
 
-    console.log(settings)
+    // console.log(settings)
 
     const valhallaRequest = buildDirectionsRequest({
       profile,
@@ -77,19 +77,20 @@ const fetchValhallaDirections = valhallaRequest => (dispatch, getState) => {
       }
     })
     .then(({ data }) => {
-      const geometry = parseDirectionsGeometry(data)
-      data.decodedGeometry = geometry
+      data.decodedGeometry = parseDirectionsGeometry(data)
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
     })
     .catch(({ response }) => {
+      let error_msg = response.data.error
+      if (response.data.error_code === 154) {
+        error_msg += ` for ${valhallaRequest.json.costing}.`
+      }
       dispatch(clearRoutes(VALHALLA_OSM_URL))
       dispatch(
         sendMessage({
           type: 'warning',
           icon: 'warning',
-          description: `${serverMapping[VALHALLA_OSM_URL]}: ${
-            response.data.error
-          }`,
+          description: `${serverMapping[VALHALLA_OSM_URL]}: ${error_msg}`,
           title: `${response.data.status}`
         })
       )
@@ -183,7 +184,7 @@ export const fetchGeocode = object => dispatch => {
 const processGeocodeResponse = (data, index, reverse, lngLat) => dispatch => {
   const addresses = parseGeocodeResponse(data, lngLat)
   // if no address can be found
-  if (addresses.length == 0) {
+  if (addresses.length === 0) {
     dispatch(
       sendMessage({
         type: 'warning',
@@ -234,7 +235,7 @@ export const updateTextInput = object => ({
 })
 
 export const doRemoveWaypoint = index => (dispatch, getState) => {
-  if (index == undefined) {
+  if (index === undefined) {
     dispatch(clearWaypoints())
     Array(2)
       .fill()
@@ -255,8 +256,8 @@ export const highlightManeuver = fromTo => (dispatch, getState) => {
 
   // this is dehighlighting
   if (
-    highlightSegment.startIndex == fromTo.startIndex &&
-    highlightSegment.endIndex == fromTo.endIndex
+    highlightSegment.startIndex === fromTo.startIndex &&
+    highlightSegment.endIndex === fromTo.endIndex
   ) {
     fromTo.startIndex = -1
     fromTo.endIndex = -1
@@ -291,7 +292,7 @@ export const doAddWaypoint = doInsert => (dispatch, getState) => {
       return wp.id
     })
   )
-  maxIndex = isFinite(maxIndex) == false ? 0 : maxIndex + 1
+  maxIndex = isFinite(maxIndex) === false ? 0 : maxIndex + 1
 
   const emptyWp = {
     id: maxIndex.toString(),
