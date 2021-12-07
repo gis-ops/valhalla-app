@@ -12,6 +12,11 @@ import {
   fetchGeocode,
   makeIsochronesRequest
 } from 'actions/isochronesActions'
+
+import {
+  updatePermalink
+} from 'actions/commonActions'
+
 import { debounce } from 'throttle-debounce'
 
 class Waypoints extends Component {
@@ -81,6 +86,7 @@ class Waypoints extends Component {
   }
 
   handleIntervalChange = (e, { value }) => {
+    const { dispatch } = this.props
     const { maxRange } = this.props.isochrones
 
     value = isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -97,6 +103,9 @@ class Waypoints extends Component {
   }
 
   handleRangeChange = (e, { value }) => {
+   
+    const { dispatch } = this.props
+
     value = isNaN(parseInt(value)) ? 0 : parseInt(value)
     if (value > 120) {
       value = 120
@@ -110,6 +119,7 @@ class Waypoints extends Component {
       intervalName,
       value
     })
+    
   }
 
   handleIsoSliderUpdateSettings = ({ value, maxRangeName, intervalName }) => {
@@ -123,6 +133,9 @@ class Waypoints extends Component {
         value: parseInt(value)
       })
     )
+
+    dispatch(updatePermalink())
+
   }
 
   render() {

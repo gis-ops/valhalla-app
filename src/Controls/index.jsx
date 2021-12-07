@@ -13,6 +13,10 @@ import {
   updatePermalink
 } from 'actions/commonActions'
 import { fetchReverseGeocodePerma } from 'actions/directionsActions'
+import {
+  fetchReverseGeocodeIso,
+  updateIsoSettings
+} from 'actions/isochronesActions'
 
 const controlStyle = {
   zIndex: 999,
@@ -57,20 +61,6 @@ class MainControl extends React.Component {
       dispatch(updateProfile({ profile: params.profile }))
     }
 
-    if ('wps' in params && params.wps.length > 0) {
-      const coordinates = params.wps.split(',').map(Number)
-
-      pairwise(coordinates, (current, next, i) => {
-        const payload = {
-          latLng: { lat: next, lng: current },
-          fromPerma: true,
-          permaLast: i == coordinates.length / 2 - 1,
-          index: i
-        }
-        dispatch(fetchReverseGeocodePerma(payload))
-      })
-    }
-
     let activeTab
     if (
       window.location.pathname === '/' ||
@@ -81,6 +71,45 @@ class MainControl extends React.Component {
     } else if (window.location.pathname === '/isochrones') {
       activeTab = 1
       dispatch(updateTab({ activeTab }))
+    }
+
+    if ('wps' in params && params.wps.length > 0) {
+      const coordinates = params.wps.split(',').map(Number)
+      pairwise(coordinates, (current, next, i) => {
+        const payload = {
+          latLng: { lat: next, lng: current },
+          fromPerma: true,
+          permaLast: i == coordinates.length / 2 - 1,
+          index: i
+        }
+        if (activeTab == 0) {
+          dispatch(fetchReverseGeocodePerma(payload))
+        } else {
+          dispatch(fetchReverseGeocodeIso(current, next))
+
+          if ('range' in params && 'interval' in params) {
+            const maxRangeName = 'maxRange'
+            const intervalName = 'interval'
+            const maxRangeValue = params.range
+            const intervalValue = params.interval
+
+            dispatch(
+              updateIsoSettings({
+                maxRangeName,
+                intervalName,
+                value: maxRangeValue
+              })
+            )
+            dispatch(
+              updateIsoSettings({
+                undefined,
+                intervalName,
+                value: intervalValue
+              })
+            )
+          }
+        }
+      })
     }
   }
 
@@ -103,24 +132,7 @@ class MainControl extends React.Component {
     const activeTab = data.activeIndex
 
     dispatch(updateTab({ activeTab }))
-
-    // build params now for specific tab...
     dispatch(updatePermalink())
-
-    // if (activeTab == 0) {
-
-    //   window.history.replaceState(
-    //     'directions',
-    //     'Valhalla Directions',
-    //     '/directions'
-    //   )
-    // } else {
-    //   window.history.replaceState(
-    //     'isochrones',
-    //     'Valhalla Isochrones',
-    //     '/isochrones'
-    //   )
-    // }
   }
 
   render() {

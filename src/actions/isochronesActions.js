@@ -12,15 +12,16 @@ import {
   reverse_geocode,
   forward_geocode,
   parseGeocodeResponse
-} from '../utils/nominatim'
-import { VALHALLA_OSM_URL, buildIsochronesRequest } from '../utils/valhalla'
+} from 'utils/nominatim'
+import { VALHALLA_OSM_URL, buildIsochronesRequest } from 'utils/valhalla'
 
 import {
   sendMessage,
   showLoading,
+  updatePermalink,
   filterProfileSettings
 } from './commonActions'
-import { calcArea } from '../utils/geom'
+import { calcArea } from 'utils/geom'
 
 const serverMapping = {
   [VALHALLA_OSM_URL]: 'OSM'
@@ -145,6 +146,7 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
 }
 
 export const fetchReverseGeocodeIso = (lng, lat) => dispatch => {
+
   dispatch(placeholderAddress(0, lng, lat))
 
   dispatch({
@@ -215,6 +217,7 @@ const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
         addressindex: 0
       }
     })
+    dispatch(updatePermalink())
     dispatch(makeIsochronesRequest())
   }
 }

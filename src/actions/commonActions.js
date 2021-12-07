@@ -43,7 +43,7 @@ export const doShowSettings = () => ({
 export const updatePermalink = () => (dispatch, getState) => {
   const { waypoints } = getState().directions
   const { geocodeResults, maxRange, interval } = getState().isochrones
-  const { profile, settings, activeTab } = getState().common
+  const { profile, /*settings,*/ activeTab } = getState().common
 
   const queryParams = new URLSearchParams()
   queryParams.set('profile', profile)
@@ -58,7 +58,7 @@ export const updatePermalink = () => (dispatch, getState) => {
         }
       }
     }
-    queryParams.set('wps', wps.toString())
+    if (wps.length > 0) queryParams.set('wps', wps.toString())
   } else {
     path = '/isochrones?'
 
@@ -68,7 +68,11 @@ export const updatePermalink = () => (dispatch, getState) => {
         center = result.sourcelnglat.toString()
       }
     }
-    queryParams.set('center', center)
+    if (center) {
+      queryParams.set('wps', center.toString())
+    }
+    queryParams.set('range', maxRange)
+    queryParams.set('interval', interval)
   }
 
   window.history.replaceState(null, null, path + queryParams.toString())
