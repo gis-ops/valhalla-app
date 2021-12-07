@@ -43,7 +43,7 @@ class Waypoint extends React.Component {
 
   handleSearchChange = event => {
     for (const results of document.getElementsByClassName('results')) {
-      document.getElementById(window._env_.ROOT_ELEMENT).appendChild(results)
+      document.getElementById('valhalla-app-root').appendChild(results)
     }
 
     const { dispatch, index } = this.props

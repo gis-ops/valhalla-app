@@ -10,9 +10,9 @@ import ExtraMarkers from './extraMarkers'
 import { Button } from 'semantic-ui-react'
 
 import { fetchReverseGeocode } from 'actions/directionsActions'
-import { fetchReverseGeocodeIso } from '../actions/isochronesActions'
-import { updateSettings } from '../actions/commonActions'
-import { VALHALLA_OSM_URL } from '../utils/valhalla'
+import { fetchReverseGeocodeIso } from 'actions/isochronesActions'
+import { updateSettings } from 'actions/commonActions'
+import { VALHALLA_OSM_URL } from 'utils/valhalla'
 
 const OSMTiles = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -502,6 +502,7 @@ class Map extends React.Component {
 
   updateWaypointPosition(object) {
     const { dispatch } = this.props
+    console.log(object)
     dispatch(fetchReverseGeocode(object))
   }
 

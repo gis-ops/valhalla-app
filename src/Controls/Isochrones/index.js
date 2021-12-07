@@ -9,7 +9,11 @@ import { ProfilePicker } from '../../components/profile-picker'
 import { Settings } from './settings'
 
 import fossgisLogo from 'images/fossgis.png'
-import { updateProfile, doShowSettings } from 'actions/commonActions'
+import {
+  updateProfile,
+  doShowSettings,
+  updatePermalink
+} from 'actions/commonActions'
 import { clearIsos, makeIsochronesRequest } from 'actions/isochronesActions'
 
 class IsochronesControl extends React.Component {
@@ -20,9 +24,9 @@ class IsochronesControl extends React.Component {
   }
 
   handleUpdateProfile = (event, data) => {
-
     const { dispatch } = this.props
     dispatch(updateProfile({ profile: data.valhalla_profile }))
+    dispatch(updatePermalink())
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -78,7 +82,7 @@ class IsochronesControl extends React.Component {
           <Waypoints />
           <Divider fitted />
           <div className="tr">
-            <a href={`https:/fossgis.de`}>
+            <a target="_blank" href={`https:/fossgis.de`} rel="noreferrer">
               <img
                 src={fossgisLogo}
                 style={{ height: 40 }}

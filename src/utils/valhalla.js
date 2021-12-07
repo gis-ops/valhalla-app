@@ -16,7 +16,7 @@ export const buildDirectionsRequest = ({
     json: {
       costing: valhalla_profile,
       costing_options: {
-        [profile]: { ...settings }
+        [valhalla_profile]: { ...settings }
       },
       exclude_polygons: settings.exclude_polygons,
       locations: makeLocations(activeWaypoints),

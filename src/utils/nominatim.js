@@ -30,17 +30,38 @@ export const parseGeocodeResponse = (results, lngLat) => {
   const processedResults = []
 
   for (const [index, result] of results.entries()) {
-    processedResults.push({
-      title: result.display_name,
-      description: result.osm_type + '(' + result.osm_id + ')',
-      selected: false,
-      displaylnglat:
-        lngLat !== undefined
-          ? lngLat
-          : [parseFloat(result.lon), parseFloat(result.lat)],
-      key: index,
-      addressindex: index
-    })
+    if (
+      'error' in result &&
+      result.error.toLowerCase() == 'unable to geocode'
+    ) {
+      processedResults.push({
+        title: lngLat.toString(),
+        description: '',
+        selected: true,
+        addresslnglat: '',
+        sourcelnglat: lngLat,
+        displaylnglat: lngLat,
+        key: index,
+        addressindex: index
+      })
+    } else {
+      processedResults.push({
+        title:
+          result.display_name.length > 0
+            ? result.display_name
+            : lngLat.toString(),
+        description: result.osm_type + '(' + result.osm_id + ')',
+        selected: false,
+        addresslnglat: [parseFloat(result.lon), parseFloat(result.lat)],
+        sourcelnglat: lngLat,
+        displaylnglat:
+          lngLat !== undefined
+            ? lngLat
+            : [parseFloat(result.lon), parseFloat(result.lat)],
+        key: index,
+        addressindex: index
+      })
+    }
   }
   return processedResults
 }

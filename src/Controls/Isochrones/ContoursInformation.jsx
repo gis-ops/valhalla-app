@@ -28,18 +28,16 @@ class ContoursInformation extends React.Component {
         {features ? (
           features.map((feature, key) => {
             return (
-              <div className={'flex justify-between pb2'} key={key}>
+              <div className={'flex pb2'} key={key}>
                 <div
                   className={'flex'}
-                  style={{ alignSelf: 'center', flexBasis: '120px' }}>
+                  style={{ alignSelf: 'center', flexBasis: '140px' }}>
                   <Icon circular name={'time'} />
                   <div className={'pr2 f6 b pt1 pb1'}>
                     {feature.properties.contour + ' minutes'}
                   </div>
                 </div>
-                <div
-                  className={'flex'}
-                  style={{ alignSelf: 'center', marginLeft: 'auto' }}>
+                <div className={'flex'} style={{ alignSelf: 'center' }}>
                   <Icon circular name={'move'} />
                   <div className={'pa1 b f6'}>
                     {feature.properties.area.toFixed(0) + ' km²'}

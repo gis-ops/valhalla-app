@@ -18,7 +18,7 @@ import {
   reverse_geocode,
   forward_geocode,
   parseGeocodeResponse
-} from '../utils/nominatim'
+} from 'utils/nominatim'
 import {
   VALHALLA_OSM_URL,
   buildDirectionsRequest,
@@ -28,7 +28,8 @@ import {
 import {
   sendMessage,
   showLoading,
-  filterProfileSettings
+  filterProfileSettings,
+  updatePermalink
 } from './commonActions'
 
 const serverMapping = {
@@ -137,8 +138,37 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
   )
 }
 
-export const fetchReverseGeocode = object => (dispatch, getState) => {
+export const fetchReverseGeocodePerma = object => (dispatch, getState) => {
   dispatch(requestGeocodeResults({ index: object.index, reverse: true }))
+
+  const { index } = object
+  const { permaLast } = object
+  const { lng, lat } = object.latLng
+
+  if (index > 1) dispatch(doAddWaypoint(true, permaLast))
+
+  reverse_geocode(lng, lat)
+    .then(response => {
+      dispatch(
+        processGeocodeResponse(
+          response.data,
+          index,
+          true,
+          [lng, lat],
+          permaLast
+        )
+      )
+    })
+    .catch(error => {
+      console.log(error) //eslint-disable-line
+    })
+  // .finally(() => {
+  //   // always executed
+  // })
+}
+
+export const fetchReverseGeocode = object => (dispatch, getState) => {
+  //dispatch(requestGeocodeResults({ index: object.index, reverse: true }))
   const { waypoints } = getState().directions
 
   let { index } = object
@@ -150,8 +180,10 @@ export const fetchReverseGeocode = object => (dispatch, getState) => {
   } else if (index === 1 && !fromDrag) {
     // insert waypoint from context menu
     dispatch(doAddWaypoint(true))
+
     index = waypoints.length - 2
   }
+
   dispatch(placeholderAddress(index, lng, lat))
 
   dispatch(requestGeocodeResults({ index, reverse: true }))
@@ -181,7 +213,13 @@ export const fetchGeocode = object => dispatch => {
     .finally(() => {})
 }
 
-const processGeocodeResponse = (data, index, reverse, lngLat) => dispatch => {
+const processGeocodeResponse = (
+  data,
+  index,
+  reverse,
+  lngLat,
+  permaLast
+) => dispatch => {
   const addresses = parseGeocodeResponse(data, lngLat)
   // if no address can be found
   if (addresses.length === 0) {
@@ -198,6 +236,7 @@ const processGeocodeResponse = (data, index, reverse, lngLat) => dispatch => {
       results.classList.remove('visible')
     }
   }
+  console.log(index)
   dispatch(receiveGeocodeResults({ addresses, index }))
 
   // this is the ULTRA hack to move the semantic ui results around
@@ -215,7 +254,13 @@ const processGeocodeResponse = (data, index, reverse, lngLat) => dispatch => {
         addressindex: 0
       })
     )
-    dispatch(makeRequest())
+    if (permaLast == undefined) {
+      dispatch(makeRequest())
+      dispatch(updatePermalink())
+    } else if (permaLast) {
+      dispatch(makeRequest())
+      dispatch(updatePermalink())
+    }
   }
 }
 
@@ -249,6 +294,7 @@ export const doRemoveWaypoint = index => (dispatch, getState) => {
       dispatch(emptyWaypoint(index))
     }
   }
+  dispatch(updatePermalink())
 }
 
 export const highlightManeuver = fromTo => (dispatch, getState) => {
@@ -297,6 +343,7 @@ export const doAddWaypoint = doInsert => (dispatch, getState) => {
   const emptyWp = {
     id: maxIndex.toString(),
     geocodeResults: [],
+    isFetching: false,
     userInput: ''
   }
   if (doInsert) {

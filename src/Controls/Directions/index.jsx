@@ -15,7 +15,11 @@ import {
   clearRoutes
 } from 'actions/directionsActions'
 import fossgisLogo from 'images/fossgis.png'
-import { updateProfile, doShowSettings } from 'actions/commonActions'
+import {
+  updateProfile,
+  doShowSettings,
+  updatePermalink
+} from 'actions/commonActions'
 
 class DirectionsControl extends React.Component {
   static propTypes = {
@@ -27,6 +31,7 @@ class DirectionsControl extends React.Component {
   handleUpdateProfile = (event, data) => {
     const { dispatch } = this.props
     dispatch(updateProfile({ profile: data.valhalla_profile }))
+    dispatch(updatePermalink())
   }
 
   handleAddWaypoint = (event, data) => {
@@ -97,7 +102,7 @@ class DirectionsControl extends React.Component {
           </div>
           <Divider fitted />
           <div className="tr">
-            <a href={`https:/fossgis.de`}>
+            <a target="_blank" href={`https://fossgis.de`} rel="noreferrer">
               <img
                 src={fossgisLogo}
                 style={{ height: 40 }}

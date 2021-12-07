@@ -40,6 +40,40 @@ export const doShowSettings = () => ({
   type: SHOW_SETTINGS
 })
 
+export const updatePermalink = () => (dispatch, getState) => {
+  const { waypoints } = getState().directions
+  const { geocodeResults, maxRange, interval } = getState().isochrones
+  const { profile, settings, activeTab } = getState().common
+
+  const queryParams = new URLSearchParams()
+  queryParams.set('profile', profile)
+
+  let path = '/directions?'
+  if (activeTab == 0) {
+    const wps = []
+    for (const wp of waypoints) {
+      for (const result of wp.geocodeResults) {
+        if (result.selected) {
+          wps.push(result.sourcelnglat)
+        }
+      }
+    }
+    queryParams.set('wps', wps.toString())
+  } else {
+    path = '/isochrones?'
+
+    let center
+    for (const result of geocodeResults) {
+      if (result.selected) {
+        center = result.sourcelnglat.toString()
+      }
+    }
+    queryParams.set('center', center)
+  }
+
+  window.history.replaceState(null, null, path + queryParams.toString())
+}
+
 export const downloadFile = ({ data, fileName, fileType }) => {
   // Create a blob with the data we want to download as a file
   const blob = new Blob([data], { type: fileType })
