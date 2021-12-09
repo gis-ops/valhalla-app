@@ -102,7 +102,10 @@ class DirectionsControl extends React.Component {
           </div>
           <Divider fitted />
           <div className="tr">
-            <a target="_blank" href={`https://fossgis.de`} rel="noreferrer">
+            <a
+              target="_blank"
+              href={`https://fossgis.de/news/2021-11-12_funding_valhalla/`}
+              rel="noreferrer">
               <img
                 src={fossgisLogo}
                 style={{ height: 40 }}

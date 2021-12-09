@@ -51,7 +51,7 @@ class MainControl extends React.Component {
       type: 'success',
       icon: 'heart',
       title: 'Welcome to Valhalla!',
-      description: 'Global Routing Service - sponsored by FOSSGIS e.V.',
+      description: 'Global Routing Service - funded by FOSSGIS e.V.',
       time: 5000
     })
 

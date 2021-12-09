@@ -18,7 +18,7 @@ const OSMTiles = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 )
 
@@ -502,7 +502,6 @@ class Map extends React.Component {
 
   updateWaypointPosition(object) {
     const { dispatch } = this.props
-    console.log(object)
     dispatch(fetchReverseGeocode(object))
   }
 
