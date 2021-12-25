@@ -18,6 +18,14 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
+  formatDuration = durationInSeconds => {
+    const date = new Date(durationInSeconds * 1000)
+    const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
+    const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
+    const minutes = date.getMinutes() > 0 ? date.getMinutes() + 'min' : ''
+    return days + hours + minutes
+  }
+
   render() {
     const { provider, results } = this.props
 
@@ -43,7 +51,7 @@ class Summary extends React.Component {
             <div style={{ alignSelf: 'center', flexGrow: 1 }}>
               <Icon circular name={'time'} size="small" />
               <div className={'dib v-mid pa1 b f6'}>
-                {new Date(summary.time * 1000).toISOString().substr(11, 8)}
+                {this.formatDuration(summary.time)}
               </div>
             </div>
             <div style={{ alignSelf: 'center' }}>
