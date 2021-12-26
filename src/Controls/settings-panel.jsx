@@ -30,7 +30,7 @@ const Checkbox = props => {
   const { settings, option, dispatch } = props
 
   const handleChange = (e, { checked }) => {
-    const value = checked ? true : false
+    const value = !!checked
     dispatch(
       updateSettings({
         name: option.param,
@@ -350,7 +350,7 @@ class SettingsPanel extends React.Component {
                     <Button
                       size="tiny"
                       icon
-                      color={this.state.copied ? 'green' : ''}
+                      color={this.state.copied ? 'green' : undefined}
                       labelPosition="left">
                       <Icon name="download" />
                       Copy Settings to Clipboard

@@ -236,7 +236,6 @@ const processGeocodeResponse = (
       results.classList.remove('visible')
     }
   }
-  console.log(index)
   dispatch(receiveGeocodeResults({ addresses, index }))
 
   // this is the ULTRA hack to move the semantic ui results around

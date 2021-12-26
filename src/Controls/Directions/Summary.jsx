@@ -35,33 +35,37 @@ class Summary extends React.Component {
       <React.Fragment>
         {summary ? (
           <React.Fragment>
-            <div className={'pr2'} style={{ alignSelf: 'center' }}>
+            <div className="flex mb1">
               <span className="b">Directions</span>
             </div>
-            <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
-              <Icon
-                circular
-                name={'arrows alternate horizontal'}
-                size={'small'}
-              />
-              <div className={'dib v-mid pa1 b f6'}>
-                {summary.length.toFixed(1) + 'km'}
+            <div className={'flex justify-between pb3 pointer'}>
+              <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
+                <Icon
+                  circular
+                  name={'arrows alternate horizontal'}
+                  size={'small'}
+                />
+                <div className={'dib v-mid pa1 b f6'}>
+                  {`${summary.length.toFixed(
+                    summary.length > 1000 ? 0 : 1
+                  )} km`}
+                </div>
               </div>
-            </div>
-            <div style={{ alignSelf: 'center', flexGrow: 1 }}>
-              <Icon circular name={'time'} size="small" />
-              <div className={'dib v-mid pa1 b f6'}>
-                {this.formatDuration(summary.time)}
+              <div style={{ alignSelf: 'center', flexGrow: 1 }}>
+                <Icon circular name={'time'} size="small" />
+                <div className={'dib v-mid pa1 b f6'}>
+                  {this.formatDuration(summary.time)}
+                </div>
               </div>
-            </div>
-            <div style={{ alignSelf: 'center' }}>
-              <Checkbox
-                slider
-                label={'Map'}
-                checked={results[provider].show}
-                provider={provider}
-                onChange={this.handleChange}
-              />
+              <div style={{ alignSelf: 'center' }}>
+                <Checkbox
+                  slider
+                  label={'Map'}
+                  checked={results[provider].show}
+                  provider={provider}
+                  onChange={this.handleChange}
+                />
+              </div>
             </div>
           </React.Fragment>
         ) : (

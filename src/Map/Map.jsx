@@ -72,7 +72,8 @@ class Map extends React.Component {
     profile: PropTypes.string,
     activeTab: PropTypes.number,
     activeDataset: PropTypes.string,
-    showRestrictions: PropTypes.object
+    showRestrictions: PropTypes.object,
+    coordinates: PropTypes.array
   }
 
   constructor(props) {
@@ -252,6 +253,10 @@ class Map extends React.Component {
       return true
     }
 
+    if (!R.equals(this.props.coordinates, nextProps.coordinates)) {
+      return true
+    }
+
     if (this.props.activeDataset !== nextProps.activeDataset) {
       return true
     }
@@ -264,6 +269,9 @@ class Map extends React.Component {
     this.addIsoCenter()
     this.addIsochrones()
 
+    if (!R.equals(this.props.coordinates, prevProps.coordinates)) {
+      this.zoomToCoordinates()
+    }
     if (
       prevProps.directions.zoomObj.timeNow <
       this.props.directions.zoomObj.timeNow
@@ -282,6 +290,11 @@ class Map extends React.Component {
     if (!isochrones.successful) {
       isoPolygonLayer.clearLayers()
     }
+  }
+
+  zoomToCoordinates = () => {
+    const { coordinates } = this.props
+    this.map.fitBounds(coordinates, { padding: [50, 50], maxZoom: 11 })
   }
 
   zoomTo = idx => {
@@ -310,21 +323,12 @@ class Map extends React.Component {
   }
 
   getIsoTooltip = (contour, area, provider) => {
-    const { profile } = this.props
-
     return `
     <div class="ui list">
         <div class="item">
         <div class="header">
-            ${routeObjects[provider].name}
+            Isochrone Summary
         </div>
-        
-        </div>
-        <div class="item">
-          <i class="${profile} icon"></i>
-          <div class="content">
-            ${profile}
-          </div>
         </div>
         <div class="item">
           <i class="time icon"></i>
@@ -400,33 +404,32 @@ class Map extends React.Component {
     }
   }
 
-  getRouteToolTip = (summary, provider) => {
-    const { profile } = this.props
+  formatDuration = durationInSeconds => {
+    const date = new Date(durationInSeconds * 1000)
+    const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
+    const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
+    const minutes = date.getMinutes() > 0 ? date.getMinutes() + 'min' : ''
+    return days + hours + minutes
+  }
 
+  getRouteToolTip = (summary, provider) => {
     return `
     <div class="ui list">
         <div class="item">
-        <div class="header">
-            ${routeObjects[provider].name}
-        </div>
-
-        </div>
-        <div class="item">
-          <i class="${profile} icon"></i>
-          <div class="content">
-            ${profile}
+          <div class="header">
+              Route Summary
           </div>
         </div>
         <div class="item">
           <i class="arrows alternate horizontal icon"></i>
           <div class="content">
-            ${summary.length.toFixed(1)} km
+            ${summary.length.toFixed(summary.length > 1000 ? 0 : 1)} km
           </div>
         </div>
         <div class="item">
           <i class="time icon"></i>
           <div class="content">
-            ${new Date(summary.time * 1000).toISOString().substr(11, 5)} h
+            ${this.formatDuration(summary.time)}
           </div>
         </div>
       </div>
@@ -622,11 +625,18 @@ class Map extends React.Component {
 
 const mapStateToProps = state => {
   const { directions, isochrones, common } = state
-  const { activeTab, profile, showRestrictions, activeDataset } = common
+  const {
+    activeTab,
+    profile,
+    showRestrictions,
+    activeDataset,
+    coordinates
+  } = common
   return {
     directions,
     isochrones,
     profile,
+    coordinates,
     activeTab,
     activeDataset,
     showRestrictions

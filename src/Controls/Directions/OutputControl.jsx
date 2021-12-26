@@ -75,9 +75,7 @@ class OutputControl extends React.Component {
           display: successful ? 'block' : 'none'
         }}>
         <div className={'flex-column'}>
-          <div className={'flex justify-between pb3 pointer'}>
-            <Summary provider={VALHALLA_OSM_URL} />
-          </div>
+          <Summary provider={VALHALLA_OSM_URL} />
           <div className={'flex justify-between'}>
             <Button
               size="mini"

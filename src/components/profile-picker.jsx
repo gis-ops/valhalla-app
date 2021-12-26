@@ -54,5 +54,5 @@ ProfilePicker.propTypes = {
   activeProfile: PropTypes.string,
   handleUpdateProfile: PropTypes.func,
   group: PropTypes.string,
-  popupContent: PropTypes.string
+  popupContent: PropTypes.array
 }

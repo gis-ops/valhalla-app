@@ -4,7 +4,8 @@ import {
   UPDATE_SETTINGS,
   UPDATE_TAB,
   LOADING,
-  SHOW_SETTINGS
+  SHOW_SETTINGS,
+  ZOOM_TO
 } from './types'
 
 import {
@@ -38,6 +39,11 @@ export const updateTab = activeTab => ({
 
 export const doShowSettings = () => ({
   type: SHOW_SETTINGS
+})
+
+export const zoomTo = coords => ({
+  type: ZOOM_TO,
+  payload: coords
 })
 
 export const updatePermalink = () => (dispatch, getState) => {

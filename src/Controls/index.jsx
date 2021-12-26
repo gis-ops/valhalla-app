@@ -10,7 +10,8 @@ import { Segment, Tab } from 'semantic-ui-react'
 import {
   updateTab,
   updateProfile,
-  updatePermalink
+  updatePermalink,
+  zoomTo
 } from 'actions/commonActions'
 import { fetchReverseGeocodePerma } from 'actions/directionsActions'
 import {
@@ -75,13 +76,16 @@ class MainControl extends React.Component {
 
     if ('wps' in params && params.wps.length > 0) {
       const coordinates = params.wps.split(',').map(Number)
+      const processedCoords = []
       pairwise(coordinates, (current, next, i) => {
+        const latLng = { lat: next, lng: current }
         const payload = {
-          latLng: { lat: next, lng: current },
+          latLng,
           fromPerma: true,
           permaLast: i == coordinates.length / 2 - 1,
           index: i
         }
+        processedCoords.push([latLng.lat, latLng.lng])
         if (activeTab == 0) {
           dispatch(fetchReverseGeocodePerma(payload))
         } else {
@@ -110,6 +114,7 @@ class MainControl extends React.Component {
           }
         }
       })
+      dispatch(zoomTo(processedCoords))
     }
   }
 

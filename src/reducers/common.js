@@ -4,12 +4,14 @@ import {
   UPDATE_TAB,
   LOADING,
   MESSAGE_HANDLER,
-  SHOW_SETTINGS
+  SHOW_SETTINGS,
+  ZOOM_TO
 } from 'actions/types'
 
 const initialState = {
   activeTab: 0,
   showSettings: true,
+  coordinates: [],
   loading: false,
   message: {
     receivedAt: 0,
@@ -73,6 +75,13 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         loading: action.payload
+      }
+    }
+
+    case ZOOM_TO: {
+      return {
+        ...state,
+        coordinates: action.payload
       }
     }
 
