@@ -49,6 +49,15 @@ class MainControl extends React.Component {
     const { dispatch } = this.props
 
     toast({
+      type: 'warning',
+      icon: 'desktop',
+      title: 'Expected Downtime',
+      description:
+        'Due to server maintenance, Valhalla is offline until the evening of January 10th.',
+      time: 5000
+    })
+
+    toast({
       type: 'success',
       icon: 'heart',
       title: 'Welcome to Valhalla!',
