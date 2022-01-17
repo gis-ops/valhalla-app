@@ -553,8 +553,6 @@ class Map extends React.Component {
           permanent: false,
           sticky: true
         })
-
-      this.hg._removeChart()
       if (this.hg._showState == true) {
         this.hg._expand()
       }
@@ -661,6 +659,7 @@ class Map extends React.Component {
     )
 
     if (!R.equals(this.state.heightPayload, heightPayload)) {
+      this.hg._removeChart()
       this.setState({ isHeightLoading: true, heightPayload })
       axios
         .post(VALHALLA_OSM_URL + '/height', heightPayload, {
