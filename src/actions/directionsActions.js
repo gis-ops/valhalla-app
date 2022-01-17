@@ -37,6 +37,7 @@ const serverMapping = {
 }
 
 export const makeRequest = () => (dispatch, getState) => {
+  dispatch(updatePermalink())
   const { waypoints } = getState().directions
   const { profile } = getState().common
   let { settings } = getState().common
@@ -55,8 +56,6 @@ export const makeRequest = () => (dispatch, getState) => {
   }
   if (activeWaypoints.length >= 2) {
     settings = filterProfileSettings(profile, settings)
-
-    // console.log(settings)
 
     const valhallaRequest = buildDirectionsRequest({
       profile,
@@ -117,7 +116,7 @@ export const clearRoutes = provider => ({
 })
 
 const placeholderAddress = (index, lng, lat) => dispatch => {
-  // placeholder until gecoder is complete
+  // placeholder until geocoder is complete
   // will add latLng to input field
   const addresses = [
     {

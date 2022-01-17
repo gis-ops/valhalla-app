@@ -8,6 +8,7 @@ import {
   fetchGeocode,
   makeRequest
 } from 'actions/directionsActions'
+
 import { debounce } from 'throttle-debounce'
 
 class Waypoint extends React.Component {

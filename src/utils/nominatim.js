@@ -28,7 +28,6 @@ export const parseGeocodeResponse = (results, lngLat) => {
     results = [results]
   }
   const processedResults = []
-
   for (const [index, result] of results.entries()) {
     if (
       'error' in result &&
@@ -53,7 +52,10 @@ export const parseGeocodeResponse = (results, lngLat) => {
         description: result.osm_type + '(' + result.osm_id + ')',
         selected: false,
         addresslnglat: [parseFloat(result.lon), parseFloat(result.lat)],
-        sourcelnglat: lngLat,
+        sourcelnglat:
+          lngLat == undefined
+            ? [parseFloat(result.lon), parseFloat(result.lat)]
+            : lngLat,
         displaylnglat:
           lngLat !== undefined
             ? lngLat

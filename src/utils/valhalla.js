@@ -2,6 +2,25 @@ import { decode } from './polyline'
 
 export const VALHALLA_OSM_URL = 'https://valhalla1.openstreetmap.de'
 
+export const buildLocateRequest = (latLng, profile) => {
+  return {
+    costing: profile,
+    locations: [{ lat: latLng.lat, lon: latLng.lng }]
+  }
+}
+
+export const buildHeightRequest = latLngs => {
+  const shape = []
+  for (const latLng of latLngs) {
+    shape.push({ lat: latLng[0], lon: latLng[1] })
+  }
+  return {
+    range: latLngs.length > 1,
+    shape,
+    id: 'valhalla_height'
+  }
+}
+
 export const buildDirectionsRequest = ({
   profile,
   activeWaypoints,

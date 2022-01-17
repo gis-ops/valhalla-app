@@ -2,17 +2,31 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import L from 'leaflet'
+import * as $ from 'jquery'
+import 'jquery-ui-bundle'
+import 'jquery-ui-bundle/jquery-ui.css'
+
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
+import 'leaflet.heightgraph'
+import 'leaflet.heightgraph/dist/L.Control.Heightgraph.min.css'
+
 import PropTypes from 'prop-types'
+import axios from 'axios'
+
 import * as R from 'ramda'
 import ExtraMarkers from './extraMarkers'
-import { Button } from 'semantic-ui-react'
-
+import { Button, Label, Icon, Popup } from 'semantic-ui-react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { fetchReverseGeocode } from 'actions/directionsActions'
 import { fetchReverseGeocodeIso } from 'actions/isochronesActions'
 import { updateSettings } from 'actions/commonActions'
-import { VALHALLA_OSM_URL } from 'utils/valhalla'
+import {
+  VALHALLA_OSM_URL,
+  buildHeightRequest,
+  buildLocateRequest
+} from 'utils/valhalla'
+import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 
 const OSMTiles = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -80,7 +94,10 @@ class Map extends React.Component {
     super(props)
     this.layerControl = null
     this.state = {
-      showPopup: false
+      showPopup: false,
+      isLocateLoading: false,
+      isHeightLoading: false,
+      locate: []
     }
   }
 
@@ -118,7 +135,7 @@ class Map extends React.Component {
 
     //and for the sake of advertising your company, you may add a logo to the map
     const brand = L.control({
-      position: 'bottomright'
+      position: 'bottomleft'
     })
     brand.onAdd = map => {
       const div = L.DomUtil.create('div', 'brand')
@@ -130,7 +147,7 @@ class Map extends React.Component {
     this.map.addControl(brand)
 
     const valhallaBrand = L.control({
-      position: 'bottomright'
+      position: 'bottomleft'
     })
     valhallaBrand.onAdd = map => {
       const div = L.DomUtil.create('div', 'brand')
@@ -141,8 +158,11 @@ class Map extends React.Component {
 
     this.map.addControl(valhallaBrand)
 
-    const popup = L.popup({ className: 'add-job' })
+    const popup = L.popup({ className: 'valhalla-popup' })
 
+    this.map.on('popupclose', event => {
+      this.setState({ hasCopied: false, locate: [] })
+    })
     this.map.on('contextmenu', event => {
       popup.setLatLng(event.latlng).openOn(this.map)
 
@@ -150,10 +170,34 @@ class Map extends React.Component {
         // as setContent needs the react dom we are setting the state here
         // to showPopup which then again renders a react portal in the render
         // return function..
-        this.setState({ showPopup: true, latLng: event.latlng })
+        this.setState({
+          showPopup: true,
+          showInfoPopup: false,
+          latLng: event.latlng
+        })
 
         popup.update()
       }, 20) //eslint-disable-line
+    })
+
+    this.map.on('click', event => {
+      if (
+        !this.map.pm.globalRemovalEnabled() &&
+        !this.map.pm.globalDrawModeEnabled()
+      ) {
+        popup.setLatLng(event.latlng).openOn(this.map)
+
+        this.getHeight(event.latlng)
+
+        setTimeout(() => {
+          this.setState({
+            showPopup: true,
+            showInfoPopup: true,
+            latLng: event.latlng
+          })
+          popup.update()
+        }, 20) //eslint-disable-line
+      }
     })
 
     // add Leaflet-Geoman controls with some options to the map
@@ -187,6 +231,52 @@ class Map extends React.Component {
 
     this.map.on('pm:remove', e => {
       this.updateExcludePolygons()
+    })
+
+    const getHeightData = this.getHeightData
+
+    this.hg = L.control.heightgraph({
+      mappings: colorMappings,
+      graphStyle: {
+        opacity: 0.9,
+        'fill-opacity': 1,
+        'stroke-width': '0px'
+      },
+      translation: {
+        distance: 'Distance from start'
+      },
+      expandCallback(expand) {
+        if (expand) getHeightData()
+      },
+      expandControls: true,
+      expand: false,
+      highlightStyle: {
+        color: 'blue'
+      }
+    })
+    this.hg.addTo(this.map)
+    const hg = this.hg
+    $('.heightgraph').resizable({
+      handles: 'w, n, nw',
+      minWidth: 380,
+      minHeight: 140,
+      stop: function(event, ui) {
+        // Remove the size/position of the UI element (.heightgraph .leaflet-control) because
+        // it should be sized dynamically based on its contents. Giving it a fixed size causes
+        // the toggle icon to be in the wrong place when the height graph is minimized.
+        ui.element.css({ width: '', height: '', left: '', top: '' })
+      },
+      resize: function(event, ui) {
+        if (
+          ui.originalPosition.left !== ui.position.left ||
+          ui.originalPosition.top !== ui.position.top
+        ) {
+          // left/upper edge was dragged => only keep size change since we're sticking to the right/bottom
+          ui.position.left = 0
+          ui.position.top = 0
+        }
+        hg.resize(ui.size)
+      }
     })
 
     // this.map.on('moveend', () => {
@@ -295,6 +385,38 @@ class Map extends React.Component {
   zoomToCoordinates = () => {
     const { coordinates } = this.props
     this.map.fitBounds(coordinates, { padding: [50, 50], maxZoom: 11 })
+  }
+
+  getHeightData = () => {
+    const { results } = this.props.directions
+    this.setState({ isHeightLoading: true })
+    axios
+      .post(
+        VALHALLA_OSM_URL + '/height',
+        buildHeightRequest(results[VALHALLA_OSM_URL].data.decodedGeometry),
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(({ data }) => {
+        this.setState({ isHeightLoading: false })
+        // lets build geojson object with steepness for the height graph
+        const reversedGeometry = JSON.parse(
+          JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
+        ).map(pair => {
+          return [...pair.reverse()]
+        })
+        const heightData = buildHeightgraphData(
+          reversedGeometry,
+          data.range_height
+        )
+        this.hg.addData(heightData)
+      })
+      .catch(({ response }) => {
+        console.log(response) //eslint-disable-line
+      })
   }
 
   zoomTo = idx => {
@@ -463,6 +585,11 @@ class Map extends React.Component {
           permanent: false,
           sticky: true
         })
+
+      this.hg._removeChart()
+      if (this.hg._showState == true) {
+        this.hg._expand()
+      }
     }
   }
 
@@ -541,6 +668,44 @@ class Map extends React.Component {
     }
   }
 
+  getLocate(latlng) {
+    const { profile } = this.props
+    this.setState({ isLocateLoading: true })
+    axios
+      .post(VALHALLA_OSM_URL + '/locate', buildLocateRequest(latlng, profile), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(({ data }) => {
+        this.setState({ locate: data, isLocateLoading: false })
+      })
+      .catch(({ response }) => {
+        console.log(response) //eslint-disable-line
+      })
+  }
+
+  getHeight(latLng) {
+    axios
+      .post(
+        VALHALLA_OSM_URL + '/height',
+        buildHeightRequest([[latLng.lat, latLng.lng]]),
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(({ data }) => {
+        if ('height' in data) {
+          this.setState({ elevation: data.height[0] + ' m' })
+        }
+      })
+      .catch(({ response }) => {
+        console.log(response) //eslint-disable-line
+      })
+  }
+
   addWaypoints() {
     routeMarkersLayer.clearLayers()
     const { waypoints } = this.props.directions
@@ -582,19 +747,149 @@ class Map extends React.Component {
 
   render() {
     const { activeTab } = this.props
-    const MapPopup = () => {
+    const MapPopup = isInfo => {
       return (
         <React.Fragment>
-          {activeTab == 0 ? (
+          {isInfo ? (
+            <React.Fragment>
+              <div>
+                <Button.Group basic size="tiny">
+                  <Popup
+                    size="tiny"
+                    content="Longitude, Latitude"
+                    trigger={
+                      <Button
+                        compact
+                        content={
+                          this.state.latLng.lng.toFixed(6) +
+                          ', ' +
+                          this.state.latLng.lat.toFixed(6)
+                        }
+                      />
+                    }
+                  />
+                  <CopyToClipboard
+                    text={
+                      this.state.latLng.lng.toFixed(6) +
+                      ',' +
+                      this.state.latLng.lat.toFixed(6)
+                    }
+                    onCopy={() => this.setState({ hasCopied: true })}>
+                    <Button compact icon="copy" />
+                  </CopyToClipboard>
+                </Button.Group>
+              </div>
+              <div className="mt1 flex">
+                <Button.Group basic size="tiny">
+                  <Popup
+                    size="tiny"
+                    content="Latitude, Longitude"
+                    trigger={
+                      <Button
+                        compact
+                        content={
+                          this.state.latLng.lat.toFixed(6) +
+                          ', ' +
+                          this.state.latLng.lng.toFixed(6)
+                        }
+                      />
+                    }
+                  />
+                  <CopyToClipboard
+                    text={
+                      this.state.latLng.lat.toFixed(6) +
+                      ',' +
+                      this.state.latLng.lng.toFixed(6)
+                    }
+                    onCopy={() => this.setState({ hasCopied: true })}>
+                    <Button compact icon="copy" />
+                  </CopyToClipboard>
+                </Button.Group>
+              </div>
+              <div className="mt1">
+                <Button.Group basic size="tiny">
+                  <Popup
+                    size="tiny"
+                    content="Calls Valhalla's Locate API"
+                    trigger={
+                      <Button
+                        onClick={() => this.getLocate(this.state.latLng)}
+                        compact
+                        loading={this.state.isLocateLoading}
+                        icon="cogs"
+                        content="Locate Point"
+                      />
+                    }
+                  />
+                  <CopyToClipboard
+                    text={JSON.stringify(this.state.locate)}
+                    onCopy={() => this.setState({ hasCopied: true })}>
+                    <Button
+                      disabled={this.state.locate.length == 0}
+                      compact
+                      icon="copy"
+                    />
+                  </CopyToClipboard>
+                </Button.Group>
+              </div>
+              <div className="mt1">
+                <Button.Group basic size="tiny">
+                  <Popup
+                    size="tiny"
+                    content="Copies a Valhalla location object to clipboard which you can use for your API requests"
+                    trigger={
+                      <Button
+                        compact
+                        icon="map marker alternate"
+                        content="Valhalla Location JSON"
+                      />
+                    }
+                  />
+                  <CopyToClipboard
+                    text={`{
+                        "lon": ${this.state.latLng.lng.toFixed(6)},
+                        "lat": ${this.state.latLng.lat.toFixed(6)}
+                      }`}
+                    onCopy={() => this.setState({ hasCopied: true })}>
+                    <Button compact icon="copy" />
+                  </CopyToClipboard>
+                </Button.Group>
+              </div>
+              <div className="mt1 flex justify-between">
+                <Popup
+                  size="tiny"
+                  content="Elevation at this point"
+                  trigger={
+                    <Button
+                      basic
+                      compact
+                      size="tiny"
+                      loading={this.state.isHeightLoading}
+                      icon="resize vertical"
+                      content={this.state.elevation}
+                    />
+                  }
+                />
+
+                <div>
+                  {this.state.hasCopied && (
+                    <Label size="mini" basic color="green">
+                      <Icon name="checkmark" /> copied
+                    </Label>
+                  )}
+                </div>
+              </div>
+            </React.Fragment>
+          ) : activeTab == 0 ? (
             <React.Fragment>
               <Button.Group size="small" basic vertical>
-                <Button index={0} onClick={this.handleAddWaypoint}>
+                <Button compact index={0} onClick={this.handleAddWaypoint}>
                   Directions from here
                 </Button>
-                <Button index={1} onClick={this.handleAddWaypoint}>
+                <Button compact index={1} onClick={this.handleAddWaypoint}>
                   Add as via point
                 </Button>
-                <Button index={-1} onClick={this.handleAddWaypoint}>
+                <Button compact index={-1} onClick={this.handleAddWaypoint}>
                   Directions to here
                 </Button>
               </Button.Group>
@@ -611,13 +906,19 @@ class Map extends React.Component {
         </React.Fragment>
       )
     }
+
     const leafletPopupDiv = document.querySelector('.leaflet-popup-content')
     return (
       <React.Fragment>
         <div id="map" style={style} />
-        {this.state.showPopup && leafletPopupDiv
-          ? ReactDOM.createPortal(MapPopup(), leafletPopupDiv)
-          : null}
+        <div>
+          {this.state.showPopup && leafletPopupDiv
+            ? ReactDOM.createPortal(
+                MapPopup(this.state.showInfoPopup),
+                leafletPopupDiv
+              )
+            : null}
+        </div>
       </React.Fragment>
     )
   }

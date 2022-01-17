@@ -50,7 +50,6 @@ export const updatePermalink = () => (dispatch, getState) => {
   const { waypoints } = getState().directions
   const { geocodeResults, maxRange, interval } = getState().isochrones
   const { profile, /*settings,*/ activeTab } = getState().common
-
   const queryParams = new URLSearchParams()
   queryParams.set('profile', profile)
 
@@ -80,7 +79,6 @@ export const updatePermalink = () => (dispatch, getState) => {
     queryParams.set('range', maxRange)
     queryParams.set('interval', interval)
   }
-
   window.history.replaceState(null, null, path + queryParams.toString())
 }
 
@@ -139,6 +137,5 @@ export const filterProfileSettings = (profile, settings) => {
       }
     }
   }
-
   return filteredSettings
 }
