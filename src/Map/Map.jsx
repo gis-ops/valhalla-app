@@ -387,38 +387,6 @@ class Map extends React.Component {
     this.map.fitBounds(coordinates, { padding: [50, 50], maxZoom: 11 })
   }
 
-  getHeightData = () => {
-    const { results } = this.props.directions
-    this.setState({ isHeightLoading: true })
-    axios
-      .post(
-        VALHALLA_OSM_URL + '/height',
-        buildHeightRequest(results[VALHALLA_OSM_URL].data.decodedGeometry),
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(({ data }) => {
-        this.setState({ isHeightLoading: false })
-        // lets build geojson object with steepness for the height graph
-        const reversedGeometry = JSON.parse(
-          JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
-        ).map(pair => {
-          return [...pair.reverse()]
-        })
-        const heightData = buildHeightgraphData(
-          reversedGeometry,
-          data.range_height
-        )
-        this.hg.addData(heightData)
-      })
-      .catch(({ response }) => {
-        console.log(response) //eslint-disable-line
-      })
-  }
-
   zoomTo = idx => {
     const { results } = this.props.directions
 
@@ -685,7 +653,43 @@ class Map extends React.Component {
       })
   }
 
+  getHeightData = () => {
+    const { results } = this.props.directions
+
+    const heightPayload = buildHeightRequest(
+      results[VALHALLA_OSM_URL].data.decodedGeometry
+    )
+
+    if (!R.equals(this.state.heightPayload, heightPayload)) {
+      this.setState({ isHeightLoading: true, heightPayload })
+      axios
+        .post(VALHALLA_OSM_URL + '/height', heightPayload, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(({ data }) => {
+          this.setState({ isHeightLoading: false })
+          // lets build geojson object with steepness for the height graph
+          const reversedGeometry = JSON.parse(
+            JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
+          ).map(pair => {
+            return [...pair.reverse()]
+          })
+          const heightData = buildHeightgraphData(
+            reversedGeometry,
+            data.range_height
+          )
+          this.hg.addData(heightData)
+        })
+        .catch(({ response }) => {
+          console.log(response) //eslint-disable-line
+        })
+    }
+  }
+
   getHeight(latLng) {
+    this.setState({ isHeightLoading: true })
     axios
       .post(
         VALHALLA_OSM_URL + '/height',
@@ -698,7 +702,10 @@ class Map extends React.Component {
       )
       .then(({ data }) => {
         if ('height' in data) {
-          this.setState({ elevation: data.height[0] + ' m' })
+          this.setState({
+            elevation: data.height[0] + ' m',
+            isHeightLoading: false
+          })
         }
       })
       .catch(({ response }) => {
