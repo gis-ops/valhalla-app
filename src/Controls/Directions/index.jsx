@@ -14,7 +14,6 @@ import {
   makeRequest,
   clearRoutes
 } from 'actions/directionsActions'
-import fossgisLogo from 'images/fossgis.png'
 import {
   updateProfile,
   doShowSettings,
@@ -101,18 +100,23 @@ class DirectionsControl extends React.Component {
             </React.Fragment>
           </div>
           <Divider fitted />
-          <div className="tr">
-            <a
-              target="_blank"
-              href={`https://fossgis.de/news/2021-11-12_funding_valhalla/`}
-              rel="noreferrer">
-              <img
-                src={fossgisLogo}
-                style={{ height: 40 }}
-                className={'pa2'}
-                alt="gisops_logo"
-              />
-            </a>
+          <div className="ml2">
+            <span className="custom-label">
+              Calculations by{' '}
+              <a
+                href="https://github.com/valhalla/valhalla"
+                target="_blank"
+                rel="noreferrer">
+                Valhalla
+              </a>{' '}
+              • visualized with{' '}
+              <a
+                href="https://github.com/gis-ops/valhalla-app/"
+                target="_blank"
+                rel="noreferrer">
+                Valhalla App
+              </a>
+            </span>
           </div>
         </div>
       </React.Fragment>

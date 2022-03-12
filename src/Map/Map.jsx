@@ -140,7 +140,7 @@ class Map extends React.Component {
     brand.onAdd = map => {
       const div = L.DomUtil.create('div', 'brand')
       div.innerHTML =
-        '<a href="https://fossgis.de" target="_blank"><div class="fossgis-logo"></div></a>'
+        '<a href="https://fossgis.de/news/2021-11-12_funding_valhalla/" target="_blank"><div class="fossgis-logo"></div></a>'
       return div
     }
 
