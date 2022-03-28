@@ -3,8 +3,12 @@ import { decode } from './polyline'
 export const VALHALLA_OSM_URL = 'https://valhalla1.openstreetmap.de'
 
 export const buildLocateRequest = (latLng, profile) => {
+  let valhalla_profile = profile
+  if (profile === 'car') {
+    valhalla_profile = 'auto'
+  }
   return {
-    costing: profile,
+    costing: valhalla_profile,
     locations: [{ lat: latLng.lat, lon: latLng.lng }]
   }
 }
