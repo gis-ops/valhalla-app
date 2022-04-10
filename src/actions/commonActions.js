@@ -5,7 +5,8 @@ import {
   UPDATE_TAB,
   LOADING,
   SHOW_SETTINGS,
-  ZOOM_TO
+  ZOOM_TO,
+  RESET_SETTINGS
 } from './types'
 
 import {
@@ -39,6 +40,10 @@ export const updateTab = activeTab => ({
 
 export const doShowSettings = () => ({
   type: SHOW_SETTINGS
+})
+
+export const resetSettings = () => ({
+  type: RESET_SETTINGS
 })
 
 export const zoomTo = coords => ({

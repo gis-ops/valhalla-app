@@ -27,7 +27,7 @@ class Waypoints extends Component {
     super(props)
     this.fetchGeocodeResults = debounce(200, this.fetchGeocodeResults)
     this.handleIsoSliderUpdateSettings = debounce(
-      200,
+      10,
       this.handleIsoSliderUpdateSettings
     )
   }
@@ -214,6 +214,8 @@ class Waypoints extends Component {
                         </div>
                       }
                       value={maxRange}
+                      type="number"
+                      step="1"
                       placeholder="Enter Value"
                       name={controlSettings.maxRange.param}
                       onChange={this.handleRangeChange}

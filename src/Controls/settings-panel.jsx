@@ -20,8 +20,10 @@ import { profile_settings, settings_general } from './settings-options'
 import {
   updateSettings,
   doShowSettings,
-  filterProfileSettings
+  filterProfileSettings,
+  resetSettings
 } from 'actions/commonActions'
+
 import CustomSlider from '../components/CustomSlider'
 import { makeRequest } from 'actions/directionsActions'
 import { makeIsochronesRequest } from 'actions/isochronesActions'
@@ -150,6 +152,11 @@ class SettingsPanel extends React.Component {
     )
   }
 
+  resetConfigSettings = () => {
+    const { dispatch } = this.props
+    dispatch(resetSettings())
+  }
+
   extractSettings = (profile, settings) => {
     return JSON.stringify(filterProfileSettings(profile, settings))
   }
@@ -169,7 +176,9 @@ class SettingsPanel extends React.Component {
               zIndex: 999,
               position: 'absolute',
               right: 60,
-              top: -5
+              top: -5,
+              height: '100%',
+              overflow: 'auto'
             }}>
             <Grid columns={16} divided>
               <Grid.Row>
@@ -343,19 +352,29 @@ class SettingsPanel extends React.Component {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <Grid.Column width={12}>
+                <Grid.Column width={16}>
                   <CopyToClipboard
                     text={this.extractSettings(profile, settings)}
                     onCopy={() => this.setState({ copied: true })}>
                     <Button
-                      size="tiny"
+                      basic
+                      size="mini"
                       icon
                       color={this.state.copied ? 'green' : undefined}
                       labelPosition="left">
                       <Icon name="download" />
-                      Copy Settings to Clipboard
+                      Copy to Clipboard
                     </Button>
                   </CopyToClipboard>
+                  <Button
+                    basic
+                    size="mini"
+                    icon
+                    onClick={this.resetConfigSettings}
+                    labelPosition="left">
+                    <Icon name="remove" />
+                    Reset
+                  </Button>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

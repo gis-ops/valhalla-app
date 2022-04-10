@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react'
-import { Form, Label, Popup } from 'semantic-ui-react'
+import React, { Fragment, useState } from 'react'
+import { Form, Label, Popup, Icon } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
+import { debounce } from 'throttle-debounce'
+import { settingsInit } from 'Controls/settings-options'
 
 import PropTypes from 'prop-types'
 
@@ -8,23 +10,42 @@ const CustomSlider = props => {
   const { settings, option, handleUpdateSettings } = props
   const { min, max, step } = option.settings
 
-  const handleChange = (e, { value }) => {
-    handleUpdateSettings({
-      name: option.param,
-      value: parseFloat(value)
-    })
+  const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
+
+  const handleChange = value => {
+    // reset
+    if (isNaN(value)) {
+      value = settingsInit[option.param]
+    }
+    setSliderVal(parseFloat(value))
+    debounce(
+      300,
+      handleUpdateSettings({
+        name: option.param,
+        value: parseFloat(value)
+      })
+    )
   }
 
   return (
     <Fragment>
       <Form.Group inline>
+        <Popup
+          content={'Reset Value'}
+          size={'tiny'}
+          trigger={
+            <Icon name="repeat" size="small" onClick={() => handleChange()} />
+          }
+        />
         <Form.Input
           width={16}
           size="small"
-          value={settings[option.param]}
+          type="number"
+          step="any"
+          value={sliderVal}
           placeholder="Enter Value"
           name={option.param}
-          onChange={handleChange}
+          onChange={e => handleChange(e.target.value)}
         />
         <Popup
           content={'Units'}
@@ -42,15 +63,12 @@ const CustomSlider = props => {
           size={'small'}
           max={max}
           step={step}
-          value={settings[option.param]}
+          value={sliderVal}
           color="secondary"
           aria-label="Default"
           valueLabelDisplay="auto"
           onChange={e => {
-            handleUpdateSettings({
-              name: option.param,
-              value: parseFloat(e.target.value)
-            })
+            handleChange(e.target.value)
           }}
         />
       </div>
