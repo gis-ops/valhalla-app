@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as R from 'ramda'
 
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
-import { Slider } from 'react-semantic-ui-range'
+import { Slider } from '@mui/material'
 
 import {
   updateTextInput,
@@ -13,9 +13,7 @@ import {
   makeIsochronesRequest
 } from 'actions/isochronesActions'
 
-import {
-  updatePermalink
-} from 'actions/commonActions'
+import { updatePermalink } from 'actions/commonActions'
 
 import { debounce } from 'throttle-debounce'
 
@@ -29,7 +27,7 @@ class Waypoints extends Component {
     super(props)
     this.fetchGeocodeResults = debounce(200, this.fetchGeocodeResults)
     this.handleIsoSliderUpdateSettings = debounce(
-      100,
+      200,
       this.handleIsoSliderUpdateSettings
     )
   }
@@ -86,7 +84,6 @@ class Waypoints extends Component {
   }
 
   handleIntervalChange = (e, { value }) => {
-    const { dispatch } = this.props
     const { maxRange } = this.props.isochrones
 
     value = isNaN(parseInt(value)) ? 0 : parseInt(value)
@@ -103,9 +100,6 @@ class Waypoints extends Component {
   }
 
   handleRangeChange = (e, { value }) => {
-   
-    const { dispatch } = this.props
-
     value = isNaN(parseInt(value)) ? 0 : parseInt(value)
     if (value > 120) {
       value = 120
@@ -119,12 +113,10 @@ class Waypoints extends Component {
       intervalName,
       value
     })
-    
   }
 
   handleIsoSliderUpdateSettings = ({ value, maxRangeName, intervalName }) => {
     const { dispatch } = this.props
-
     // maxRangeName can be undefined if interval is being updated
     dispatch(
       updateIsoSettings({
@@ -135,7 +127,6 @@ class Waypoints extends Component {
     )
 
     dispatch(updatePermalink())
-
   }
 
   render() {
@@ -242,24 +233,21 @@ class Waypoints extends Component {
                   </Form.Group>
                   <div className={'mb2 pa2'}>
                     <Slider
-                      discrete
-                      color="grey"
+                      min={controlSettings.maxRange.settings.min}
+                      max={controlSettings.maxRange.settings.max}
+                      step={controlSettings.maxRange.settings.step}
                       value={maxRange}
-                      settings={{
-                        min: controlSettings.maxRange.settings.min,
-                        max: controlSettings.maxRange.settings.max,
-                        step: controlSettings.maxRange.settings.step,
-                        start: maxRange,
-                        onChange: value => {
-                          const maxRangeName = controlSettings.maxRange.param
-                          const intervalName = controlSettings.interval.param
-
-                          this.handleIsoSliderUpdateSettings({
-                            maxRangeName,
-                            intervalName,
-                            value
-                          })
-                        }
+                      color="secondary"
+                      aria-label="Default"
+                      valueLabelDisplay="auto"
+                      onChange={e => {
+                        const maxRangeName = controlSettings.maxRange.param
+                        const intervalName = controlSettings.interval.param
+                        this.handleIsoSliderUpdateSettings({
+                          maxRangeName,
+                          intervalName,
+                          value: e.target.value
+                        })
                       }}
                     />
                   </div>
@@ -307,22 +295,19 @@ class Waypoints extends Component {
                   </Form.Group>
                   <div className={'mb2 pa2'}>
                     <Slider
-                      discrete
-                      color="grey"
+                      min={controlSettings.interval.settings.min}
+                      max={controlSettings.interval.settings.max}
+                      step={controlSettings.interval.settings.step}
                       value={interval}
-                      settings={{
-                        min: controlSettings.interval.settings.min,
-                        max: maxRange,
-                        step: controlSettings.interval.settings.step,
-                        start: interval,
-                        onChange: value => {
-                          const intervalName = controlSettings.interval.param
-
-                          this.handleIsoSliderUpdateSettings({
-                            intervalName,
-                            value
-                          })
-                        }
+                      color="secondary"
+                      aria-label="Default"
+                      valueLabelDisplay="auto"
+                      onChange={e => {
+                        const intervalName = controlSettings.interval.param
+                        this.handleIsoSliderUpdateSettings({
+                          intervalName,
+                          value: e.target.value
+                        })
                       }}
                     />
                   </div>

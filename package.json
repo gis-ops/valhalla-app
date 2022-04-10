@@ -4,7 +4,10 @@
   "private": false,
   "homepage": "https://converter.gis-ops.com",
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@geoman-io/leaflet-geoman-free": "^2.11.3",
+    "@mui/material": "^5.6.0",
     "@turf/turf": "^5.1.6",
     "axios": "^0.19.0",
     "date-fns": "^2.28.0",
@@ -21,7 +24,6 @@
     "react-redux": "^6.0.0",
     "react-scripts": "^3.0.1",
     "react-semantic-toasts": "^0.6.1",
-    "react-semantic-ui-range": "0.7.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

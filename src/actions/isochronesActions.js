@@ -77,7 +77,7 @@ const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
         dispatch(registerIsoResponse(URL, data))
       })
       .catch(({ response }) => {
-        dispatch(clearIsos(URL))
+        dispatch(registerIsoResponse(URL, []))
         dispatch(
           sendMessage({
             type: 'warning',
@@ -146,7 +146,6 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
 }
 
 export const fetchReverseGeocodeIso = (lng, lat) => dispatch => {
-
   dispatch(placeholderAddress(0, lng, lat))
 
   dispatch({

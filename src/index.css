@@ -55,6 +55,10 @@ i.help.grey.icon {
   background-color: #9943f5 !important;
 }
 
+.ui.form .inline.fields {
+  margin: 0em 0em 0em;
+}
+
 .extra-marker i {
   font-style: normal;
   font-size: 12px;

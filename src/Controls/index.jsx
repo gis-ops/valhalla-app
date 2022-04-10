@@ -20,7 +20,7 @@ import {
 } from 'actions/isochronesActions'
 
 const controlStyle = {
-  zIndex: 9999,
+  zIndex: 1000,
   position: 'absolute',
   width: '420px',
   top: '10px',

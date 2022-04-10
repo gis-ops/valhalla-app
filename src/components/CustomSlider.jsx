@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Form, Label, Popup } from 'semantic-ui-react'
-import { Slider } from 'react-semantic-ui-range'
+import { Slider } from '@mui/material'
+
 import PropTypes from 'prop-types'
 
 const CustomSlider = props => {
@@ -14,37 +15,12 @@ const CustomSlider = props => {
     })
   }
 
-  const sliderSettings = {
-    start: settings[option.param],
-    min: min,
-    max: max,
-    step: step,
-    onChange: value => {
-      handleUpdateSettings({
-        name: option.param,
-        value: parseFloat(value)
-      })
-    }
-  }
-
   return (
     <Fragment>
       <Form.Group inline>
         <Form.Input
           width={16}
           size="small"
-          // label={
-          //   <div className="flex flex-row align-top">
-          //     <span className="custom-label">{option.name}</span>
-          //     <Popup
-          //       content={option.description}
-          //       size={'tiny'}
-          //       trigger={
-          //         <Icon className="pl2" color="grey" name="help circle" />
-          //       }
-          //     />
-          //   </div>
-          // }
           value={settings[option.param]}
           placeholder="Enter Value"
           name={option.param}
@@ -60,12 +36,22 @@ const CustomSlider = props => {
           }
         />
       </Form.Group>
-      <div className={'mb2'}>
+      <div>
         <Slider
-          discrete
-          color="grey"
+          min={min}
+          size={'small'}
+          max={max}
+          step={step}
           value={settings[option.param]}
-          settings={sliderSettings}
+          color="secondary"
+          aria-label="Default"
+          valueLabelDisplay="auto"
+          onChange={e => {
+            handleUpdateSettings({
+              name: option.param,
+              value: parseFloat(e.target.value)
+            })
+          }}
         />
       </div>
     </Fragment>
