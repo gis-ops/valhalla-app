@@ -45,22 +45,34 @@ class OutputControl extends React.Component {
     this.setState({ showResults: !this.state.showResults })
   }
 
+  dateNow() {
+    let dtNow = new Date()
+    dtNow =
+      [dtNow.getMonth() + 1, dtNow.getDate(), dtNow.getFullYear()].join('/') +
+      '_' +
+      [dtNow.getHours(), dtNow.getMinutes(), dtNow.getSeconds()].join(':')
+    return dtNow
+  }
   exportToJson = e => {
     const { results } = this.props
-    const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
+    const { data } = results[VALHALLA_OSM_URL]
 
-    const dateNow = new Date()
-    const dformat =
-      [dateNow.getMonth() + 1, dateNow.getDate(), dateNow.getFullYear()].join(
-        '/'
-      ) +
-      '_' +
-      [dateNow.getHours(), dateNow.getMinutes(), dateNow.getSeconds()].join(':')
+    e.preventDefault()
+    downloadFile({
+      data: JSON.stringify(data),
+      fileName: 'valhalla-directions_' + this.dateNow() + '.json',
+      fileType: 'text/json'
+    })
+  }
+
+  exportToGeoJson = e => {
+    const { results } = this.props
+    const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
 
     e.preventDefault()
     downloadFile({
       data: JSON.stringify(L.polyline(coordinates).toGeoJSON()),
-      fileName: 'valhalla-directions_' + dformat + '.geojson',
+      fileName: 'valhalla-directions_' + this.dateNow() + '.geojson',
       fileType: 'text/json'
     })
   }
@@ -84,12 +96,21 @@ class OutputControl extends React.Component {
               onClick={this.showManeuvers}>
               {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
             </Button>
-            <div
-              className={'flex pointer'}
-              style={{ alignSelf: 'center' }}
-              onClick={this.exportToJson}>
-              <Icon circular name={'download'} />
-              <div className={'pa1 b f6'}>{'Download'}</div>
+            <div className={'flex'}>
+              <div
+                className={'flex pointer'}
+                style={{ alignSelf: 'center' }}
+                onClick={this.exportToJson}>
+                <Icon circular name={'download'} />
+                <div className={'pa1 b f6'}>{'JSON'}</div>
+              </div>
+              <div
+                className={'ml2 flex pointer'}
+                style={{ alignSelf: 'center' }}
+                onClick={this.exportToGeoJson}>
+                <Icon circular name={'download'} />
+                <div className={'pa1 b f6'}>{'GeoJSON'}</div>
+              </div>
             </div>
           </div>
 
