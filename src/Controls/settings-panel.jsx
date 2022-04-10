@@ -165,7 +165,7 @@ class SettingsPanel extends React.Component {
     const { dispatch, profile, settings, showSettings } = this.props
 
     const no_profile_settings = profile_settings[profile].boolean.length === 0
-    const width = no_profile_settings ? 170 : 340
+    const width = no_profile_settings ? 200 : 400
 
     return (
       <React.Fragment>
@@ -177,7 +177,7 @@ class SettingsPanel extends React.Component {
               position: 'absolute',
               right: 60,
               top: -5,
-              height: '100%',
+              height: '95%',
               overflow: 'auto'
             }}>
             <Grid columns={16} divided>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Form, Label, Popup, Icon } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
 import { debounce } from 'throttle-debounce'
@@ -11,6 +11,10 @@ const CustomSlider = props => {
   const { min, max, step } = option.settings
 
   const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
+
+  useEffect(() => {
+    setSliderVal(parseFloat(settings[option.param]))
+  }, [props])
 
   const handleChange = value => {
     // reset

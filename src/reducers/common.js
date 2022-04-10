@@ -70,7 +70,7 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         settings: {
-          ...initialState.settings
+          ...settingsInit
         }
       }
     }
