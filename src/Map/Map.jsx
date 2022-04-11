@@ -42,6 +42,20 @@ const style = {
   height: '100vh'
 }
 
+const convertDDToDMS = decimalDegrees =>
+  [
+    0 | decimalDegrees,
+    '° ',
+    0 |
+      (((decimalDegrees =
+        (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) + 1e-4) %
+        1) *
+        60),
+    "' ",
+    0 | (((decimalDegrees * 60) % 1) * 60),
+    '"'
+  ].join('')
+
 // for this app we create two leaflet layer groups to control, one for the isochrone centers and one for the isochrone contours
 const isoCenterLayer = L.featureGroup()
 const isoPolygonLayer = L.featureGroup()
@@ -785,6 +799,7 @@ class Map extends React.Component {
                   </CopyToClipboard>
                 </Button.Group>
               </div>
+
               <div className="mt1 flex">
                 <Button.Group basic size="tiny">
                   <Popup
@@ -812,6 +827,36 @@ class Map extends React.Component {
                   </CopyToClipboard>
                 </Button.Group>
               </div>
+              <div className="mt1 flex">
+                <Button.Group basic size="tiny">
+                  <Popup
+                    size="tiny"
+                    content="Latitude, Longitude"
+                    trigger={
+                      <Button
+                        compact
+                        content={
+                          convertDDToDMS(this.state.latLng.lat) +
+                          ' N ' +
+                          convertDDToDMS(this.state.latLng.lng) +
+                          ' E'
+                        }
+                      />
+                    }
+                  />
+                  <CopyToClipboard
+                    text={
+                      convertDDToDMS(this.state.latLng.lat) +
+                      ' N ' +
+                      convertDDToDMS(this.state.latLng.lng) +
+                      ' E'
+                    }
+                    onCopy={() => this.setState({ hasCopied: true })}>
+                    <Button compact icon="copy" />
+                  </CopyToClipboard>
+                </Button.Group>
+              </div>
+
               <div className="mt1">
                 <Button.Group basic size="tiny">
                   <Popup
