@@ -18,7 +18,10 @@ import * as R from 'ramda'
 import ExtraMarkers from './extraMarkers'
 import { Button, Label, Icon, Popup } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { fetchReverseGeocode } from 'actions/directionsActions'
+import {
+  fetchReverseGeocode,
+  updateInclineDeclineTotal
+} from 'actions/directionsActions'
 import { fetchReverseGeocodeIso } from 'actions/isochronesActions'
 import { updateSettings } from 'actions/commonActions'
 import {
@@ -667,6 +670,7 @@ class Map extends React.Component {
 
   getHeightData = () => {
     const { results } = this.props.directions
+    const { dispatch } = this.props
 
     const heightPayload = buildHeightRequest(
       results[VALHALLA_OSM_URL].data.decodedGeometry
@@ -693,6 +697,9 @@ class Map extends React.Component {
             reversedGeometry,
             data.range_height
           )
+          const { inclineTotal, declineTotal } = heightData[0].properties
+          dispatch(updateInclineDeclineTotal({ inclineTotal, declineTotal }))
+
           this.hg.addData(heightData)
         })
         .catch(({ response }) => {

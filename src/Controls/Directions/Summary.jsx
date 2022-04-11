@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import * as R from 'ramda'
 import { intervalToDuration } from 'date-fns'
 
-import { Icon, Checkbox } from 'semantic-ui-react'
+import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     results: PropTypes.object,
+    inclineDeclineTotal: PropTypes.object,
     header: PropTypes.string,
     provider: PropTypes.string
   }
@@ -43,7 +44,7 @@ class Summary extends React.Component {
   }
 
   render() {
-    const { provider, results } = this.props
+    const { provider, results, inclineDeclineTotal } = this.props
 
     const summary = R.path([provider, 'data', 'trip', 'summary'], results)
 
@@ -54,7 +55,7 @@ class Summary extends React.Component {
             <div className="flex mb1">
               <span className="b">Directions</span>
             </div>
-            <div className={'flex justify-between pb3 pointer'}>
+            <div className={'flex justify-between pb2 pointer'}>
               <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
                 <Icon
                   circular
@@ -83,6 +84,38 @@ class Summary extends React.Component {
                 />
               </div>
             </div>
+            {inclineDeclineTotal && (
+              <div className={'flex pb3 pointer'}>
+                <div style={{ alignSelf: 'center', marginRight: '1em' }}>
+                  <Popup
+                    content={'Total incline'}
+                    size={'tiny'}
+                    trigger={
+                      <div>
+                        <Icon circular name={'arrow up'} size={'small'} />
+                        <div className={'dib v-mid pa1 b f6'}>
+                          {`${inclineDeclineTotal.inclineTotal} m`}
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+                <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
+                  <Popup
+                    content={'Total decline'}
+                    size={'tiny'}
+                    trigger={
+                      <div>
+                        <Icon circular name={'arrow down'} size={'small'} />
+                        <div className={'dib v-mid pa1 b f6'}>
+                          {`${inclineDeclineTotal.declineTotal} m`}
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+            )}
           </React.Fragment>
         ) : (
           <div>No route found</div>
@@ -93,9 +126,10 @@ class Summary extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { results } = state.directions
+  const { results, inclineDeclineTotal } = state.directions
   return {
-    results
+    results,
+    inclineDeclineTotal
   }
 }
 

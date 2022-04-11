@@ -46,6 +46,9 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
   let LineStringCoordinates = []
   const heightClasses = []
 
+  let inclineTotal = 0
+  let declineTotal = 0
+
   rangeHeightData.forEach((item, index) => {
     //console.log("Current: " + item.name);
     if (index < rangeHeightData.length - 1) {
@@ -56,6 +59,12 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
 
       const slope = (rise / run) * 100
       const heightClass = isNaN(slope) ? 0 : deriveHeightClass(slope)
+
+      if (rise > 0) {
+        inclineTotal += rise
+      } else if (rise < 0) {
+        declineTotal += rise * -1
+      }
 
       LineStringCoordinates.push([
         coordinates[index][0],
@@ -91,7 +100,9 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
       type: 'FeatureCollection',
       features: features,
       properties: {
-        summary: 'steepness'
+        summary: 'steepness',
+        inclineTotal,
+        declineTotal
       }
     }
   ]

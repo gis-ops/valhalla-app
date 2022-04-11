@@ -11,7 +11,8 @@ import {
   CLEAR_ROUTES,
   TOGGLE_PROVIDER_ISO,
   HIGHLIGHT_MNV,
-  ZOOM_TO_MNV
+  ZOOM_TO_MNV,
+  UPDATE_INCLINE_DECLINE
 } from 'actions/types'
 
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
@@ -39,6 +40,12 @@ const initialState = {
 export const directions = (state = initialState, action) => {
   //console.log(action) //eslint-disable-line
   switch (action.type) {
+    case UPDATE_INCLINE_DECLINE:
+      return {
+        ...state,
+        inclineDeclineTotal: { ...action.payload }
+      }
+
     case TOGGLE_PROVIDER_ISO:
       return {
         ...state,
@@ -55,6 +62,7 @@ export const directions = (state = initialState, action) => {
       return {
         ...state,
         successful: false,
+        inclineDeclineTotal: undefined,
         results: {
           ...state.results,
           [action.payload]: {
@@ -67,6 +75,7 @@ export const directions = (state = initialState, action) => {
     case RECEIVE_ROUTE_RESULTS:
       return {
         ...state,
+        inclineDeclineTotal: undefined,
         results: {
           ...state.results,
           [action.payload.provider]: {

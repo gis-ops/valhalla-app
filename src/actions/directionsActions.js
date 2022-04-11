@@ -12,7 +12,8 @@ import {
   CLEAR_ROUTES,
   TOGGLE_PROVIDER_ISO,
   HIGHLIGHT_MNV,
-  ZOOM_TO_MNV
+  ZOOM_TO_MNV,
+  UPDATE_INCLINE_DECLINE
 } from './types'
 import {
   reverse_geocode,
@@ -326,6 +327,11 @@ export const clearWaypoints = index => ({
 export const emptyWaypoint = index => ({
   type: EMPTY_WAYPOINT,
   payload: { index: index }
+})
+
+export const updateInclineDeclineTotal = object => ({
+  type: UPDATE_INCLINE_DECLINE,
+  payload: object
 })
 
 export const doAddWaypoint = doInsert => (dispatch, getState) => {
