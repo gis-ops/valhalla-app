@@ -9,6 +9,8 @@ import {
   makeRequest
 } from 'actions/directionsActions'
 
+import { zoomTo } from 'actions/commonActions'
+
 import { debounce } from 'throttle-debounce'
 
 class Waypoint extends React.Component {
@@ -62,6 +64,7 @@ class Waypoint extends React.Component {
 
   handleResultSelect = (e, { result }) => {
     const { dispatch, index } = this.props
+    dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
     dispatch(
       updateTextInput({
         inputValue: result.title,

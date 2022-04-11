@@ -30,7 +30,8 @@ import {
   sendMessage,
   showLoading,
   filterProfileSettings,
-  updatePermalink
+  updatePermalink,
+  zoomTo
 } from './commonActions'
 
 const serverMapping = {
@@ -80,6 +81,7 @@ const fetchValhallaDirections = valhallaRequest => (dispatch, getState) => {
     .then(({ data }) => {
       data.decodedGeometry = parseDirectionsGeometry(data)
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
+      dispatch(zoomTo(data.decodedGeometry))
     })
     .catch(({ response }) => {
       let error_msg = response.data.error

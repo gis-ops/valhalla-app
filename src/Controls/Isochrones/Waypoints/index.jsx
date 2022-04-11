@@ -13,7 +13,7 @@ import {
   makeIsochronesRequest
 } from 'actions/isochronesActions'
 
-import { updatePermalink } from 'actions/commonActions'
+import { updatePermalink, zoomTo } from 'actions/commonActions'
 
 import { debounce } from 'throttle-debounce'
 
@@ -80,6 +80,7 @@ class Waypoints extends Component {
         addressindex: result.addressindex
       })
     )
+    dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
     dispatch(makeIsochronesRequest())
   }
 
