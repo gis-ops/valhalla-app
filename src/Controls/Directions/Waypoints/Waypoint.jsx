@@ -10,6 +10,7 @@ import {
 } from 'actions/directionsActions'
 
 import { zoomTo } from 'actions/commonActions'
+import { isValidCoordinates } from 'utils/geom'
 
 import { debounce } from 'throttle-debounce'
 
@@ -21,35 +22,55 @@ class Waypoint extends React.Component {
     userInput: PropTypes.string,
     isFetching: PropTypes.bool,
     results: PropTypes.array,
+    use_geocoding: PropTypes.bool,
     geocodeResults: PropTypes.array
   }
 
   constructor(props) {
     super(props)
-    this.state = { isClicked: false }
+    this.state = { open: false }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleResultSelect = this.handleResultSelect.bind(this)
     this.fetchGeocodeResults = debounce(0, this.fetchGeocodeResults)
   }
 
   fetchGeocodeResults(e) {
-    const { dispatch, index, userInput } = this.props
+    const { dispatch, index, userInput, use_geocoding } = this.props
+
+    this.setState({ open: true })
+
     if (userInput.length > 0 && e == 'Enter') {
-      dispatch(
-        fetchGeocode({
-          inputValue: userInput,
-          index: index
-        })
-      )
+      // make results visible
+      if (use_geocoding) {
+        dispatch(
+          fetchGeocode({
+            inputValue: userInput,
+            index: index
+          })
+        )
+      } else {
+        const coords = userInput.split(/[\s,;]+/)
+        // is this a coordinate?
+        if (coords.length == 2) {
+          const lat = coords[1]
+          const lng = coords[0]
+          if (isValidCoordinates(lat, lng)) {
+            dispatch(
+              fetchGeocode({
+                inputValue: userInput,
+                index: index,
+                lngLat: [parseFloat(lng), parseFloat(lat)]
+              })
+            )
+          }
+        }
+      }
     }
   }
 
   handleSearchChange = event => {
-    for (const results of document.getElementsByClassName('results')) {
-      document.getElementById('valhalla-app-root').appendChild(results)
-    }
-
     const { dispatch, index } = this.props
+
     dispatch(
       updateTextInput({
         inputValue: event.target.value,
@@ -64,6 +85,8 @@ class Waypoint extends React.Component {
 
   handleResultSelect = (e, { result }) => {
     const { dispatch, index } = this.props
+
+    this.setState({ open: false })
     dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
     dispatch(
       updateTextInput({
@@ -75,8 +98,33 @@ class Waypoint extends React.Component {
     dispatch(makeRequest())
   }
 
+  resultRenderer = ({ title, description }) => (
+    <div className="flex-column">
+      <div>
+        <span className="title">{title}</span>
+      </div>
+      {description && description.length > 0 && (
+        <div>
+          <Icon disabled name="linkify" />
+          <span className="description b">
+            <a target="_blank" rel="noreferrer" href={description}>
+              OSM Link
+            </a>
+          </span>
+        </div>
+      )}
+    </div>
+  )
+
   render() {
-    const { dispatch, isFetching, geocodeResults, userInput } = this.props
+    const {
+      dispatch,
+      isFetching,
+      geocodeResults,
+      userInput,
+      use_geocoding,
+      index
+    } = this.props
 
     return (
       <React.Fragment>
@@ -87,17 +135,24 @@ class Waypoint extends React.Component {
             trigger={
               <Label basic size="small">
                 <Icon name="ellipsis vertical" />
-                {parseInt(this.props.index) + 1}
+                {parseInt(index) + 1}
               </Label>
             }
           />
           <Search
-            className={'pa2 ' + this.props.index}
+            className={'pa2 ' + index}
             size="small"
+            fluid
             input={{ icon: 'search', iconPosition: 'left' }}
             onSearchChange={this.handleSearchChange}
             onResultSelect={this.handleResultSelect}
+            resultRenderer={this.resultRenderer}
             type="text"
+            showNoResults={false}
+            open={this.state.open}
+            onFocus={() => this.setState({ open: true })}
+            onMouseDown={() => this.setState({ open: true })}
+            onBlur={() => this.setState({ open: false })}
             loading={isFetching}
             results={geocodeResults}
             value={userInput}
@@ -107,6 +162,21 @@ class Waypoint extends React.Component {
             placeholder="Hit enter for search..."
           />
           <Popup
+            content={
+              use_geocoding ? 'Search for address' : 'Enter Lon/lat coordinates'
+            }
+            size={'tiny'}
+            trigger={
+              <Icon
+                className="pointer"
+                name="checkmark"
+                disabled={userInput.length == 0}
+                size="small"
+                onClick={() => this.fetchGeocodeResults('Enter')}
+              />
+            }
+          />
+          <Popup
             content={'Remove this waypoint'}
             size={'tiny'}
             trigger={
@@ -114,7 +184,7 @@ class Waypoint extends React.Component {
                 className="pointer"
                 name="remove"
                 size="small"
-                onClick={() => dispatch(doRemoveWaypoint(this.props.index))}
+                onClick={() => dispatch(doRemoveWaypoint(index))}
               />
             }
           />
@@ -128,10 +198,12 @@ const mapStateToProps = (state, ownProps) => {
   const { index } = ownProps
   const waypoint = state.directions.waypoints[index]
   const { geocodeResults, userInput, isFetching } = waypoint
+  const { use_geocoding } = state.common.settings
   return {
     userInput,
     geocodeResults,
-    isFetching
+    isFetching,
+    use_geocoding
   }
 }
 

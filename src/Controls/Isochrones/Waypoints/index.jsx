@@ -6,6 +6,7 @@ import * as R from 'ramda'
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
 
+import { isValidCoordinates } from 'utils/geom'
 import {
   updateTextInput,
   updateIsoSettings,
@@ -20,7 +21,8 @@ import { debounce } from 'throttle-debounce'
 class Waypoints extends Component {
   static propTypes = {
     isochrones: PropTypes.object,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    use_geocoding: PropTypes.bool
   }
 
   constructor(props) {
@@ -32,7 +34,7 @@ class Waypoints extends Component {
     )
   }
 
-  state = { activeIndex: 0 }
+  state = { activeIndex: 0, open: false }
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps
@@ -45,15 +47,31 @@ class Waypoints extends Component {
   handleSearchChange = (event, { value }) => {
     const { dispatch } = this.props
     dispatch(updateTextInput({ userInput: value }))
-    this.fetchGeocodeResults()
   }
 
-  fetchGeocodeResults() {
-    const { dispatch } = this.props
-    const { userInput } = this.props.isochrones
+  fetchGeocodeResults(e) {
+    const { dispatch, use_geocoding, isochrones } = this.props
+    const { userInput } = isochrones
 
-    if (userInput.length > 0) {
-      dispatch(fetchGeocode(userInput))
+    this.setState({ open: true })
+
+    if (userInput.length > 0 && e == 'Enter') {
+      // make results visible
+      if (use_geocoding) {
+        dispatch(fetchGeocode(userInput))
+      } else {
+        const coords = userInput.split(/[\s,;]+/)
+        // is this a coordinate?
+        if (coords.length == 2) {
+          const lat = coords[1]
+          const lng = coords[0]
+          if (isValidCoordinates(lat, lng)) {
+            dispatch(
+              fetchGeocode(userInput, [parseFloat(lng), parseFloat(lat)])
+            )
+          }
+        }
+      }
     }
   }
 
@@ -73,6 +91,8 @@ class Waypoints extends Component {
   }
 
   handleResultSelect = (e, { result }) => {
+    this.setState({ open: false })
+
     const { dispatch } = this.props
     dispatch(
       updateTextInput({
@@ -130,6 +150,24 @@ class Waypoints extends Component {
     dispatch(updatePermalink())
   }
 
+  resultRenderer = ({ title, description }) => (
+    <div className="flex-column">
+      <div>
+        <span className="title">{title}</span>
+      </div>
+      {description && description.length > 0 && (
+        <div>
+          <Icon disabled name="linkify" />
+          <span className="description b">
+            <a target="_blank" rel="noreferrer" href={description}>
+              OSM Link
+            </a>
+          </span>
+        </div>
+      )}
+    </div>
+  )
+
   render() {
     const {
       isFetching,
@@ -168,18 +206,27 @@ class Waypoints extends Component {
     return (
       <div>
         <Search
-          className={'pt2 pl3'}
           size="small"
+          type="text"
+          minCharacters={3}
+          className={'pt2 pl3'}
           input={{ icon: 'search', iconPosition: 'left' }}
           onSearchChange={this.handleSearchChange}
           onResultSelect={this.handleResultSelect}
-          type="text"
-          minCharacters={3}
+          resultRenderer={this.resultRenderer}
+          showNoResults={false}
+          open={this.state.open}
+          onFocus={() => this.setState({ open: true })}
+          onMouseDown={() => this.setState({ open: true })}
           loading={isFetching}
           results={geocodeResults}
           value={userInput}
-          placeholder="Find address ..."
+          onKeyPress={(event: React.KeyboardEvent) => {
+            this.fetchGeocodeResults(event.key)
+          }}
+          placeholder="Hit enter for search..."
         />
+
         <div className="pa2">
           <Accordion>
             <Accordion.Title
@@ -326,8 +373,11 @@ class Waypoints extends Component {
 
 const mapStateToProps = state => {
   const { isochrones } = state
+  const { use_geocoding } = state.common.settings
+
   return {
-    isochrones
+    isochrones,
+    use_geocoding
   }
 }
 

@@ -38,7 +38,7 @@ const initialState = {
 }
 
 export const directions = (state = initialState, action) => {
-  //console.log(action) //eslint-disable-line
+  // console.log(action) //eslint-disable-line
   switch (action.type) {
     case UPDATE_INCLINE_DECLINE:
       return {

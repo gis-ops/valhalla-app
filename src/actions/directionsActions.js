@@ -44,18 +44,7 @@ export const makeRequest = () => (dispatch, getState) => {
   const { profile } = getState().common
   let { settings } = getState().common
   // if 2 results are selected
-  const activeWaypoints = []
-
-  for (const waypoint of waypoints) {
-    if (waypoint.geocodeResults.length > 0) {
-      for (const result of waypoint.geocodeResults) {
-        if (result.hasOwnProperty('selected') && result.selected) {
-          activeWaypoints.push(result)
-          break
-        }
-      }
-    }
-  }
+  const activeWaypoints = getActiveWaypoints(waypoints)
   if (activeWaypoints.length >= 2) {
     settings = filterProfileSettings(profile, settings)
 
@@ -66,6 +55,21 @@ export const makeRequest = () => (dispatch, getState) => {
     })
     dispatch(fetchValhallaDirections(valhallaRequest))
   }
+}
+
+const getActiveWaypoints = waypoints => {
+  const activeWaypoints = []
+  for (const waypoint of waypoints) {
+    if (waypoint.geocodeResults.length > 0) {
+      for (const result of waypoint.geocodeResults) {
+        if (result.hasOwnProperty('selected') && result.selected) {
+          activeWaypoints.push(result)
+          break
+        }
+      }
+    }
+  }
+  return activeWaypoints
 }
 
 const fetchValhallaDirections = valhallaRequest => (dispatch, getState) => {
@@ -123,7 +127,6 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
   // will add latLng to input field
   const addresses = [
     {
-      selected: false,
       title: '',
       displaylnglat: [lng, lat],
       key: index,
@@ -203,16 +206,32 @@ export const fetchReverseGeocode = object => (dispatch, getState) => {
 }
 
 export const fetchGeocode = object => dispatch => {
-  dispatch(requestGeocodeResults({ index: object.index }))
+  if (object.hasOwnProperty('lngLat')) {
+    const addresses = [
+      {
+        title: object.lngLat.toString(),
+        description: '',
+        selected: false,
+        addresslnglat: object.lngLat,
+        sourcelnglat: object.lngLat,
+        displaylnglat: object.lngLat,
+        key: object.index,
+        addressindex: 0
+      }
+    ]
+    dispatch(receiveGeocodeResults({ addresses, index: object.index }))
+  } else {
+    dispatch(requestGeocodeResults({ index: object.index }))
 
-  forward_geocode(object.inputValue)
-    .then(response => {
-      dispatch(processGeocodeResponse(response.data, object.index))
-    })
-    .catch(error => {
-      console.log(error) //eslint-disable-line
-    })
-    .finally(() => {})
+    forward_geocode(object.inputValue)
+      .then(response => {
+        dispatch(processGeocodeResponse(response.data, object.index))
+      })
+      .catch(error => {
+        console.log(error) //eslint-disable-line
+      })
+      .finally(() => {})
+  }
 }
 
 const processGeocodeResponse = (
@@ -233,20 +252,12 @@ const processGeocodeResponse = (
         title: 'No addresses'
       })
     )
-
-    for (const results of document.getElementsByClassName('results')) {
-      results.classList.remove('visible')
-    }
+    // for (const results of document.getElementsByClassName('results')) {
+    //   results.classList.remove('visible')
+    // }
   }
   dispatch(receiveGeocodeResults({ addresses, index }))
 
-  // this is the ULTRA hack to move the semantic ui results around
-  // to fit them on the screen, they will overflow otherwise
-  if (addresses.length > 0) {
-    for (const results of document.getElementsByClassName('results')) {
-      document.getElementById('valhalla-app-root').appendChild(results)
-    }
-  }
   if (reverse) {
     dispatch(
       updateTextInput({
@@ -287,12 +298,16 @@ export const doRemoveWaypoint = index => (dispatch, getState) => {
       .fill()
       .map((_, i) => dispatch(doAddWaypoint()))
   } else {
-    const waypoints = getState().directions.waypoints
+    let waypoints = getState().directions.waypoints
     if (waypoints.length > 2) {
       dispatch(clearWaypoints(index))
       dispatch(makeRequest())
     } else {
       dispatch(emptyWaypoint(index))
+    }
+    waypoints = getState().directions.waypoints
+    if (getActiveWaypoints(waypoints).length < 2) {
+      dispatch(clearRoutes(VALHALLA_OSM_URL))
     }
   }
   dispatch(updatePermalink())
@@ -300,7 +315,6 @@ export const doRemoveWaypoint = index => (dispatch, getState) => {
 
 export const highlightManeuver = fromTo => (dispatch, getState) => {
   const highlightSegment = getState().directions.highlightSegment
-
   // this is dehighlighting
   if (
     highlightSegment.startIndex === fromTo.startIndex &&

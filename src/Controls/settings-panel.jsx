@@ -348,6 +348,25 @@ class SettingsPanel extends React.Component {
                         </div>
                       )
                     })}
+                    {settings_general.all.boolean.map((option, key) => {
+                      return (
+                        <div key={key} className="flex">
+                          <Checkbox
+                            key={key}
+                            option={option}
+                            dispatch={dispatch}
+                            settings={settings}
+                          />
+                          <div style={{ marginLeft: 'auto' }}>
+                            <Popup
+                              content={option.description}
+                              size={'tiny'}
+                              trigger={<Icon color="grey" name="help circle" />}
+                            />
+                          </div>
+                        </div>
+                      )
+                    })}
                   </Form>
                 </Grid.Column>
               </Grid.Row>

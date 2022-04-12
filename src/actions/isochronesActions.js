@@ -163,18 +163,37 @@ export const fetchReverseGeocodeIso = (lng, lat) => dispatch => {
   // })
 }
 
-export const fetchGeocode = userInput => dispatch => {
+export const fetchGeocode = (userInput, lngLat) => dispatch => {
   dispatch({
     type: REQUEST_GEOCODE_RESULTS_ISO
   })
 
-  forward_geocode(userInput)
-    .then(response => {
-      dispatch(processGeocodeResponse(response.data))
+  if (lngLat) {
+    const addresses = [
+      {
+        title: lngLat.toString(),
+        description: '',
+        selected: false,
+        addresslnglat: lngLat,
+        sourcelnglat: lngLat,
+        displaylnglat: lngLat,
+        addressindex: 0
+      }
+    ]
+
+    dispatch({
+      type: RECEIVE_GEOCODE_RESULTS_ISO,
+      payload: addresses
     })
-    .catch(error => {
-      console.log(error) //eslint-disable-line
-    })
+  } else {
+    forward_geocode(userInput)
+      .then(response => {
+        dispatch(processGeocodeResponse(response.data))
+      })
+      .catch(error => {
+        console.log(error) //eslint-disable-line
+      })
+  }
 }
 
 const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
@@ -189,23 +208,11 @@ const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
         title: 'No addresses'
       })
     )
-
-    for (const results of document.getElementsByClassName('results')) {
-      results.classList.remove('visible')
-    }
   }
   dispatch({
     type: RECEIVE_GEOCODE_RESULTS_ISO,
     payload: addresses
   })
-
-  // this is the ULTRA hack to move the semantic ui results around
-  // to fit them on the screen, they will overflow otherwise
-  if (addresses.length > 0) {
-    for (const results of document.getElementsByClassName('results')) {
-      document.getElementById('valhalla-app-root').appendChild(results)
-    }
-  }
 
   if (reverse) {
     dispatch({

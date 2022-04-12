@@ -32,7 +32,8 @@ const getListStyle = isDraggingOver => ({
   width: '100%',
   //height: 200,
   paddingBottom: 20,
-  maxHeight: 300
+  maxHeight: 350,
+  height: 300
 })
 
 class Waypoints extends Component {
@@ -56,7 +57,7 @@ class Waypoints extends Component {
     this.setState({ visible: true })
 
     if (directions.waypoints.length == 0) {
-      Array(2)
+      Array(3)
         .fill()
         .map((_, i) => dispatch(doAddWaypoint()))
     }
@@ -81,7 +82,6 @@ class Waypoints extends Component {
 
   render() {
     const { waypoints } = this.props.directions
-
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable">

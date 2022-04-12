@@ -65,51 +65,6 @@ i.help.grey.icon {
   font-weight: bold;
 }
 
-.results {
-  display: none;
-  position: absolute;
-  top: 23px;
-  left: 420px;
-  -webkit-transform-origin: center top;
-  transform-origin: center top;
-  white-space: normal;
-  text-align: left;
-  text-transform: none;
-  background: #ffffff;
-  margin-top: 0.5em;
-  width: 18em;
-  border-radius: 0.28571429rem;
-  box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12),
-    0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-  border: 1px solid #d4d4d5;
-  z-index: 998;
-}
 
-.results .result {
-  cursor: pointer;
-  display: block;
-  overflow: hidden;
-  font-size: 1em;
-  padding: 0.85714286em 1.14285714em;
-  color: rgba(0, 0, 0, 0.87);
-  line-height: 1.33;
-  font-size: 0.95em;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
-}
 
-.results > :first-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
-}
 
-.results .result:hover,
-.results .category .result:hover {
-  background: #f9fafb;
-}
-
-.results .result .title {
-  margin: -0.14285714em 0em 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 1em;
-  color: rgba(0, 0, 0, 0.85);
-}

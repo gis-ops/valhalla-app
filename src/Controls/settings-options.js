@@ -265,6 +265,13 @@ const excludeCashOnlyTolls = {
   param: 'exclude_cash_only_tolls'
 }
 
+const useGeocoding = {
+  name: 'Geocoding',
+  description:
+    'Decides whether you want to use geocoding or work with plain coordinates.',
+  param: 'use_geocoding'
+}
+
 const bicycleType = {
   name: 'Bicycle Type',
   description: `The type of bicycle. The default type is Hybrid.
@@ -509,7 +516,8 @@ export const settingsInit = {
   driveway_factor: 5,
   step_penalty: 0,
   max_hiking_difficulty: 1,
-  exclude_polygons: []
+  exclude_polygons: [],
+  use_geocoding: true
 }
 
 export const profile_settings = {
@@ -653,5 +661,8 @@ export const settings_general = {
     ],
     boolean: [],
     enum: []
+  },
+  all: {
+    boolean: [useGeocoding]
   }
 }

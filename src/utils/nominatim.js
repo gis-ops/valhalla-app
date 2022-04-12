@@ -49,7 +49,9 @@ export const parseGeocodeResponse = (results, lngLat) => {
           result.display_name.length > 0
             ? result.display_name
             : lngLat.toString(),
-        description: result.osm_type + '(' + result.osm_id + ')',
+        description: `https://www.openstreetmap.org/${result.osm_type}/${
+          result.osm_id
+        }`,
         selected: false,
         addresslnglat: [parseFloat(result.lon), parseFloat(result.lat)],
         sourcelnglat:
