@@ -31,13 +31,12 @@ import {
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 
-const OSMTiles = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution:
-      '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }
-)
+const TILE_SERVER_URL = 'https://maps.wcedmisten.dev/tile/{z}/{x}/{y}.png'
+
+const OSMTiles = L.tileLayer(TILE_SERVER_URL, {
+  attribution:
+    '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+})
 
 // defining the container styles the map sits in
 const style = {
