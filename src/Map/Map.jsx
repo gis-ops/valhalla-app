@@ -50,10 +50,10 @@ const convertDDToDMS = decimalDegrees =>
     0 | decimalDegrees,
     '° ',
     0 |
-      (((decimalDegrees =
-        (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) + 1e-4) %
-        1) *
-        60),
+    (((decimalDegrees =
+      (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) + 1e-4) %
+      1) *
+      60),
     "' ",
     0 | (((decimalDegrees * 60) % 1) * 60),
     '"'
@@ -277,13 +277,13 @@ class Map extends React.Component {
       handles: 'w, n, nw',
       minWidth: 380,
       minHeight: 140,
-      stop: function(event, ui) {
+      stop: function (event, ui) {
         // Remove the size/position of the UI element (.heightgraph .leaflet-control) because
         // it should be sized dynamically based on its contents. Giving it a fixed size causes
         // the toggle icon to be in the wrong place when the height graph is minimized.
         ui.element.css({ width: '', height: '', left: '', top: '' })
       },
-      resize: function(event, ui) {
+      resize: function (event, ui) {
         if (
           ui.originalPosition.left !== ui.position.left ||
           ui.originalPosition.top !== ui.position.top
@@ -570,7 +570,7 @@ class Map extends React.Component {
           permanent: false,
           sticky: true
         })
-      if (this.hg._showState == true) {
+      if (this.hg._showState === true) {
         this.hg._expand()
       }
     }
@@ -883,7 +883,7 @@ class Map extends React.Component {
                     text={JSON.stringify(this.state.locate)}
                     onCopy={() => this.setState({ hasCopied: true })}>
                     <Button
-                      disabled={this.state.locate.length == 0}
+                      disabled={this.state.locate.length === 0}
                       compact
                       icon="copy"
                     />
@@ -938,7 +938,7 @@ class Map extends React.Component {
                 </div>
               </div>
             </React.Fragment>
-          ) : activeTab == 0 ? (
+          ) : activeTab === 0 ? (
             <React.Fragment>
               <Button.Group size="small" basic vertical>
                 <Button compact index={0} onClick={this.handleAddWaypoint}>
@@ -972,9 +972,9 @@ class Map extends React.Component {
         <div>
           {this.state.showPopup && leafletPopupDiv
             ? ReactDOM.createPortal(
-                MapPopup(this.state.showInfoPopup),
-                leafletPopupDiv
-              )
+              MapPopup(this.state.showInfoPopup),
+              leafletPopupDiv
+            )
             : null}
         </div>
       </React.Fragment>

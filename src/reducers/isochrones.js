@@ -76,7 +76,7 @@ export const isochrones = (state = initialState, action) => {
         userInput: payload.userInput,
         selectedAddress: state.geocodeResults[action.payload.addressindex],
         geocodeResults: state.geocodeResults.map((result, i) =>
-          i == action.payload.addressindex
+          i === action.payload.addressindex
             ? { ...result, selected: true }
             : { ...result, selected: false }
         )

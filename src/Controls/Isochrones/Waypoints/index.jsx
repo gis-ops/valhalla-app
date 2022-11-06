@@ -55,14 +55,14 @@ class Waypoints extends Component {
 
     this.setState({ open: true })
 
-    if (userInput.length > 0 && e == 'Enter') {
+    if (userInput.length > 0 && e === 'Enter') {
       // make results visible
       if (use_geocoding) {
         dispatch(fetchGeocode(userInput))
       } else {
         const coords = userInput.split(/[\s,;]+/)
         // is this a coordinate?
-        if (coords.length == 2) {
+        if (coords.length === 2) {
           const lat = coords[1]
           const lng = coords[0]
           if (isValidCoordinates(lat, lng)) {
@@ -159,7 +159,7 @@ class Waypoints extends Component {
         <div>
           <Icon disabled name="linkify" />
           <span className="description b">
-            <a target="_blank" rel="noreferrer" href={description}>
+            <a target="_blank" rel="noopener noreferrer" href={description}>
               OSM Link
             </a>
           </span>

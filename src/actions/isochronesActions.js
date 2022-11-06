@@ -40,7 +40,7 @@ export const makeIsochronesRequest = () => (dispatch, getState) => {
   let center = undefined
   if (geocodeResults.length > 0) {
     for (const result of geocodeResults) {
-      if (result.hasOwnProperty('selected') && result.selected) {
+      if (result.selected) {
         center = result
         break
       }
@@ -65,7 +65,7 @@ const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
   for (const URL of [VALHALLA_OSM_URL]) {
     axios
       .get(URL + '/isochrone', {
-        params: valhallaRequest,
+        params: { json: JSON.stringify(valhallaRequest.json) },
         headers: {
           'Content-Type': 'application/json'
         }

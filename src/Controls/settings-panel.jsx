@@ -129,7 +129,7 @@ class SettingsPanel extends React.Component {
     }
 
     if (!R.equals(settings, nextProps.settings)) {
-      activeTab == 0
+      activeTab === 0
         ? dispatch(makeRequest())
         : dispatch(makeIsochronesRequest())
     }
