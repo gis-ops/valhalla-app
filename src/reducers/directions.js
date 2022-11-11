@@ -92,10 +92,10 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-                ...waypoint,
-                isFetching: false,
-                geocodeResults: action.payload.addresses
-              }
+              ...waypoint,
+              isFetching: false,
+              geocodeResults: action.payload.addresses
+            }
             : waypoint
         )
       }
@@ -114,8 +114,8 @@ export const directions = (state = initialState, action) => {
       // Catch array of selectedAddress from all waypoints
       // eslint-disable-next-line no-case-declarations
       const selectedAddresses = []
-      state.waypoints.map(waypoint => {
-        waypoint.geocodeResults.map((result, i) => {
+      state.waypoints.forEach(waypoint => {
+        waypoint.geocodeResults.forEach((result, i) => {
           selectedAddresses.push(
             i === action.payload.addressindex ? waypoint : null
           )
@@ -127,14 +127,14 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-                ...waypoint,
-                userInput: action.payload.inputValue,
-                geocodeResults: waypoint.geocodeResults.map((result, i) =>
-                  i == action.payload.addressindex
-                    ? { ...result, selected: true }
-                    : { ...result, selected: false }
-                )
-              }
+              ...waypoint,
+              userInput: action.payload.inputValue,
+              geocodeResults: waypoint.geocodeResults.map((result, i) =>
+                i === action.payload.addressindex
+                  ? { ...result, selected: true }
+                  : { ...result, selected: false }
+              )
+            }
             : waypoint
         )
       }
@@ -144,7 +144,7 @@ export const directions = (state = initialState, action) => {
         ...state,
         waypoints:
           action.payload.index >= 0
-            ? state.waypoints.filter((v, i) => i != action.payload.index)
+            ? state.waypoints.filter((v, i) => i !== action.payload.index)
             : []
       }
     }
@@ -155,10 +155,10 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-                ...waypoint,
-                userInput: '',
-                geocodeResults: []
-              }
+              ...waypoint,
+              userInput: '',
+              geocodeResults: []
+            }
             : waypoint
         )
       }

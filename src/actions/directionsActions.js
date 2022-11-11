@@ -62,7 +62,7 @@ const getActiveWaypoints = waypoints => {
   for (const waypoint of waypoints) {
     if (waypoint.geocodeResults.length > 0) {
       for (const result of waypoint.geocodeResults) {
-        if (result.hasOwnProperty('selected') && result.selected) {
+        if (result.selected) {
           activeWaypoints.push(result)
           break
         }
@@ -72,22 +72,29 @@ const getActiveWaypoints = waypoints => {
   return activeWaypoints
 }
 
-const fetchValhallaDirections = valhallaRequest => (dispatch, getState) => {
+const fetchValhallaDirections = valhallaRequest => (dispatch,) => {
   dispatch(showLoading(true))
 
+  // console.log(valhallaRequest);
+  console.log(VALHALLA_OSM_URL + '/route');
+  console.log(JSON.stringify())
+  const config = {
+    params: { json: JSON.stringify(valhallaRequest.json) },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  console.log(config)
   axios
-    .get(VALHALLA_OSM_URL + '/route', {
-      params: valhallaRequest,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    .get(VALHALLA_OSM_URL + '/route', config)
     .then(({ data }) => {
+      console.log(data);
       data.decodedGeometry = parseDirectionsGeometry(data)
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
       dispatch(zoomTo(data.decodedGeometry))
     })
-    .catch(({ response }) => {
+    .catch(response => {
+      console.log(response)
       let error_msg = response.data.error
       if (response.data.error_code === 154) {
         error_msg += ` for ${valhallaRequest.json.costing}.`
@@ -143,7 +150,7 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
   )
 }
 
-export const fetchReverseGeocodePerma = object => (dispatch, getState) => {
+export const fetchReverseGeocodePerma = object => (dispatch,) => {
   dispatch(requestGeocodeResults({ index: object.index, reverse: true }))
 
   const { index } = object
@@ -206,7 +213,7 @@ export const fetchReverseGeocode = object => (dispatch, getState) => {
 }
 
 export const fetchGeocode = object => dispatch => {
-  if (object.hasOwnProperty('lngLat')) {
+  if (object.lngLat) {
     const addresses = [
       {
         title: object.lngLat.toString(),
@@ -230,7 +237,7 @@ export const fetchGeocode = object => dispatch => {
       .catch(error => {
         console.log(error) //eslint-disable-line
       })
-      .finally(() => {})
+      .finally(() => { })
   }
 }
 
@@ -266,7 +273,7 @@ const processGeocodeResponse = (
         addressindex: 0
       })
     )
-    if (permaLast == undefined) {
+    if (permaLast === undefined) {
       dispatch(makeRequest())
       dispatch(updatePermalink())
     } else if (permaLast) {

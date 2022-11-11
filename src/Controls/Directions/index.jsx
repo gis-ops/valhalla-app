@@ -44,7 +44,7 @@ class DirectionsControl extends React.Component {
     dispatch(clearRoutes())
   }
 
-  componentDidUpdate = prevProps => {}
+  componentDidUpdate = prevProps => { }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { dispatch } = this.props
@@ -106,14 +106,14 @@ class DirectionsControl extends React.Component {
               <a
                 href="https://github.com/valhalla/valhalla"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer">
                 Valhalla
               </a>{' '}
               • visualized with{' '}
               <a
                 href="https://github.com/gis-ops/valhalla-app/"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer">
                 Valhalla App
               </a>
             </span>

@@ -59,7 +59,7 @@ export const updatePermalink = () => (dispatch, getState) => {
   queryParams.set('profile', profile)
 
   let path = '/directions?'
-  if (activeTab == 0) {
+  if (activeTab === 0) {
     const wps = []
     for (const wp of waypoints) {
       for (const result of wp.geocodeResults) {
@@ -110,34 +110,34 @@ export const filterProfileSettings = (profile, settings) => {
   }
   for (const setting in settings) {
     for (const item of settings_general[profile].numeric) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }
     for (const item of settings_general[profile].boolean) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }
     for (const item of settings_general[profile].enum) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }
 
     for (const item of profile_settings[profile].numeric) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }
 
     for (const item of profile_settings[profile].boolean) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }
     for (const item of profile_settings[profile].enum) {
-      if (setting == item.param) {
+      if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
     }

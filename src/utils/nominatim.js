@@ -1,7 +1,8 @@
 import axios from 'axios'
 
-export const NOMINATIM_URL = 'https://nominatim.wcedmisten.dev/search'
-export const NOMINATIME_URL_REVERSE = 'https://nominatim.wcedmisten.dev/reverse'
+export const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
+export const NOMINATIME_URL_REVERSE =
+  'https://nominatim.openstreetmap.org/reverse'
 
 export const forward_geocode = userInput =>
   axios.get(NOMINATIM_URL, {
@@ -30,7 +31,7 @@ export const parseGeocodeResponse = (results, lngLat) => {
   for (const [index, result] of results.entries()) {
     if (
       'error' in result &&
-      result.error.toLowerCase() == 'unable to geocode'
+      result.error.toLowerCase() === 'unable to geocode'
     ) {
       processedResults.push({
         title: lngLat.toString(),
@@ -48,13 +49,11 @@ export const parseGeocodeResponse = (results, lngLat) => {
           result.display_name.length > 0
             ? result.display_name
             : lngLat.toString(),
-        description: `https://www.openstreetmap.org/${result.osm_type}/${
-          result.osm_id
-        }`,
+        description: `https://www.openstreetmap.org/${result.osm_type}/${result.osm_id}`,
         selected: false,
         addresslnglat: [parseFloat(result.lon), parseFloat(result.lat)],
         sourcelnglat:
-          lngLat == undefined
+          lngLat === undefined
             ? [parseFloat(result.lon), parseFloat(result.lat)]
             : lngLat,
         displaylnglat:

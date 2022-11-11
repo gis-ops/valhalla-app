@@ -56,7 +56,7 @@ class Waypoints extends Component {
     const { dispatch, directions } = this.props
     this.setState({ visible: true })
 
-    if (directions.waypoints.length == 0) {
+    if (directions.waypoints.length === 0) {
       Array(3)
         .fill()
         .map((_, i) => dispatch(doAddWaypoint()))

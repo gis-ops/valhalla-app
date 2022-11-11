@@ -86,14 +86,14 @@ class IsochronesControl extends React.Component {
               <a
                 href="https://github.com/valhalla/valhalla"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer">
                 Valhalla
               </a>{' '}
               • visualized with{' '}
               <a
                 href="https://github.com/gis-ops/valhalla-app/"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer">
                 Valhalla App
               </a>
             </span>
