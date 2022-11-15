@@ -75,16 +75,12 @@ const getActiveWaypoints = waypoints => {
 const fetchValhallaDirections = valhallaRequest => (dispatch,) => {
   dispatch(showLoading(true))
 
-  // console.log(valhallaRequest);
-  console.log(VALHALLA_OSM_URL + '/route');
-  console.log(JSON.stringify())
   const config = {
     params: { json: JSON.stringify(valhallaRequest.json) },
     headers: {
       'Content-Type': 'application/json'
     }
   }
-  console.log(config)
   axios
     .get(VALHALLA_OSM_URL + '/route', config)
     .then(({ data }) => {
