@@ -13,14 +13,14 @@ import './index.css' // postCSS import of CSS module
 const middleware = [thunk]
 
 const store = createStore(
-  reducer,
-  composeWithDevTools(applyMiddleware(...middleware))
+    reducer,
+    composeWithDevTools(applyMiddleware(...middleware))
 )
 
 render(
-  <Provider store={store}>
-    {' '}
-    <App />
-  </Provider>,
-  document.getElementById('valhalla-app-root')
+    <Provider store={store}>
+        {' '}
+        <App />
+    </Provider>,
+    document.getElementById('valhalla-app-root')
 )
