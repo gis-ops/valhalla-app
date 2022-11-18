@@ -13,17 +13,17 @@ import {
   TOGGLE_PROVIDER_ISO,
   HIGHLIGHT_MNV,
   ZOOM_TO_MNV,
-  UPDATE_INCLINE_DECLINE
+  UPDATE_INCLINE_DECLINE,
 } from './types'
 import {
   reverse_geocode,
   forward_geocode,
-  parseGeocodeResponse
+  parseGeocodeResponse,
 } from 'utils/nominatim'
 import {
   VALHALLA_OSM_URL,
   buildDirectionsRequest,
-  parseDirectionsGeometry
+  parseDirectionsGeometry,
 } from 'utils/valhalla'
 
 import {
@@ -31,11 +31,11 @@ import {
   showLoading,
   filterProfileSettings,
   updatePermalink,
-  zoomTo
+  zoomTo,
 } from './commonActions'
 
 const serverMapping = {
-  [VALHALLA_OSM_URL]: 'OSM'
+  [VALHALLA_OSM_URL]: 'OSM',
 }
 
 export const makeRequest = () => (dispatch, getState) => {
@@ -51,13 +51,13 @@ export const makeRequest = () => (dispatch, getState) => {
     const valhallaRequest = buildDirectionsRequest({
       profile,
       activeWaypoints,
-      settings
+      settings,
     })
     dispatch(fetchValhallaDirections(valhallaRequest))
   }
 }
 
-const getActiveWaypoints = waypoints => {
+const getActiveWaypoints = (waypoints) => {
   const activeWaypoints = []
   for (const waypoint of waypoints) {
     if (waypoint.geocodeResults.length > 0) {
@@ -72,14 +72,14 @@ const getActiveWaypoints = waypoints => {
   return activeWaypoints
 }
 
-const fetchValhallaDirections = valhallaRequest => (dispatch,) => {
+const fetchValhallaDirections = (valhallaRequest) => (dispatch) => {
   dispatch(showLoading(true))
 
   const config = {
     params: { json: JSON.stringify(valhallaRequest.json) },
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   }
 
   axios
@@ -100,7 +100,7 @@ const fetchValhallaDirections = valhallaRequest => (dispatch,) => {
           type: 'warning',
           icon: 'warning',
           description: `${serverMapping[VALHALLA_OSM_URL]}: ${error_msg}`,
-          title: `${response.data.status}`
+          title: `${response.data.status}`,
         })
       )
     })
@@ -115,16 +115,16 @@ export const registerRouteResponse = (provider, data) => ({
   type: RECEIVE_ROUTE_RESULTS,
   payload: {
     provider,
-    data
-  }
+    data,
+  },
 })
 
-export const clearRoutes = provider => ({
+export const clearRoutes = (provider) => ({
   type: CLEAR_ROUTES,
-  payload: provider
+  payload: provider,
 })
 
-const placeholderAddress = (index, lng, lat) => dispatch => {
+const placeholderAddress = (index, lng, lat) => (dispatch) => {
   // placeholder until geocoder is complete
   // will add latLng to input field
   const addresses = [
@@ -132,30 +132,32 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
       title: '',
       displaylnglat: [lng, lat],
       key: index,
-      addressindex: index
-    }
+      addressindex: index,
+    },
   ]
   dispatch(receiveGeocodeResults({ addresses, index: index }))
   dispatch(
     updateTextInput({
       inputValue: [lng.toFixed(6), lat.toFixed(6)].join(', '),
       index: index,
-      addressindex: 0
+      addressindex: 0,
     })
   )
 }
 
-export const fetchReverseGeocodePerma = object => (dispatch,) => {
+export const fetchReverseGeocodePerma = (object) => (dispatch) => {
   dispatch(requestGeocodeResults({ index: object.index, reverse: true }))
 
   const { index } = object
   const { permaLast } = object
   const { lng, lat } = object.latLng
 
-  if (index > 1) dispatch(doAddWaypoint(true, permaLast))
+  if (index > 1) {
+    dispatch(doAddWaypoint(true, permaLast))
+  }
 
   reverse_geocode(lng, lat)
-    .then(response => {
+    .then((response) => {
       dispatch(
         processGeocodeResponse(
           response.data,
@@ -166,7 +168,7 @@ export const fetchReverseGeocodePerma = object => (dispatch,) => {
         )
       )
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error) //eslint-disable-line
     })
   // .finally(() => {
@@ -174,7 +176,7 @@ export const fetchReverseGeocodePerma = object => (dispatch,) => {
   // })
 }
 
-export const fetchReverseGeocode = object => (dispatch, getState) => {
+export const fetchReverseGeocode = (object) => (dispatch, getState) => {
   //dispatch(requestGeocodeResults({ index: object.index, reverse: true }))
   const { waypoints } = getState().directions
 
@@ -196,10 +198,10 @@ export const fetchReverseGeocode = object => (dispatch, getState) => {
   dispatch(requestGeocodeResults({ index, reverse: true }))
 
   reverse_geocode(lng, lat)
-    .then(response => {
+    .then((response) => {
       dispatch(processGeocodeResponse(response.data, index, true, [lng, lat]))
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error) //eslint-disable-line
     })
   // .finally(() => {
@@ -207,7 +209,7 @@ export const fetchReverseGeocode = object => (dispatch, getState) => {
   // })
 }
 
-export const fetchGeocode = object => dispatch => {
+export const fetchGeocode = (object) => (dispatch) => {
   if (object.lngLat) {
     const addresses = [
       {
@@ -218,82 +220,77 @@ export const fetchGeocode = object => dispatch => {
         sourcelnglat: object.lngLat,
         displaylnglat: object.lngLat,
         key: object.index,
-        addressindex: 0
-      }
+        addressindex: 0,
+      },
     ]
     dispatch(receiveGeocodeResults({ addresses, index: object.index }))
   } else {
     dispatch(requestGeocodeResults({ index: object.index }))
 
     forward_geocode(object.inputValue)
-      .then(response => {
+      .then((response) => {
         dispatch(processGeocodeResponse(response.data, object.index))
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error) //eslint-disable-line
       })
-      .finally(() => { })
+      .finally(() => {})
   }
 }
 
-const processGeocodeResponse = (
-  data,
-  index,
-  reverse,
-  lngLat,
-  permaLast
-) => dispatch => {
-  const addresses = parseGeocodeResponse(data, lngLat)
-  // if no address can be found
-  if (addresses.length === 0) {
-    dispatch(
-      sendMessage({
-        type: 'warning',
-        icon: 'warning',
-        description: 'Sorry, no addresses can be found.',
-        title: 'No addresses'
-      })
-    )
-    // for (const results of document.getElementsByClassName('results')) {
-    //   results.classList.remove('visible')
-    // }
-  }
-  dispatch(receiveGeocodeResults({ addresses, index }))
+const processGeocodeResponse =
+  (data, index, reverse, lngLat, permaLast) => (dispatch) => {
+    const addresses = parseGeocodeResponse(data, lngLat)
+    // if no address can be found
+    if (addresses.length === 0) {
+      dispatch(
+        sendMessage({
+          type: 'warning',
+          icon: 'warning',
+          description: 'Sorry, no addresses can be found.',
+          title: 'No addresses',
+        })
+      )
+      // for (const results of document.getElementsByClassName('results')) {
+      //   results.classList.remove('visible')
+      // }
+    }
+    dispatch(receiveGeocodeResults({ addresses, index }))
 
-  if (reverse) {
-    dispatch(
-      updateTextInput({
-        inputValue: addresses[0].title,
-        index: index,
-        addressindex: 0
-      })
-    )
-    if (permaLast === undefined) {
-      dispatch(makeRequest())
-      dispatch(updatePermalink())
-    } else if (permaLast) {
-      dispatch(makeRequest())
-      dispatch(updatePermalink())
+    if (reverse) {
+      dispatch(
+        updateTextInput({
+          inputValue: addresses[0].title,
+          index: index,
+          addressindex: 0,
+        })
+      )
+      if (permaLast === undefined) {
+        dispatch(makeRequest())
+        dispatch(updatePermalink())
+      } else if (permaLast) {
+        dispatch(makeRequest())
+        dispatch(updatePermalink())
+      }
     }
   }
-}
 
-export const receiveGeocodeResults = object => ({
+export const receiveGeocodeResults = (object) => ({
   type: RECEIVE_GEOCODE_RESULTS,
-  payload: object
+  payload: object,
 })
 
-export const requestGeocodeResults = object => ({
+export const requestGeocodeResults = (object) => ({
   type: REQUEST_GEOCODE_RESULTS,
-  payload: object
+  payload: object,
 })
 
-export const updateTextInput = object => ({
+export const updateTextInput = (object) => ({
   type: UPDATE_TEXTINPUT,
-  payload: object
+  payload: object,
 })
 
-export const doRemoveWaypoint = index => (dispatch, getState) => {
+export const doRemoveWaypoint = (index) => (dispatch, getState) => {
   if (index === undefined) {
     dispatch(clearWaypoints())
     Array(2)
@@ -315,7 +312,7 @@ export const doRemoveWaypoint = index => (dispatch, getState) => {
   dispatch(updatePermalink())
 }
 
-export const highlightManeuver = fromTo => (dispatch, getState) => {
+export const highlightManeuver = (fromTo) => (dispatch, getState) => {
   const highlightSegment = getState().directions.highlightSegment
   // this is dehighlighting
   if (
@@ -328,35 +325,35 @@ export const highlightManeuver = fromTo => (dispatch, getState) => {
 
   dispatch({
     type: HIGHLIGHT_MNV,
-    payload: fromTo
+    payload: fromTo,
   })
 }
 
-export const zoomToManeuver = zoomObj => ({
+export const zoomToManeuver = (zoomObj) => ({
   type: ZOOM_TO_MNV,
-  payload: zoomObj
+  payload: zoomObj,
 })
 
-export const clearWaypoints = index => ({
+export const clearWaypoints = (index) => ({
   type: CLEAR_WAYPOINTS,
-  payload: { index: index }
+  payload: { index: index },
 })
 
-export const emptyWaypoint = index => ({
+export const emptyWaypoint = (index) => ({
   type: EMPTY_WAYPOINT,
-  payload: { index: index }
+  payload: { index: index },
 })
 
-export const updateInclineDeclineTotal = object => ({
+export const updateInclineDeclineTotal = (object) => ({
   type: UPDATE_INCLINE_DECLINE,
-  payload: object
+  payload: object,
 })
 
-export const doAddWaypoint = doInsert => (dispatch, getState) => {
+export const doAddWaypoint = (doInsert) => (dispatch, getState) => {
   const waypoints = getState().directions.waypoints
   let maxIndex = Math.max.apply(
     Math,
-    waypoints.map(wp => {
+    waypoints.map((wp) => {
       return wp.id
     })
   )
@@ -366,7 +363,7 @@ export const doAddWaypoint = doInsert => (dispatch, getState) => {
     id: maxIndex.toString(),
     geocodeResults: [],
     isFetching: false,
-    userInput: ''
+    userInput: '',
   }
   if (doInsert) {
     dispatch(insertWaypoint(emptyWp))
@@ -375,25 +372,25 @@ export const doAddWaypoint = doInsert => (dispatch, getState) => {
   }
 }
 
-const insertWaypoint = waypoint => ({
+const insertWaypoint = (waypoint) => ({
   type: INSERT_WAYPOINT,
-  payload: waypoint
+  payload: waypoint,
 })
 
-export const addWaypoint = waypoint => ({
+export const addWaypoint = (waypoint) => ({
   type: ADD_WAYPOINT,
-  payload: waypoint
+  payload: waypoint,
 })
 
-export const setWaypoints = waypoints => ({
+export const setWaypoints = (waypoints) => ({
   type: SET_WAYPOINT,
-  payload: waypoints
+  payload: waypoints,
 })
 
 export const showProvider = (provider, show) => ({
   type: TOGGLE_PROVIDER_ISO,
   payload: {
     provider,
-    show
-  }
+    show,
+  },
 })

@@ -12,7 +12,7 @@ import {
   TOGGLE_PROVIDER_ISO,
   HIGHLIGHT_MNV,
   ZOOM_TO_MNV,
-  UPDATE_INCLINE_DECLINE
+  UPDATE_INCLINE_DECLINE,
 } from 'actions/types'
 
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
@@ -21,20 +21,20 @@ const initialState = {
   successful: false,
   highlightSegment: {
     startIndex: -1,
-    endIndex: -1
+    endIndex: -1,
   },
   waypoints: [],
   zoomObj: {
     index: -1,
-    timeNow: -1
+    timeNow: -1,
   },
   selectedAddresses: '',
   results: {
     [VALHALLA_OSM_URL]: {
       data: {},
-      show: true
-    }
-  }
+      show: true,
+    },
+  },
 }
 
 export const directions = (state = initialState, action) => {
@@ -43,7 +43,7 @@ export const directions = (state = initialState, action) => {
     case UPDATE_INCLINE_DECLINE:
       return {
         ...state,
-        inclineDeclineTotal: { ...action.payload }
+        inclineDeclineTotal: { ...action.payload },
       }
 
     case TOGGLE_PROVIDER_ISO:
@@ -53,9 +53,9 @@ export const directions = (state = initialState, action) => {
           ...state.results,
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
-            show: action.payload.show
-          }
-        }
+            show: action.payload.show,
+          },
+        },
       }
 
     case CLEAR_ROUTES:
@@ -67,9 +67,9 @@ export const directions = (state = initialState, action) => {
           ...state.results,
           [action.payload]: {
             ...state.results[action.payload],
-            data: {}
-          }
-        }
+            data: {},
+          },
+        },
       }
 
     case RECEIVE_ROUTE_RESULTS:
@@ -80,10 +80,10 @@ export const directions = (state = initialState, action) => {
           ...state.results,
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
-            data: action.payload.data
-          }
+            data: action.payload.data,
+          },
         },
-        successful: true
+        successful: true,
       }
 
     case RECEIVE_GEOCODE_RESULTS:
@@ -92,12 +92,12 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-              ...waypoint,
-              isFetching: false,
-              geocodeResults: action.payload.addresses
-            }
+                ...waypoint,
+                isFetching: false,
+                geocodeResults: action.payload.addresses,
+              }
             : waypoint
-        )
+        ),
       }
 
     case REQUEST_GEOCODE_RESULTS:
@@ -107,14 +107,14 @@ export const directions = (state = initialState, action) => {
           i === action.payload.index
             ? { ...waypoint, isFetching: true }
             : waypoint
-        )
+        ),
       }
 
     case UPDATE_TEXTINPUT:
       // Catch array of selectedAddress from all waypoints
       // eslint-disable-next-line no-case-declarations
       const selectedAddresses = []
-      state.waypoints.forEach(waypoint => {
+      state.waypoints.forEach((waypoint) => {
         waypoint.geocodeResults.forEach((result, i) => {
           selectedAddresses.push(
             i === action.payload.addressindex ? waypoint : null
@@ -127,16 +127,16 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-              ...waypoint,
-              userInput: action.payload.inputValue,
-              geocodeResults: waypoint.geocodeResults.map((result, i) =>
-                i === action.payload.addressindex
-                  ? { ...result, selected: true }
-                  : { ...result, selected: false }
-              )
-            }
+                ...waypoint,
+                userInput: action.payload.inputValue,
+                geocodeResults: waypoint.geocodeResults.map((result, i) =>
+                  i === action.payload.addressindex
+                    ? { ...result, selected: true }
+                    : { ...result, selected: false }
+                ),
+              }
             : waypoint
-        )
+        ),
       }
 
     case CLEAR_WAYPOINTS: {
@@ -145,7 +145,7 @@ export const directions = (state = initialState, action) => {
         waypoints:
           action.payload.index >= 0
             ? state.waypoints.filter((v, i) => i !== action.payload.index)
-            : []
+            : [],
       }
     }
 
@@ -155,26 +155,26 @@ export const directions = (state = initialState, action) => {
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index
             ? {
-              ...waypoint,
-              userInput: '',
-              geocodeResults: []
-            }
+                ...waypoint,
+                userInput: '',
+                geocodeResults: [],
+              }
             : waypoint
-        )
+        ),
       }
     }
 
     case SET_WAYPOINT: {
       return {
         ...state,
-        waypoints: action.payload
+        waypoints: action.payload,
       }
     }
 
     case ADD_WAYPOINT: {
       return {
         ...state,
-        waypoints: [...state.waypoints, action.payload]
+        waypoints: [...state.waypoints, action.payload],
       }
     }
 
@@ -184,21 +184,21 @@ export const directions = (state = initialState, action) => {
 
       return {
         ...state,
-        waypoints: [...waypoints]
+        waypoints: [...waypoints],
       }
     }
 
     case HIGHLIGHT_MNV: {
       return {
         ...state,
-        highlightSegment: action.payload
+        highlightSegment: action.payload,
       }
     }
 
     case ZOOM_TO_MNV: {
       return {
         ...state,
-        zoomObj: action.payload
+        zoomObj: action.payload,
       }
     }
 

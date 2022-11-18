@@ -9,15 +9,8 @@
       "version": "detect"
     }
   },
-  "plugins": [
-    "prettier",
-    "import",
-    "react"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "plugins": ["prettier", "import", "react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": 9,
@@ -36,15 +29,7 @@
       "error",
       {
         "min": 2,
-        "exceptions": [
-          "_",
-          "L",
-          "R",
-          "i",
-          "v",
-          "e",
-          "j"
-        ]
+        "exceptions": ["_", "L", "R", "i", "v", "e", "j"]
       }
     ],
     "no-const-assign": 2,
@@ -63,22 +48,14 @@
     ],
     "no-useless-return": 2,
     "no-var": 2,
-    "one-var": [
-      2,
-      "never"
-    ],
+    "one-var": [2, "never"],
     "prefer-arrow-callback": 2,
     "prefer-const": 2,
     "prefer-promise-reject-errors": 2,
     "prettier/prettier": 2,
     "sort-imports": 0,
-    "sort-keys": [
-      0
-    ],
+    "sort-keys": [0],
     "sort-vars": 2,
-    "strict": [
-      2,
-      "global"
-    ]
+    "strict": [2, "global"]
   }
 }

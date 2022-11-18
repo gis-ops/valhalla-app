@@ -20,14 +20,14 @@ import { Button, Label, Icon, Popup } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   fetchReverseGeocode,
-  updateInclineDeclineTotal
+  updateInclineDeclineTotal,
 } from 'actions/directionsActions'
 import { fetchReverseGeocodeIso } from 'actions/isochronesActions'
 import { updateSettings } from 'actions/commonActions'
 import {
   VALHALLA_OSM_URL,
   buildHeightRequest,
-  buildLocateRequest
+  buildLocateRequest,
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 
@@ -35,28 +35,28 @@ const OSMTiles = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution:
-      '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }
 )
 
 // defining the container styles the map sits in
 const style = {
   width: '100%',
-  height: '100vh'
+  height: '100vh',
 }
 
-const convertDDToDMS = decimalDegrees =>
+const convertDDToDMS = (decimalDegrees) =>
   [
     0 | decimalDegrees,
     '° ',
     0 |
-    (((decimalDegrees =
-      (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) + 1e-4) %
-      1) *
-      60),
+      (((decimalDegrees =
+        (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) + 1e-4) %
+        1) *
+        60),
     "' ",
     0 | (((decimalDegrees * 60) % 1) * 60),
-    '"'
+    '"',
   ].join('')
 
 // for this app we create two leaflet layer groups to control, one for the isochrone centers and one for the isochrone contours
@@ -83,15 +83,15 @@ const mapParams = {
     highlightRouteSegmentlayer,
     highlightRouteIndexLayer,
     excludePolygonsLayer,
-    OSMTiles
-  ]
+    OSMTiles,
+  ],
 }
 
 const routeObjects = {
   [VALHALLA_OSM_URL]: {
     color: '#cc0000',
-    name: 'OSM'
-  }
+    name: 'OSM',
+  },
 }
 
 // this you have seen before, we define a react component
@@ -104,7 +104,7 @@ class Map extends React.Component {
     activeTab: PropTypes.number,
     activeDataset: PropTypes.string,
     showRestrictions: PropTypes.object,
-    coordinates: PropTypes.array
+    coordinates: PropTypes.array,
   }
 
   constructor(props) {
@@ -114,7 +114,7 @@ class Map extends React.Component {
       showPopup: false,
       isLocateLoading: false,
       isHeightLoading: false,
-      locate: []
+      locate: [],
     }
   }
 
@@ -131,14 +131,14 @@ class Map extends React.Component {
 
     // our basemap and add it to the map
     const baseMaps = {
-      OpenStreetMap: OSMTiles
+      OpenStreetMap: OSMTiles,
     }
 
     const overlayMaps = {
       Waypoints: routeMarkersLayer,
       'Isochrone Center': isoCenterLayer,
       Routes: routeLineStringLayer,
-      Isochrones: isoPolygonLayer
+      Isochrones: isoPolygonLayer,
     }
 
     this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map)
@@ -146,15 +146,15 @@ class Map extends React.Component {
     // we do want a zoom control
     L.control
       .zoom({
-        position: 'topright'
+        position: 'topright',
       })
       .addTo(this.map)
 
     //and for the sake of advertising your company, you may add a logo to the map
     const brand = L.control({
-      position: 'bottomleft'
+      position: 'bottomleft',
     })
-    brand.onAdd = map => {
+    brand.onAdd = (map) => {
       const div = L.DomUtil.create('div', 'brand')
       div.innerHTML =
         '<a href="https://fossgis.de/news/2021-11-12_funding_valhalla/" target="_blank"><div class="fossgis-logo"></div></a>'
@@ -164,9 +164,9 @@ class Map extends React.Component {
     this.map.addControl(brand)
 
     const valhallaBrand = L.control({
-      position: 'bottomleft'
+      position: 'bottomleft',
     })
-    valhallaBrand.onAdd = map => {
+    valhallaBrand.onAdd = (map) => {
       const div = L.DomUtil.create('div', 'brand')
       div.innerHTML =
         '<a href="https://github.com/valhalla/valhalla" target="_blank"><div class="valhalla-logo"></div></a>'
@@ -177,10 +177,10 @@ class Map extends React.Component {
 
     const popup = L.popup({ className: 'valhalla-popup' })
 
-    this.map.on('popupclose', event => {
+    this.map.on('popupclose', (event) => {
       this.setState({ hasCopied: false, locate: [] })
     })
-    this.map.on('contextmenu', event => {
+    this.map.on('contextmenu', (event) => {
       popup.setLatLng(event.latlng).openOn(this.map)
 
       setTimeout(() => {
@@ -190,14 +190,14 @@ class Map extends React.Component {
         this.setState({
           showPopup: true,
           showInfoPopup: false,
-          latLng: event.latlng
+          latLng: event.latlng,
         })
 
         popup.update()
       }, 20) //eslint-disable-line
     })
 
-    this.map.on('click', event => {
+    this.map.on('click', (event) => {
       if (
         !this.map.pm.globalRemovalEnabled() &&
         !this.map.pm.globalDrawModeEnabled()
@@ -210,7 +210,7 @@ class Map extends React.Component {
           this.setState({
             showPopup: true,
             showInfoPopup: true,
-            latLng: event.latlng
+            latLng: event.latlng,
           })
           popup.update()
         }, 20) //eslint-disable-line
@@ -229,24 +229,24 @@ class Map extends React.Component {
       dragMode: true,
       allowSelfIntersection: false,
       editPolygon: true,
-      deleteLayer: true
+      deleteLayer: true,
     })
 
     this.map.pm.setGlobalOptions({
-      layerGroup: excludePolygonsLayer
+      layerGroup: excludePolygonsLayer,
     })
 
     this.map.on('pm:create', ({ layer }) => {
-      layer.on('pm:edit', e => {
+      layer.on('pm:edit', (e) => {
         this.updateExcludePolygons()
       })
-      layer.on('pm:dragend', e => {
+      layer.on('pm:dragend', (e) => {
         this.updateExcludePolygons()
       })
       this.updateExcludePolygons()
     })
 
-    this.map.on('pm:remove', e => {
+    this.map.on('pm:remove', (e) => {
       this.updateExcludePolygons()
     })
 
@@ -257,19 +257,21 @@ class Map extends React.Component {
       graphStyle: {
         opacity: 0.9,
         'fill-opacity': 1,
-        'stroke-width': '0px'
+        'stroke-width': '0px',
       },
       translation: {
-        distance: 'Distance from start'
+        distance: 'Distance from start',
       },
       expandCallback(expand) {
-        if (expand) getHeightData()
+        if (expand) {
+          getHeightData()
+        }
       },
       expandControls: true,
       expand: false,
       highlightStyle: {
-        color: 'blue'
-      }
+        color: 'blue',
+      },
     })
     this.hg.addTo(this.map)
     const hg = this.hg
@@ -293,7 +295,7 @@ class Map extends React.Component {
           ui.position.top = 0
         }
         hg.resize(ui.size)
-      }
+      },
     })
 
     // this.map.on('moveend', () => {
@@ -404,7 +406,7 @@ class Map extends React.Component {
     this.map.fitBounds(coordinates, { padding: [50, 50], maxZoom: 11 })
   }
 
-  zoomTo = idx => {
+  zoomTo = (idx) => {
     const { results } = this.props.directions
 
     const coords = results[VALHALLA_OSM_URL].data.decodedGeometry
@@ -416,12 +418,12 @@ class Map extends React.Component {
       markerColor: 'blue',
       shape: 'circle',
       prefix: 'fa',
-      iconColor: 'white'
+      iconColor: 'white',
     })
 
     L.marker(coords[idx], {
       icon: highlightMarker,
-      pmIgnore: true
+      pmIgnore: true,
     }).addTo(highlightRouteIndexLayer)
 
     setTimeout(() => {
@@ -464,7 +466,7 @@ class Map extends React.Component {
         color: 'yellow',
         weight: 4,
         opacity: 1,
-        pmIgnore: true
+        pmIgnore: true,
       }).addTo(highlightRouteSegmentlayer)
     } else {
       highlightRouteSegmentlayer.clearLayers()
@@ -492,7 +494,7 @@ class Map extends React.Component {
             weight: 2,
             opacity: 1.0,
             pane: 'isochronesPane',
-            pmIgnore: true
+            pmIgnore: true,
           })
             .bindTooltip(
               this.getIsoTooltip(
@@ -502,7 +504,7 @@ class Map extends React.Component {
               ),
               {
                 permanent: false,
-                sticky: true
+                sticky: true,
               }
             )
             .addTo(isoPolygonLayer)
@@ -511,7 +513,7 @@ class Map extends React.Component {
     }
   }
 
-  formatDuration = durationInSeconds => {
+  formatDuration = (durationInSeconds) => {
     const date = new Date(durationInSeconds * 1000)
     const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
     const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
@@ -557,18 +559,18 @@ class Map extends React.Component {
         color: '#FFF',
         weight: 9,
         opacity: 1,
-        pmIgnore: true
+        pmIgnore: true,
       }).addTo(routeLineStringLayer)
       L.polyline(coords, {
         color: routeObjects[VALHALLA_OSM_URL].color,
         weight: 5,
         opacity: 1,
-        pmIgnore: true
+        pmIgnore: true,
       })
         .addTo(routeLineStringLayer)
         .bindTooltip(this.getRouteToolTip(summary, VALHALLA_OSM_URL), {
           permanent: false,
-          sticky: true
+          sticky: true,
         })
       if (this.hg._showState === true) {
         this.hg._expand()
@@ -580,7 +582,7 @@ class Map extends React.Component {
     this.map.closePopup()
     this.updateWaypointPosition({
       latLng: this.state.latLng,
-      index: e.index
+      index: e.index,
     })
   }
 
@@ -592,7 +594,7 @@ class Map extends React.Component {
 
   updateExcludePolygons() {
     const excludePolygons = []
-    excludePolygonsLayer.eachLayer(layer => {
+    excludePolygonsLayer.eachLayer((layer) => {
       const lngLatArray = []
       for (const coords of layer._latlngs[0]) {
         lngLatArray.push([coords.lng, coords.lat])
@@ -608,7 +610,7 @@ class Map extends React.Component {
     dispatch(
       updateSettings({
         name,
-        value
+        value,
       })
     )
   }
@@ -633,18 +635,18 @@ class Map extends React.Component {
           markerColor: 'purple',
           shape: 'star',
           prefix: 'fa',
-          number: '1'
+          number: '1',
         })
 
         L.marker([address.displaylnglat[1], address.displaylnglat[0]], {
           icon: isoMarker,
           draggable: true,
-          pmIgnore: true
+          pmIgnore: true,
         })
           .addTo(isoCenterLayer)
           .bindTooltip(address.title, { permanent: false })
           //.openTooltip()
-          .on('dragend', e => {
+          .on('dragend', (e) => {
             this.updateIsoPosition(e.target.getLatLng())
           })
       }
@@ -657,8 +659,8 @@ class Map extends React.Component {
     axios
       .post(VALHALLA_OSM_URL + '/locate', buildLocateRequest(latlng, profile), {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
       .then(({ data }) => {
         this.setState({ locate: data, isLocateLoading: false })
@@ -682,15 +684,15 @@ class Map extends React.Component {
       axios
         .post(VALHALLA_OSM_URL + '/height', heightPayload, {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(({ data }) => {
           this.setState({ isHeightLoading: false })
           // lets build geojson object with steepness for the height graph
           const reversedGeometry = JSON.parse(
             JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
-          ).map(pair => {
+          ).map((pair) => {
             return [...pair.reverse()]
           })
           const heightData = buildHeightgraphData(
@@ -698,7 +700,12 @@ class Map extends React.Component {
             data.range_height
           )
           const { inclineTotal, declineTotal } = heightData[0].properties
-          dispatch(updateInclineDeclineTotal({ inclineTotal, declineTotal }))
+          dispatch(
+            updateInclineDeclineTotal({
+              inclineTotal,
+              declineTotal,
+            })
+          )
 
           this.hg.addData(heightData)
         })
@@ -716,15 +723,15 @@ class Map extends React.Component {
         buildHeightRequest([[latLng.lat, latLng.lng]]),
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       )
       .then(({ data }) => {
         if ('height' in data) {
           this.setState({
             elevation: data.height[0] + ' m',
-            isHeightLoading: false
+            isHeightLoading: false,
           })
         }
       })
@@ -745,25 +752,25 @@ class Map extends React.Component {
             markerColor: 'green',
             //shape: 'star',
             prefix: 'fa',
-            number: (index + 1).toString()
+            number: (index + 1).toString(),
           })
 
           L.marker([address.displaylnglat[1], address.displaylnglat[0]], {
             icon: wpMarker,
             draggable: true,
             index: index,
-            pmIgnore: true
+            pmIgnore: true,
           })
             .addTo(routeMarkersLayer)
             .bindTooltip(address.title, {
-              permanent: false
+              permanent: false,
             })
             //.openTooltip()
-            .on('dragend', e => {
+            .on('dragend', (e) => {
               this.updateWaypointPosition({
                 latLng: e.target.getLatLng(),
                 index: e.target.options.index,
-                fromDrag: true
+                fromDrag: true,
               })
             })
         }
@@ -774,7 +781,7 @@ class Map extends React.Component {
 
   render() {
     const { activeTab } = this.props
-    const MapPopup = isInfo => {
+    const MapPopup = (isInfo) => {
       return (
         <React.Fragment>
           {isInfo ? (
@@ -801,7 +808,8 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lat.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}>
+                    onCopy={() => this.setState({ hasCopied: true })}
+                  >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
                 </Button.Group>
@@ -829,7 +837,8 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lng.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}>
+                    onCopy={() => this.setState({ hasCopied: true })}
+                  >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
                 </Button.Group>
@@ -858,7 +867,8 @@ class Map extends React.Component {
                       convertDDToDMS(this.state.latLng.lng) +
                       ' E'
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}>
+                    onCopy={() => this.setState({ hasCopied: true })}
+                  >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
                 </Button.Group>
@@ -881,7 +891,8 @@ class Map extends React.Component {
                   />
                   <CopyToClipboard
                     text={JSON.stringify(this.state.locate)}
-                    onCopy={() => this.setState({ hasCopied: true })}>
+                    onCopy={() => this.setState({ hasCopied: true })}
+                  >
                     <Button
                       disabled={this.state.locate.length === 0}
                       compact
@@ -908,7 +919,8 @@ class Map extends React.Component {
                         "lon": ${this.state.latLng.lng.toFixed(6)},
                         "lat": ${this.state.latLng.lat.toFixed(6)}
                       }`}
-                    onCopy={() => this.setState({ hasCopied: true })}>
+                    onCopy={() => this.setState({ hasCopied: true })}
+                  >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
                 </Button.Group>
@@ -972,9 +984,9 @@ class Map extends React.Component {
         <div>
           {this.state.showPopup && leafletPopupDiv
             ? ReactDOM.createPortal(
-              MapPopup(this.state.showInfoPopup),
-              leafletPopupDiv
-            )
+                MapPopup(this.state.showInfoPopup),
+                leafletPopupDiv
+              )
             : null}
         </div>
       </React.Fragment>
@@ -982,15 +994,10 @@ class Map extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { directions, isochrones, common } = state
-  const {
-    activeTab,
-    profile,
-    showRestrictions,
-    activeDataset,
-    coordinates
-  } = common
+  const { activeTab, profile, showRestrictions, activeDataset, coordinates } =
+    common
   return {
     directions,
     isochrones,
@@ -998,7 +1005,7 @@ const mapStateToProps = state => {
     coordinates,
     activeTab,
     activeDataset,
-    showRestrictions
+    showRestrictions,
   }
 }
 

@@ -6,7 +6,7 @@ import { isochrones } from './isochrones'
 const rootReducer = combineReducers({
   common,
   directions,
-  isochrones
+  isochrones,
 })
 
 export default rootReducer

@@ -10,7 +10,7 @@ class ContoursInformation extends React.Component {
     results: PropTypes.object,
     header: PropTypes.string,
     provider: PropTypes.string,
-    profile: PropTypes.string
+    profile: PropTypes.string,
   }
 
   handleChange = (data, event) => {
@@ -31,7 +31,11 @@ class ContoursInformation extends React.Component {
               <div className={'flex pb2'} key={key}>
                 <div
                   className={'flex'}
-                  style={{ alignSelf: 'center', flexBasis: '140px' }}>
+                  style={{
+                    alignSelf: 'center',
+                    flexBasis: '140px',
+                  }}
+                >
                   <Icon circular name={'time'} />
                   <div className={'pr2 f6 b pt1 pb1'}>
                     {feature.properties.contour + ' minutes'}
@@ -54,10 +58,10 @@ class ContoursInformation extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { results } = state.isochrones
   return {
-    results
+    results,
   }
 }
 
