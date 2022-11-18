@@ -5,63 +5,63 @@
 @import '~leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css';
 
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 i.help.grey.icon {
-    color: #9943f5 !important;
+  color: #9943f5 !important;
 }
 
 .fossgis-logo {
-    background-image: url('images/fossgis.png');
-    height: 31px;
-    width: 150px;
-    background-position: center;
-    background-repeat: no-repeat;
+  background-image: url('images/fossgis.png');
+  height: 31px;
+  width: 150px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .valhalla-logo {
-    background-image: url('images/valhalla.png');
-    height: 100px;
-    width: 100px;
-    background-position: center;
-    background-repeat: no-repeat;
+  background-image: url('images/valhalla.png');
+  height: 100px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .ui.search input {
-    width: 250px;
+  width: 250px;
 }
 
 .ui.checkbox label,
 .ui.checkbox + label,
 .custom-label {
-    font-size: 0.85em;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.87);
+  font-size: 0.85em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
 .ui.toggle.checkbox input:focus:checked ~ label:before {
-    background-color: #9943f5 !important;
+  background-color: #9943f5 !important;
 }
 
 .ui.toggle.checkbox input:checked ~ .box:before,
 .ui.toggle.checkbox input:checked ~ label:before {
-    background-color: #9943f5 !important;
+  background-color: #9943f5 !important;
 }
 
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
 .ui.toggle.checkbox input:focus:checked ~ label:before {
-    background-color: #9943f5 !important;
+  background-color: #9943f5 !important;
 }
 
 .ui.form .inline.fields {
-    margin: 0em 0em 0em;
+  margin: 0em 0em 0em;
 }
 
 .extra-marker i {
-    font-style: normal;
-    font-size: 12px;
-    font-weight: bold;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: bold;
 }

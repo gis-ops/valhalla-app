@@ -4,9 +4,9 @@ import { directions } from './directions'
 import { isochrones } from './isochrones'
 
 const rootReducer = combineReducers({
-    common,
-    directions,
-    isochrones,
+  common,
+  directions,
+  isochrones,
 })
 
 export default rootReducer
