@@ -11,7 +11,7 @@ import {
   updateTextInput,
   updateIsoSettings,
   fetchGeocode,
-  makeIsochronesRequest
+  makeIsochronesRequest,
 } from 'actions/isochronesActions'
 
 import { updatePermalink, zoomTo } from 'actions/commonActions'
@@ -22,7 +22,7 @@ class Waypoints extends Component {
   static propTypes = {
     isochrones: PropTypes.object,
     dispatch: PropTypes.func,
-    use_geocoding: PropTypes.bool
+    use_geocoding: PropTypes.bool,
   }
 
   constructor(props) {
@@ -97,7 +97,7 @@ class Waypoints extends Component {
     dispatch(
       updateTextInput({
         userInput: result.title,
-        addressindex: result.addressindex
+        addressindex: result.addressindex,
       })
     )
     dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
@@ -116,7 +116,7 @@ class Waypoints extends Component {
 
     this.handleIsoSliderUpdateSettings({
       intervalName,
-      value
+      value,
     })
   }
 
@@ -132,7 +132,7 @@ class Waypoints extends Component {
     this.handleIsoSliderUpdateSettings({
       maxRangeName,
       intervalName,
-      value
+      value,
     })
   }
 
@@ -143,7 +143,7 @@ class Waypoints extends Component {
       updateIsoSettings({
         maxRangeName,
         intervalName,
-        value: parseInt(value)
+        value: parseInt(value),
       })
     )
 
@@ -169,13 +169,8 @@ class Waypoints extends Component {
   )
 
   render() {
-    const {
-      isFetching,
-      geocodeResults,
-      userInput,
-      maxRange,
-      interval
-    } = this.props.isochrones
+    const { isFetching, geocodeResults, userInput, maxRange, interval } =
+      this.props.isochrones
     const { activeIndex } = this.state
 
     const controlSettings = {
@@ -187,8 +182,8 @@ class Waypoints extends Component {
         settings: {
           min: 1,
           max: 120,
-          step: 1
-        }
+          step: 1,
+        },
       },
       interval: {
         name: 'Interval Step',
@@ -198,9 +193,9 @@ class Waypoints extends Component {
         settings: {
           min: 1,
           max: maxRange,
-          step: 1
-        }
-      }
+          step: 1,
+        },
+      },
     }
 
     return (
@@ -232,7 +227,8 @@ class Waypoints extends Component {
             <Accordion.Title
               active={activeIndex === 0}
               index={0}
-              onClick={this.handleClick}>
+              onClick={this.handleClick}
+            >
               <Icon name="dropdown" />
               <span className="f5">Settings</span>
             </Accordion.Title>
@@ -275,7 +271,8 @@ class Waypoints extends Component {
                         <Label
                           basic
                           size={'small'}
-                          style={{ cursor: 'default' }}>
+                          style={{ cursor: 'default' }}
+                        >
                           {controlSettings.maxRange.unit}
                         </Label>
                       }
@@ -290,13 +287,13 @@ class Waypoints extends Component {
                       color="secondary"
                       aria-label="Default"
                       valueLabelDisplay="auto"
-                      onChange={e => {
+                      onChange={(e) => {
                         const maxRangeName = controlSettings.maxRange.param
                         const intervalName = controlSettings.interval.param
                         this.handleIsoSliderUpdateSettings({
                           maxRangeName,
                           intervalName,
-                          value: e.target.value
+                          value: e.target.value,
                         })
                       }}
                     />
@@ -337,7 +334,8 @@ class Waypoints extends Component {
                         <Label
                           basic
                           size={'small'}
-                          style={{ cursor: 'default' }}>
+                          style={{ cursor: 'default' }}
+                        >
                           {controlSettings.interval.unit}
                         </Label>
                       }
@@ -352,11 +350,11 @@ class Waypoints extends Component {
                       color="secondary"
                       aria-label="Default"
                       valueLabelDisplay="auto"
-                      onChange={e => {
+                      onChange={(e) => {
                         const intervalName = controlSettings.interval.param
                         this.handleIsoSliderUpdateSettings({
                           intervalName,
-                          value: e.target.value
+                          value: e.target.value,
                         })
                       }}
                     />
@@ -371,13 +369,13 @@ class Waypoints extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { isochrones } = state
   const { use_geocoding } = state.common.settings
 
   return {
     isochrones,
-    use_geocoding
+    use_geocoding,
   }
 }
 

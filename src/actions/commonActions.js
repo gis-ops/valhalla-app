@@ -6,49 +6,49 @@ import {
   LOADING,
   SHOW_SETTINGS,
   ZOOM_TO,
-  RESET_SETTINGS
+  RESET_SETTINGS,
 } from './types'
 
 import {
   profile_settings,
-  settings_general
+  settings_general,
 } from '../Controls/settings-options'
 
-export const showLoading = loading => ({
+export const showLoading = (loading) => ({
   type: LOADING,
-  payload: loading
+  payload: loading,
 })
-export const sendMessage = message_object => ({
+export const sendMessage = (message_object) => ({
   type: MESSAGE_HANDLER,
   payload: {
     receivedAt: Date.now(),
-    ...message_object
-  }
+    ...message_object,
+  },
 })
-export const updateSettings = object => ({
+export const updateSettings = (object) => ({
   type: UPDATE_SETTINGS,
-  payload: object
+  payload: object,
 })
-export const updateProfile = profile => ({
+export const updateProfile = (profile) => ({
   type: UPDATE_PROFILE,
-  payload: profile
+  payload: profile,
 })
-export const updateTab = activeTab => ({
+export const updateTab = (activeTab) => ({
   type: UPDATE_TAB,
-  payload: activeTab
+  payload: activeTab,
 })
 
 export const doShowSettings = () => ({
-  type: SHOW_SETTINGS
+  type: SHOW_SETTINGS,
 })
 
 export const resetSettings = () => ({
-  type: RESET_SETTINGS
+  type: RESET_SETTINGS,
 })
 
-export const zoomTo = coords => ({
+export const zoomTo = (coords) => ({
   type: ZOOM_TO,
-  payload: coords
+  payload: coords,
 })
 
 export const updatePermalink = () => (dispatch, getState) => {
@@ -98,7 +98,7 @@ export const downloadFile = ({ data, fileName, fileType }) => {
   const clickEvt = new MouseEvent('click', {
     view: window,
     bubbles: true,
-    cancelable: true
+    cancelable: true,
   })
   aElem.dispatchEvent(clickEvt)
   aElem.remove()
@@ -106,7 +106,7 @@ export const downloadFile = ({ data, fileName, fileType }) => {
 
 export const filterProfileSettings = (profile, settings) => {
   const filteredSettings = {
-    exclude_polygons: settings.exclude_polygons
+    exclude_polygons: settings.exclude_polygons,
   }
   for (const setting in settings) {
     for (const item of settings_general[profile].numeric) {

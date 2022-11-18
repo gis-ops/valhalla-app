@@ -1,4 +1,4 @@
-const deriveHeightClass = slope => {
+const deriveHeightClass = (slope) => {
   let heightClass
   switch (true) {
     case slope < -15:
@@ -69,25 +69,25 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
       LineStringCoordinates.push([
         coordinates[index][0],
         coordinates[index][1],
-        item[1]
+        item[1],
       ])
 
       if (heightClasses[heightClasses.length - 1] !== heightClass) {
         LineStringCoordinates.push([
           coordinates[index + 1][0],
           coordinates[index + 1][1],
-          rangeHeightData[index + 1][1]
+          rangeHeightData[index + 1][1],
         ])
 
         features.push({
           type: 'Feature',
           geometry: {
             type: 'LineString',
-            coordinates: LineStringCoordinates
+            coordinates: LineStringCoordinates,
           },
           properties: {
-            attributeType: heightClass
-          }
+            attributeType: heightClass,
+          },
         })
         LineStringCoordinates = []
       }
@@ -102,9 +102,9 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
       properties: {
         summary: 'steepness',
         inclineTotal,
-        declineTotal
-      }
-    }
+        declineTotal,
+      },
+    },
   ]
 }
 
@@ -112,47 +112,47 @@ export const colorMappings = {
   steepness: {
     '-5': {
       text: '16%+',
-      color: '#028306'
+      color: '#028306',
     },
     '-4': {
       text: '10-15%',
-      color: '#2AA12E'
+      color: '#2AA12E',
     },
     '-3': {
       text: '7-9%',
-      color: '#53BF56'
+      color: '#53BF56',
     },
     '-2': {
       text: '4-6%',
-      color: '#7BDD7E'
+      color: '#7BDD7E',
     },
     '-1': {
       text: '1-3%',
-      color: '#A4FBA6'
+      color: '#A4FBA6',
     },
-    '0': {
+    0: {
       text: '0%',
-      color: '#ffcc99'
+      color: '#ffcc99',
     },
-    '1': {
+    1: {
       text: '1-3%',
-      color: '#F29898'
+      color: '#F29898',
     },
-    '2': {
+    2: {
       text: '4-6%',
-      color: '#E07575'
+      color: '#E07575',
     },
-    '3': {
+    3: {
       text: '7-9%',
-      color: '#CF5352'
+      color: '#CF5352',
     },
-    '4': {
+    4: {
       text: '10-15%',
-      color: '#BE312F'
+      color: '#BE312F',
     },
-    '5': {
+    5: {
       text: '16%+',
-      color: '#AD0F0C'
-    }
-  }
+      color: '#AD0F0C',
+    },
+  },
 }

@@ -13,7 +13,7 @@ class Summary extends React.Component {
     results: PropTypes.object,
     inclineDeclineTotal: PropTypes.object,
     header: PropTypes.string,
-    provider: PropTypes.string
+    provider: PropTypes.string,
   }
 
   handleChange = (event, data) => {
@@ -21,10 +21,10 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
-  formatDuration = durationInSeconds => {
+  formatDuration = (durationInSeconds) => {
     const duration = intervalToDuration({
       start: 0,
-      end: durationInSeconds * 1000
+      end: durationInSeconds * 1000,
     })
 
     let durationStr = ''
@@ -125,11 +125,11 @@ class Summary extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { results, inclineDeclineTotal } = state.directions
   return {
     results,
-    inclineDeclineTotal
+    inclineDeclineTotal,
   }
 }
 

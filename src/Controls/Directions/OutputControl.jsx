@@ -16,14 +16,14 @@ class OutputControl extends React.Component {
     profile: PropTypes.string,
     activeTab: PropTypes.number,
     successful: PropTypes.bool,
-    results: PropTypes.object
+    results: PropTypes.object,
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
-      showResults: false
+      showResults: false,
     }
     this.showManeuvers = this.showManeuvers.bind(this)
   }
@@ -53,7 +53,7 @@ class OutputControl extends React.Component {
       [dtNow.getHours(), dtNow.getMinutes(), dtNow.getSeconds()].join(':')
     return dtNow
   }
-  exportToJson = e => {
+  exportToJson = (e) => {
     const { results } = this.props
     const { data } = results[VALHALLA_OSM_URL]
 
@@ -61,11 +61,11 @@ class OutputControl extends React.Component {
     downloadFile({
       data: JSON.stringify(data),
       fileName: 'valhalla-directions_' + this.dateNow() + '.json',
-      fileType: 'text/json'
+      fileType: 'text/json',
     })
   }
 
-  exportToGeoJson = e => {
+  exportToGeoJson = (e) => {
     const { results } = this.props
     const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
 
@@ -73,7 +73,7 @@ class OutputControl extends React.Component {
     downloadFile({
       data: JSON.stringify(L.polyline(coordinates).toGeoJSON()),
       fileName: 'valhalla-directions_' + this.dateNow() + '.geojson',
-      fileType: 'text/json'
+      fileType: 'text/json',
     })
   }
 
@@ -84,8 +84,9 @@ class OutputControl extends React.Component {
       <Segment
         style={{
           margin: '0 1rem 10px',
-          display: successful ? 'block' : 'none'
-        }}>
+          display: successful ? 'block' : 'none',
+        }}
+      >
         <div className={'flex-column'}>
           <Summary provider={VALHALLA_OSM_URL} />
           <div className={'flex justify-between'}>
@@ -93,21 +94,24 @@ class OutputControl extends React.Component {
               size="mini"
               toggle
               active={this.state.showResults}
-              onClick={this.showManeuvers}>
+              onClick={this.showManeuvers}
+            >
               {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
             </Button>
             <div className={'flex'}>
               <div
                 className={'flex pointer'}
                 style={{ alignSelf: 'center' }}
-                onClick={this.exportToJson}>
+                onClick={this.exportToJson}
+              >
                 <Icon circular name={'download'} />
                 <div className={'pa1 b f6'}>{'JSON'}</div>
               </div>
               <div
                 className={'ml2 flex pointer'}
                 style={{ alignSelf: 'center' }}
-                onClick={this.exportToGeoJson}>
+                onClick={this.exportToGeoJson}
+              >
                 <Icon circular name={'download'} />
                 <div className={'pa1 b f6'}>{'GeoJSON'}</div>
               </div>
@@ -125,14 +129,14 @@ class OutputControl extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { profile, activeTab } = state.common
   const { successful, results } = state.directions
   return {
     profile,
     activeTab,
     successful,
-    results
+    results,
   }
 }
 

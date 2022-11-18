@@ -6,8 +6,8 @@ const length = {
   settings: {
     min: 1.0,
     max: 50.0,
-    step: 0.5
-  }
+    step: 0.5,
+  },
 }
 
 const width = {
@@ -18,8 +18,8 @@ const width = {
   settings: {
     min: 1.0,
     max: 10,
-    step: 0.5
-  }
+    step: 0.5,
+  },
 }
 
 const weight = {
@@ -30,8 +30,8 @@ const weight = {
   settings: {
     min: 1,
     max: 100,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const height = {
@@ -42,8 +42,8 @@ const height = {
   settings: {
     min: 1,
     max: 10,
-    step: 0.5
-  }
+    step: 0.5,
+  },
 }
 
 const axleLoad = {
@@ -54,8 +54,8 @@ const axleLoad = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const countryCrossingPenality = {
@@ -67,8 +67,8 @@ const countryCrossingPenality = {
   settings: {
     min: 0,
     max: 1000,
-    step: 60
-  }
+    step: 60,
+  },
 }
 
 const countryCrossingCost = {
@@ -80,8 +80,8 @@ const countryCrossingCost = {
   settings: {
     min: 0,
     max: 5000,
-    step: 100
-  }
+    step: 100,
+  },
 }
 
 const turnPenalityCost = {
@@ -93,14 +93,14 @@ const turnPenalityCost = {
   settings: {
     min: 0,
     max: 20,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const hazardousMaterials = {
   name: 'Hazardous materials',
   description: 'Whether the vehicle is carrying hazardous materials',
-  param: 'hazmat'
+  param: 'hazmat',
 }
 
 const useHighways = {
@@ -112,8 +112,8 @@ const useHighways = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 const useTollways = {
   name: 'Use Tollways',
@@ -124,8 +124,8 @@ const useTollways = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 const useFerry = {
   name: 'Use Ferries',
@@ -136,8 +136,8 @@ const useFerry = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const ferryCost = {
@@ -149,8 +149,8 @@ const ferryCost = {
   settings: {
     min: 0,
     max: 5000,
-    step: 100
-  }
+    step: 100,
+  },
 }
 
 const useLivingStreets = {
@@ -162,8 +162,8 @@ const useLivingStreets = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const useTracks = {
@@ -175,8 +175,8 @@ const useTracks = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const privateAccessPenalty = {
@@ -188,15 +188,15 @@ const privateAccessPenalty = {
   settings: {
     min: 0,
     max: 5000,
-    step: 100
-  }
+    step: 100,
+  },
 }
 
 const ignoreClosures = {
   name: 'Ignore Closures',
   description:
     'If set to true, ignores all closures, marked due to live traffic closures, during routing. ',
-  param: 'ignore_closures'
+  param: 'ignore_closures',
 }
 
 const closureFactor = {
@@ -208,8 +208,8 @@ const closureFactor = {
   settings: {
     min: 1,
     max: 10,
-    step: 0.5
-  }
+    step: 0.5,
+  },
 }
 
 const servicePenalty = {
@@ -221,8 +221,8 @@ const servicePenalty = {
   settings: {
     min: 0,
     max: 100,
-    step: 5
-  }
+    step: 5,
+  },
 }
 
 const serviceFactor = {
@@ -234,8 +234,8 @@ const serviceFactor = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const excludeUnpaved = {
@@ -247,29 +247,29 @@ const excludeUnpaved = {
   settings: {
     min: 0,
     max: 1,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const shortest = {
   name: 'Shortest',
   description:
     'Changes the metric to quasi-shortest, i.e. purely distance-based costing. Note, this will disable all other costings & penalties. Also note, shortest will not disable hierarchy pruning, leading to potentially sub-optimal routes for some costing models. The default is false.',
-  param: 'shortest'
+  param: 'shortest',
 }
 
 const excludeCashOnlyTolls = {
   name: 'Exclude Cash Only Tolls',
   description:
     'A boolean value which indicates the desire to avoid routes with cash-only tolls.',
-  param: 'exclude_cash_only_tolls'
+  param: 'exclude_cash_only_tolls',
 }
 
 const useGeocoding = {
   name: 'Geocoding',
   description:
     'Decides whether you want to use geocoding or work with plain coordinates.',
-  param: 'use_geocoding'
+  param: 'use_geocoding',
 }
 
 const bicycleType = {
@@ -284,29 +284,29 @@ const bicycleType = {
     {
       key: 'Hybrid',
       text: 'Hybrid',
-      value: 'Hybrid'
+      value: 'Hybrid',
     },
     {
       key: 'Road',
       text: 'Road',
-      value: 'Road'
+      value: 'Road',
     },
     {
       key: 'City',
       text: 'City',
-      value: 'City'
+      value: 'City',
     },
     {
       key: 'Cross',
       text: 'Cross',
-      value: 'Cross'
+      value: 'Cross',
     },
     {
       key: 'Mountain',
       text: 'Mountain',
-      value: 'Mountain'
-    }
-  ]
+      value: 'Mountain',
+    },
+  ],
 }
 
 const cyclingSpeed = {
@@ -318,8 +318,8 @@ const cyclingSpeed = {
   settings: {
     min: 5,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const useRoads = {
@@ -331,8 +331,8 @@ const useRoads = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const useHills = {
@@ -344,8 +344,8 @@ const useHills = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const avoidBadSurfaces = {
@@ -357,8 +357,8 @@ const avoidBadSurfaces = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const topSpeed = {
@@ -370,8 +370,8 @@ const topSpeed = {
   settings: {
     min: 10,
     max: 252,
-    step: 5
-  }
+    step: 5,
+  },
 }
 
 const usePrimary = {
@@ -383,8 +383,8 @@ const usePrimary = {
   settings: {
     min: 0,
     max: 1,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const walkingSpeed = {
@@ -396,8 +396,8 @@ const walkingSpeed = {
   settings: {
     min: 0.5,
     max: 25,
-    step: 0.1
-  }
+    step: 0.1,
+  },
 }
 
 const walkwayFactor = {
@@ -409,8 +409,8 @@ const walkwayFactor = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const sidewalkFactor = {
@@ -422,8 +422,8 @@ const sidewalkFactor = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const alleyFactor = {
@@ -435,8 +435,8 @@ const alleyFactor = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const drivewayFactor = {
@@ -448,8 +448,8 @@ const drivewayFactor = {
   settings: {
     min: 1,
     max: 50,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 const stepPenalty = {
@@ -461,8 +461,8 @@ const stepPenalty = {
   settings: {
     min: 0,
     max: 500,
-    step: 5
-  }
+    step: 5,
+  },
 }
 
 const maxHikingDifficulty = {
@@ -474,8 +474,8 @@ const maxHikingDifficulty = {
   settings: {
     min: 0,
     max: 6,
-    step: 1
-  }
+    step: 1,
+  },
 }
 
 export const settingsInit = {
@@ -517,7 +517,7 @@ export const settingsInit = {
   step_penalty: 0,
   max_hiking_difficulty: 1,
   exclude_polygons: [],
-  use_geocoding: true
+  use_geocoding: true,
 }
 
 export const profile_settings = {
@@ -532,10 +532,10 @@ export const profile_settings = {
       privateAccessPenalty,
       closureFactor,
       servicePenalty,
-      serviceFactor
+      serviceFactor,
     ],
     boolean: [hazardousMaterials, shortest],
-    enum: []
+    enum: [],
   },
   car: {
     numeric: [
@@ -545,10 +545,10 @@ export const profile_settings = {
       privateAccessPenalty,
       closureFactor,
       servicePenalty,
-      serviceFactor
+      serviceFactor,
     ],
     boolean: [shortest],
-    enum: []
+    enum: [],
   },
   bus: {
     numeric: [
@@ -560,10 +560,10 @@ export const profile_settings = {
       privateAccessPenalty,
       closureFactor,
       servicePenalty,
-      serviceFactor
+      serviceFactor,
     ],
     boolean: [shortest],
-    enum: []
+    enum: [],
   },
   pedestrian: {
     numeric: [
@@ -574,21 +574,21 @@ export const profile_settings = {
       alleyFactor,
       drivewayFactor,
       stepPenalty,
-      maxHikingDifficulty
+      maxHikingDifficulty,
     ],
     boolean: [shortest],
-    enum: []
+    enum: [],
   },
   motor_scooter: {
     numeric: [useHills, topSpeed, usePrimary],
     boolean: [shortest],
-    enum: []
+    enum: [],
   },
   bicycle: {
     numeric: [cyclingSpeed, useRoads, useHills, avoidBadSurfaces],
     boolean: [shortest],
-    enum: [bicycleType]
-  }
+    enum: [bicycleType],
+  },
 }
 
 export const settings_general = {
@@ -603,10 +603,10 @@ export const settings_general = {
       ferryCost,
       useLivingStreets,
       useTracks,
-      excludeUnpaved
+      excludeUnpaved,
     ],
     boolean: [ignoreClosures, excludeCashOnlyTolls],
-    enum: []
+    enum: [],
   },
   car: {
     numeric: [
@@ -619,10 +619,10 @@ export const settings_general = {
       ferryCost,
       useLivingStreets,
       useTracks,
-      excludeUnpaved
+      excludeUnpaved,
     ],
     boolean: [ignoreClosures, excludeCashOnlyTolls],
-    enum: []
+    enum: [],
   },
   bus: {
     numeric: [
@@ -634,20 +634,20 @@ export const settings_general = {
       useFerry,
       ferryCost,
       useTracks,
-      excludeUnpaved
+      excludeUnpaved,
     ],
     boolean: [ignoreClosures, excludeCashOnlyTolls],
-    enum: []
+    enum: [],
   },
   pedestrian: {
     numeric: [useFerry, servicePenalty, serviceFactor],
     boolean: [],
-    enum: []
+    enum: [],
   },
   motor_scooter: {
     numeric: [useFerry, useTracks],
     boolean: [],
-    enum: []
+    enum: [],
   },
   bicycle: {
     numeric: [
@@ -657,12 +657,12 @@ export const settings_general = {
       countryCrossingPenality,
       turnPenalityCost,
       servicePenalty,
-      serviceFactor
+      serviceFactor,
     ],
     boolean: [],
-    enum: []
+    enum: [],
   },
   all: {
-    boolean: [useGeocoding]
-  }
+    boolean: [useGeocoding],
+  },
 }

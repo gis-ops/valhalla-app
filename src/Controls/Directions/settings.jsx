@@ -5,7 +5,7 @@ import { Button, Popup, Icon } from 'semantic-ui-react'
 export const Settings = ({
   handleAddWaypoint,
   handleRemoveWaypoints,
-  handleSettings
+  handleSettings,
 }) => (
   <div>
     <Popup
@@ -41,5 +41,5 @@ Settings.propTypes = {
   handleAddWaypoint: PropTypes.func,
   handleRemoveWaypoints: PropTypes.func,
   handleSettings: PropTypes.func,
-  group: PropTypes.string
+  group: PropTypes.string,
 }

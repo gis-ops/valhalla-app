@@ -14,7 +14,7 @@ class OutputControl extends React.Component {
     profile: PropTypes.string,
     activeTab: PropTypes.number,
     successful: PropTypes.bool,
-    results: PropTypes.object
+    results: PropTypes.object,
   }
 
   // necessary to calculate new routes the tab was changed from isochrone tab
@@ -35,7 +35,8 @@ class OutputControl extends React.Component {
 
     return (
       <Segment
-        style={{ margin: '0 1rem', display: successful ? 'block' : 'none' }}>
+        style={{ margin: '0 1rem', display: successful ? 'block' : 'none' }}
+      >
         <div className={'flex-column'}>
           <div className={'flex justify-between pointer'}>
             <Summary provider={VALHALLA_OSM_URL} />
@@ -48,14 +49,14 @@ class OutputControl extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { profile, activeTab } = state.common
   const { successful, results } = state.isochrones
   return {
     profile,
     activeTab,
     successful,
-    results
+    results,
   }
 }
 

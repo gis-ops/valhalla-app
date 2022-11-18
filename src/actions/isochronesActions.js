@@ -6,12 +6,12 @@ import {
   REQUEST_GEOCODE_RESULTS_ISO,
   TOGGLE_PROVIDER_ISO,
   RECEIVE_ISOCHRONE_RESULTS,
-  CLEAR_ISOS
+  CLEAR_ISOS,
 } from './types'
 import {
   reverse_geocode,
   forward_geocode,
-  parseGeocodeResponse
+  parseGeocodeResponse,
 } from 'utils/nominatim'
 import { VALHALLA_OSM_URL, buildIsochronesRequest } from 'utils/valhalla'
 
@@ -19,12 +19,12 @@ import {
   sendMessage,
   showLoading,
   updatePermalink,
-  filterProfileSettings
+  filterProfileSettings,
 } from './commonActions'
 import { calcArea } from 'utils/geom'
 
 const serverMapping = {
-  [VALHALLA_OSM_URL]: 'OSM'
+  [VALHALLA_OSM_URL]: 'OSM',
 }
 
 export const makeIsochronesRequest = () => (dispatch, getState) => {
@@ -53,13 +53,13 @@ export const makeIsochronesRequest = () => (dispatch, getState) => {
       center,
       settings,
       maxRange,
-      interval
+      interval,
     })
     dispatch(fetchValhallaIsochrones(valhallaRequest))
   }
 }
 
-const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
+const fetchValhallaIsochrones = (valhallaRequest) => (dispatch, getState) => {
   dispatch(showLoading(true))
 
   for (const URL of [VALHALLA_OSM_URL]) {
@@ -67,12 +67,12 @@ const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
       .get(URL + '/isochrone', {
         params: { json: JSON.stringify(valhallaRequest.json) },
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
       .then(({ data }) => {
         console.log(data)
-        data.features.forEach(feature => {
+        data.features.forEach((feature) => {
           feature.properties.area = calcArea(feature)
         })
         dispatch(registerIsoResponse(URL, data))
@@ -84,7 +84,7 @@ const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
             type: 'warning',
             icon: 'warning',
             description: `${serverMapping[URL]}: ${response.data.error}`,
-            title: `${response.data.status}`
+            title: `${response.data.status}`,
           })
         )
       })
@@ -96,30 +96,30 @@ const fetchValhallaIsochrones = valhallaRequest => (dispatch, getState) => {
   }
 }
 
-export const clearIsos = provider => ({
+export const clearIsos = (provider) => ({
   type: CLEAR_ISOS,
-  payload: provider
+  payload: provider,
 })
 
 export const registerIsoResponse = (provider, data) => ({
   type: RECEIVE_ISOCHRONE_RESULTS,
   payload: {
     provider,
-    data
-  }
+    data,
+  },
 })
 
-export const updateTextInput = obj => ({
+export const updateTextInput = (obj) => ({
   type: UPDATE_TEXTINPUT_ISO,
-  payload: obj
+  payload: obj,
 })
 
-export const updateIsoSettings = obj => ({
+export const updateIsoSettings = (obj) => ({
   type: UPDATE_SETTINGS_ISO,
-  payload: obj
+  payload: obj,
 })
 
-const placeholderAddress = (index, lng, lat) => dispatch => {
+const placeholderAddress = (index, lng, lat) => (dispatch) => {
   // placeholder until gecoder is complete
   // will add latLng to input field
   const addresses = [
@@ -128,35 +128,35 @@ const placeholderAddress = (index, lng, lat) => dispatch => {
       title: '',
       displaylnglat: [lng, lat],
       key: index,
-      addressindex: index
-    }
+      addressindex: index,
+    },
   ]
 
   dispatch({
     type: RECEIVE_GEOCODE_RESULTS_ISO,
-    payload: addresses
+    payload: addresses,
   })
   dispatch({
     type: UPDATE_TEXTINPUT_ISO,
     payload: {
       userInput: [lng.toFixed(6), lat.toFixed(6)].join(', '),
       index: 0,
-      addressindex: 0
-    }
+      addressindex: 0,
+    },
   })
 }
 
-export const fetchReverseGeocodeIso = (lng, lat) => dispatch => {
+export const fetchReverseGeocodeIso = (lng, lat) => (dispatch) => {
   dispatch(placeholderAddress(0, lng, lat))
 
   dispatch({
-    type: REQUEST_GEOCODE_RESULTS_ISO
+    type: REQUEST_GEOCODE_RESULTS_ISO,
   })
   reverse_geocode(lng, lat)
-    .then(response => {
+    .then((response) => {
       dispatch(processGeocodeResponse(response.data, true, [lng, lat]))
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error) //eslint-disable-line
     })
   // .finally(() => {
@@ -164,9 +164,9 @@ export const fetchReverseGeocodeIso = (lng, lat) => dispatch => {
   // })
 }
 
-export const fetchGeocode = (userInput, lngLat) => dispatch => {
+export const fetchGeocode = (userInput, lngLat) => (dispatch) => {
   dispatch({
-    type: REQUEST_GEOCODE_RESULTS_ISO
+    type: REQUEST_GEOCODE_RESULTS_ISO,
   })
 
   if (lngLat) {
@@ -178,26 +178,26 @@ export const fetchGeocode = (userInput, lngLat) => dispatch => {
         addresslnglat: lngLat,
         sourcelnglat: lngLat,
         displaylnglat: lngLat,
-        addressindex: 0
-      }
+        addressindex: 0,
+      },
     ]
 
     dispatch({
       type: RECEIVE_GEOCODE_RESULTS_ISO,
-      payload: addresses
+      payload: addresses,
     })
   } else {
     forward_geocode(userInput)
-      .then(response => {
+      .then((response) => {
         dispatch(processGeocodeResponse(response.data))
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error) //eslint-disable-line
       })
   }
 }
 
-const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
+const processGeocodeResponse = (data, reverse, lngLat) => (dispatch) => {
   const addresses = parseGeocodeResponse(data, lngLat)
   // if no address can be found
   if (addresses.length === 0) {
@@ -206,13 +206,13 @@ const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
         type: 'warning',
         icon: 'warning',
         description: 'Sorry, no addresses can be found.',
-        title: 'No addresses'
+        title: 'No addresses',
       })
     )
   }
   dispatch({
     type: RECEIVE_GEOCODE_RESULTS_ISO,
-    payload: addresses
+    payload: addresses,
   })
 
   if (reverse) {
@@ -221,8 +221,8 @@ const processGeocodeResponse = (data, reverse, lngLat) => dispatch => {
       payload: {
         userInput: addresses[0].title,
         index: 0,
-        addressindex: 0
-      }
+        addressindex: 0,
+      },
     })
     dispatch(updatePermalink())
     dispatch(makeIsochronesRequest())
@@ -233,6 +233,6 @@ export const showProvider = (provider, show) => ({
   type: TOGGLE_PROVIDER_ISO,
   payload: {
     provider,
-    show
-  }
+    show,
+  },
 })

@@ -6,7 +6,7 @@ import {
   MESSAGE_HANDLER,
   SHOW_SETTINGS,
   ZOOM_TO,
-  RESET_SETTINGS
+  RESET_SETTINGS,
 } from 'actions/types'
 import { settingsInit } from 'Controls/settings-options'
 
@@ -20,10 +20,10 @@ const initialState = {
     type: null,
     icon: null,
     topic: null,
-    description: null
+    description: null,
   },
   profile: 'bicycle',
-  settings: { ...settingsInit }
+  settings: { ...settingsInit },
 }
 
 export const common = (state = initialState, action) => {
@@ -31,27 +31,27 @@ export const common = (state = initialState, action) => {
     case MESSAGE_HANDLER: {
       return {
         ...state,
-        message: action.payload
+        message: action.payload,
       }
     }
     case LOADING: {
       return {
         ...state,
-        loading: action.payload
+        loading: action.payload,
       }
     }
 
     case ZOOM_TO: {
       return {
         ...state,
-        coordinates: action.payload
+        coordinates: action.payload,
       }
     }
 
     case SHOW_SETTINGS: {
       return {
         ...state,
-        showSettings: !state.showSettings
+        showSettings: !state.showSettings,
       }
     }
 
@@ -61,8 +61,8 @@ export const common = (state = initialState, action) => {
         ...state,
         settings: {
           ...state.settings,
-          [name]: value
-        }
+          [name]: value,
+        },
       }
     }
 
@@ -70,8 +70,8 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         settings: {
-          ...settingsInit
-        }
+          ...settingsInit,
+        },
       }
     }
 
@@ -79,7 +79,7 @@ export const common = (state = initialState, action) => {
       const { activeTab } = action.payload
       return {
         ...state,
-        activeTab
+        activeTab,
       }
     }
 
@@ -87,7 +87,7 @@ export const common = (state = initialState, action) => {
       const { profile } = action.payload
       return {
         ...state,
-        profile
+        profile,
       }
     }
 
