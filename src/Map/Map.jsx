@@ -35,7 +35,7 @@ const TILE_SERVER_URL = 'https://maps.wcedmisten.dev/tile/{z}/{x}/{y}.png'
 
 const OSMTiles = L.tileLayer(TILE_SERVER_URL, {
     attribution:
-        '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 })
 
 // defining the container styles the map sits in
@@ -49,11 +49,11 @@ const convertDDToDMS = (decimalDegrees) =>
         0 | decimalDegrees,
         '° ',
         0 |
-        (((decimalDegrees =
-            (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) +
-            1e-4) %
-            1) *
-            60),
+            (((decimalDegrees =
+                (decimalDegrees < 0 ? -decimalDegrees : decimalDegrees) +
+                1e-4) %
+                1) *
+                60),
         "' ",
         0 | (((decimalDegrees * 60) % 1) * 60),
         '"',
@@ -1060,9 +1060,9 @@ class Map extends React.Component {
                 <div>
                     {this.state.showPopup && leafletPopupDiv
                         ? ReactDOM.createPortal(
-                            MapPopup(this.state.showInfoPopup),
-                            leafletPopupDiv
-                        )
+                              MapPopup(this.state.showInfoPopup),
+                              leafletPopupDiv
+                          )
                         : null}
                 </div>
             </React.Fragment>
