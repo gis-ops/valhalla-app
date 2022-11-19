@@ -5,7 +5,7 @@ import {
   UPDATE_SETTINGS_ISO,
   UPDATE_TEXTINPUT_ISO,
   TOGGLE_PROVIDER_ISO,
-  CLEAR_ISOS
+  CLEAR_ISOS,
 } from 'actions/types'
 
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
@@ -21,9 +21,9 @@ const initialState = {
   results: {
     [VALHALLA_OSM_URL]: {
       data: {},
-      show: true
-    }
-  }
+      show: true,
+    },
+  },
 }
 
 export const isochrones = (state = initialState, action) => {
@@ -36,7 +36,7 @@ export const isochrones = (state = initialState, action) => {
         userInput: '',
         geocodeResults: [],
         selectedAddress: '',
-        results: initialState.results
+        results: initialState.results,
       }
 
     case TOGGLE_PROVIDER_ISO:
@@ -46,9 +46,9 @@ export const isochrones = (state = initialState, action) => {
           ...state.results,
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
-            show: payload.show
-          }
-        }
+            show: payload.show,
+          },
+        },
       }
     case RECEIVE_ISOCHRONE_RESULTS:
       return {
@@ -57,17 +57,17 @@ export const isochrones = (state = initialState, action) => {
           ...state.results,
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
-            data: action.payload.data
-          }
+            data: action.payload.data,
+          },
         },
-        successful: true
+        successful: true,
       }
 
     case UPDATE_SETTINGS_ISO:
       return {
         ...state,
         [payload.maxRangeName]: payload.value,
-        [payload.intervalName]: payload.value
+        [payload.intervalName]: payload.value,
       }
 
     case UPDATE_TEXTINPUT_ISO:
@@ -76,23 +76,23 @@ export const isochrones = (state = initialState, action) => {
         userInput: payload.userInput,
         selectedAddress: state.geocodeResults[action.payload.addressindex],
         geocodeResults: state.geocodeResults.map((result, i) =>
-          i == action.payload.addressindex
+          i === action.payload.addressindex
             ? { ...result, selected: true }
             : { ...result, selected: false }
-        )
+        ),
       }
 
     case RECEIVE_GEOCODE_RESULTS_ISO:
       return {
         ...state,
         geocodeResults: payload,
-        isFetching: false
+        isFetching: false,
       }
 
     case REQUEST_GEOCODE_RESULTS_ISO:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       }
 
     default:

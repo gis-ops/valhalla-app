@@ -11,12 +11,12 @@ import {
   updateTab,
   updateProfile,
   updatePermalink,
-  zoomTo
+  zoomTo,
 } from 'actions/commonActions'
 import { fetchReverseGeocodePerma } from 'actions/directionsActions'
 import {
   fetchReverseGeocodeIso,
-  updateIsoSettings
+  updateIsoSettings,
 } from 'actions/isochronesActions'
 
 const controlStyle = {
@@ -26,7 +26,7 @@ const controlStyle = {
   top: '10px',
   left: '10px',
   overflow: 'auto',
-  maxHeight: 'calc(100vh - 3vw)'
+  maxHeight: 'calc(100vh - 3vw)',
 }
 
 const pairwise = (arr, func) => {
@@ -42,7 +42,7 @@ class MainControl extends React.Component {
     dispatch: PropTypes.func.isRequired,
     message: PropTypes.object,
     activeDataset: PropTypes.string,
-    activeTab: PropTypes.number
+    activeTab: PropTypes.number,
   }
 
   componentDidMount = () => {
@@ -62,7 +62,7 @@ class MainControl extends React.Component {
       icon: 'heart',
       title: 'Welcome to Valhalla!',
       description: 'Global Routing Service - funded by FOSSGIS e.V.',
-      time: 5000
+      time: 5000,
     })
 
     const params = Object.fromEntries(new URL(document.location).searchParams)
@@ -91,11 +91,11 @@ class MainControl extends React.Component {
         const payload = {
           latLng,
           fromPerma: true,
-          permaLast: i == coordinates.length / 2 - 1,
-          index: i
+          permaLast: i === coordinates.length / 2 - 1,
+          index: i,
         }
         processedCoords.push([latLng.lat, latLng.lng])
-        if (activeTab == 0) {
+        if (activeTab === 0) {
           dispatch(fetchReverseGeocodePerma(payload))
         } else {
           dispatch(fetchReverseGeocodeIso(current, next))
@@ -110,14 +110,14 @@ class MainControl extends React.Component {
               updateIsoSettings({
                 maxRangeName,
                 intervalName,
-                value: maxRangeValue
+                value: maxRangeValue,
               })
             )
             dispatch(
               updateIsoSettings({
                 undefined,
                 intervalName,
-                value: intervalValue
+                value: intervalValue,
               })
             )
           }
@@ -127,7 +127,7 @@ class MainControl extends React.Component {
     }
   }
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
     const { message } = this.props
 
     if (message.receivedAt > prevProps.message.receivedAt) {
@@ -136,7 +136,7 @@ class MainControl extends React.Component {
         icon: message.icon,
         title: message.topic,
         description: message.description,
-        time: 5000
+        time: 5000,
       })
     }
   }
@@ -158,7 +158,7 @@ class MainControl extends React.Component {
           <Tab.Pane style={{ padding: '0 0 0 0' }} attached={false}>
             <DirectionsControl />
           </Tab.Pane>
-        )
+        ),
       },
       {
         menuItem: 'Isochrones',
@@ -166,8 +166,8 @@ class MainControl extends React.Component {
           <Tab.Pane style={{ padding: '0 0 0 0' }} attached={false}>
             <IsochronesControl />
           </Tab.Pane>
-        )
-      }
+        ),
+      },
     ]
 
     const ServiceTabs = () => (
@@ -194,11 +194,11 @@ class MainControl extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { message, activeTab } = state.common
   return {
     message,
-    activeTab
+    activeTab,
   }
 }
 

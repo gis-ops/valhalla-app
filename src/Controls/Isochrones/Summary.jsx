@@ -12,7 +12,7 @@ class Summary extends React.Component {
     dispatch: PropTypes.func.isRequired,
     results: PropTypes.object,
     header: PropTypes.string,
-    provider: PropTypes.string
+    provider: PropTypes.string,
   }
 
   handleChange = (event, data) => {
@@ -20,7 +20,7 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
-  exportToJson = e => {
+  exportToJson = (e) => {
     const { provider, results } = this.props
     const data = R.path([provider, 'data'], results)
 
@@ -36,7 +36,7 @@ class Summary extends React.Component {
     downloadFile({
       data: JSON.stringify(data),
       fileName: 'valhalla-isochrones_' + dformat + '.geojson',
-      fileType: 'text/json'
+      fileType: 'text/json',
     })
   }
 
@@ -53,7 +53,8 @@ class Summary extends React.Component {
             <div
               className={'flex pointer'}
               style={{ alignSelf: 'center' }}
-              onClick={this.exportToJson}>
+              onClick={this.exportToJson}
+            >
               <Icon circular name={'download'} />
               <div className={'pa1 b f6'}>{'Download'}</div>
             </div>
@@ -75,10 +76,10 @@ class Summary extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { results } = state.isochrones
   return {
-    results
+    results,
   }
 }
 

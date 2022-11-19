@@ -12,19 +12,19 @@ import {
   doAddWaypoint,
   doRemoveWaypoint,
   makeRequest,
-  clearRoutes
+  clearRoutes,
 } from 'actions/directionsActions'
 import {
   updateProfile,
   doShowSettings,
-  updatePermalink
+  updatePermalink,
 } from 'actions/commonActions'
 
 class DirectionsControl extends React.Component {
   static propTypes = {
     profile: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
   }
 
   handleUpdateProfile = (event, data) => {
@@ -44,7 +44,7 @@ class DirectionsControl extends React.Component {
     dispatch(clearRoutes())
   }
 
-  componentDidUpdate = prevProps => {}
+  componentDidUpdate = (prevProps) => {}
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { dispatch } = this.props
@@ -66,7 +66,8 @@ class DirectionsControl extends React.Component {
           <div>
             <div
               className="pa3 flex flex-row justify-between"
-              style={{ height: '60px' }}>
+              style={{ height: '60px' }}
+            >
               <ProfilePicker
                 group={'directions'}
                 profiles={[
@@ -75,7 +76,7 @@ class DirectionsControl extends React.Component {
                   'car',
                   'truck',
                   'bus',
-                  'motor_scooter'
+                  'motor_scooter',
                 ]}
                 loading={loading}
                 popupContent={[
@@ -84,7 +85,7 @@ class DirectionsControl extends React.Component {
                   'car',
                   'truck',
                   'bus',
-                  'motor scooter'
+                  'motor scooter',
                 ]}
                 activeProfile={profile}
                 handleUpdateProfile={this.handleUpdateProfile}
@@ -106,14 +107,16 @@ class DirectionsControl extends React.Component {
               <a
                 href="https://github.com/valhalla/valhalla"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer"
+              >
                 Valhalla
               </a>{' '}
               • visualized with{' '}
               <a
                 href="https://github.com/gis-ops/valhalla-app/"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer"
+              >
                 Valhalla App
               </a>
             </span>
@@ -124,11 +127,11 @@ class DirectionsControl extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { profile, loading } = state.common
   return {
     profile,
-    loading
+    loading,
   }
 }
 

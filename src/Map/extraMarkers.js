@@ -21,12 +21,12 @@ ExtraMarkers.Icon = L.Icon.extend({
     svgOpacity: 1,
     iconColor: '#fff',
     number: '',
-    svg: false
+    svg: false,
   },
-  initialize: function(options) {
+  initialize: function (options) {
     options = L.Util.setOptions(this, options)
   },
-  createIcon: function() {
+  createIcon: function () {
     const div = document.createElement('div')
     const options = this.options
     if (options.icon) {
@@ -46,7 +46,7 @@ ExtraMarkers.Icon = L.Icon.extend({
     }
     return div
   },
-  _createInner: function() {
+  _createInner: function () {
     let iconColorStyle = ''
     let iconNumber = ''
     const options = this.options
@@ -122,7 +122,7 @@ ExtraMarkers.Icon = L.Icon.extend({
       "'></i>"
     )
   },
-  _setIconStyles: function(img, name) {
+  _setIconStyles: function (img, name) {
     const options = this.options
     const size = L.point(options[name === 'shadow' ? 'shadowSize' : 'iconSize'])
     let anchor
@@ -154,14 +154,14 @@ ExtraMarkers.Icon = L.Icon.extend({
       img.style.height = size.y + 'px'
     }
   },
-  createShadow: function() {
+  createShadow: function () {
     const div = document.createElement('div')
     this._setIconStyles(div, 'shadow')
     return div
-  }
+  },
 })
 
-ExtraMarkers.icon = function(options) {
+ExtraMarkers.icon = function (options) {
   return new ExtraMarkers.Icon(options)
 }
 

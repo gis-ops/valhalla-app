@@ -7,7 +7,7 @@ import Waypoint from './Waypoint'
 import {
   doAddWaypoint,
   setWaypoints,
-  makeRequest
+  makeRequest,
 } from 'actions/directionsActions'
 
 const reorder = (list, startIndex, endIndex) => {
@@ -24,22 +24,22 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   paddingRight: 16,
   //background: isDragging ? 'lightgreen' : 'transparent',
   // styles we need to apply on draggables
-  ...draggableStyle
+  ...draggableStyle,
 })
 
-const getListStyle = isDraggingOver => ({
+const getListStyle = (isDraggingOver) => ({
   //background: isDraggingOver ? 'lightblue' : 'lightgrey',
   width: '100%',
   //height: 200,
   paddingBottom: 20,
   maxHeight: 350,
-  height: 300
+  height: 300,
 })
 
 class Waypoints extends Component {
   static propTypes = {
     directions: PropTypes.object,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   }
 
   constructor(props) {
@@ -56,7 +56,7 @@ class Waypoints extends Component {
     const { dispatch, directions } = this.props
     this.setState({ visible: true })
 
-    if (directions.waypoints.length == 0) {
+    if (directions.waypoints.length === 0) {
       Array(3)
         .fill()
         .map((_, i) => dispatch(doAddWaypoint()))
@@ -91,7 +91,8 @@ class Waypoints extends Component {
                 className={`flex flex-column overflow-auto`}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}>
+                style={getListStyle(snapshot.isDraggingOver)}
+              >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
                     {(provided, snapshot) => (
@@ -102,7 +103,8 @@ class Waypoints extends Component {
                         style={getItemStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style
-                        )}>
+                        )}
+                      >
                         <Waypoint
                           id={wp.id}
                           index={index}
@@ -123,10 +125,10 @@ class Waypoints extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { directions } = state
   return {
-    directions
+    directions,
   }
 }
 

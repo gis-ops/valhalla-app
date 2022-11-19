@@ -4,14 +4,14 @@ export const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
 export const NOMINATIME_URL_REVERSE =
   'https://nominatim.openstreetmap.org/reverse'
 
-export const forward_geocode = userInput =>
+export const forward_geocode = (userInput) =>
   axios.get(NOMINATIM_URL, {
     params: {
       // eslint-disable-next-line
       q: userInput,
       format: 'json',
-      limit: 5
-    }
+      limit: 5,
+    },
   })
 
 export const reverse_geocode = (lon, lat) =>
@@ -19,8 +19,8 @@ export const reverse_geocode = (lon, lat) =>
     params: {
       lon: lon,
       lat: lat,
-      format: 'json'
-    }
+      format: 'json',
+    },
   })
 
 export const parseGeocodeResponse = (results, lngLat) => {
@@ -31,7 +31,7 @@ export const parseGeocodeResponse = (results, lngLat) => {
   for (const [index, result] of results.entries()) {
     if (
       'error' in result &&
-      result.error.toLowerCase() == 'unable to geocode'
+      result.error.toLowerCase() === 'unable to geocode'
     ) {
       processedResults.push({
         title: lngLat.toString(),
@@ -41,7 +41,7 @@ export const parseGeocodeResponse = (results, lngLat) => {
         sourcelnglat: lngLat,
         displaylnglat: lngLat,
         key: index,
-        addressindex: index
+        addressindex: index,
       })
     } else {
       processedResults.push({
@@ -49,13 +49,11 @@ export const parseGeocodeResponse = (results, lngLat) => {
           result.display_name.length > 0
             ? result.display_name
             : lngLat.toString(),
-        description: `https://www.openstreetmap.org/${result.osm_type}/${
-          result.osm_id
-        }`,
+        description: `https://www.openstreetmap.org/${result.osm_type}/${result.osm_id}`,
         selected: false,
         addresslnglat: [parseFloat(result.lon), parseFloat(result.lat)],
         sourcelnglat:
-          lngLat == undefined
+          lngLat === undefined
             ? [parseFloat(result.lon), parseFloat(result.lat)]
             : lngLat,
         displaylnglat:
@@ -63,7 +61,7 @@ export const parseGeocodeResponse = (results, lngLat) => {
             ? lngLat
             : [parseFloat(result.lon), parseFloat(result.lat)],
         key: index,
-        addressindex: index
+        addressindex: index,
       })
     }
   }

@@ -6,7 +6,7 @@ import { Header, Icon, Divider } from 'semantic-ui-react'
 
 import { highlightManeuver, zoomToManeuver } from 'actions/directionsActions'
 
-const getLength = length => {
+const getLength = (length) => {
   const visibleLength = length * 1000
   if (visibleLength < 1000) {
     return visibleLength + 'm'
@@ -20,7 +20,7 @@ class Maneuvers extends React.Component {
     results: PropTypes.object,
     header: PropTypes.string,
     provider: PropTypes.string,
-    profile: PropTypes.string
+    profile: PropTypes.string,
   }
 
   highlightMnv = (sIdx, eIdx) => {
@@ -28,7 +28,7 @@ class Maneuvers extends React.Component {
     dispatch(highlightManeuver({ startIndex: sIdx, endIndex: eIdx }))
   }
 
-  zoomToMnv = sIdx => {
+  zoomToMnv = (sIdx) => {
     const { dispatch } = this.props
     dispatch(zoomToManeuver({ index: sIdx, timeNow: Date.now() }))
   }
@@ -39,7 +39,7 @@ class Maneuvers extends React.Component {
     const legs = R.path([provider, 'data', 'trip', 'legs'], results)
 
     const startIndices = {
-      0: 0
+      0: 0,
     }
     if (legs) {
       for (let i = 0; i < legs.length - 1; i++) {
@@ -71,13 +71,19 @@ class Maneuvers extends React.Component {
                   }
                   onClick={() =>
                     this.zoomToMnv(startIndices[i] + mnv.begin_shape_index)
-                  }>
+                  }
+                >
                   <div className="pb2">
                     <Header as="h4">{mnv.instruction}</Header>
                   </div>
                   {mnv.type !== 4 && mnv.type !== 5 && mnv.type !== 6 && (
                     <div className={'flex justify-between'}>
-                      <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
+                      <div
+                        style={{
+                          alignSelf: 'center',
+                          flexBasis: '100px',
+                        }}
+                      >
                         <Icon
                           circular
                           name={'arrows alternate horizontal'}
@@ -87,7 +93,12 @@ class Maneuvers extends React.Component {
                           {getLength(mnv.length)}
                         </div>
                       </div>
-                      <div style={{ alignSelf: 'center', flexGrow: 1 }}>
+                      <div
+                        style={{
+                          alignSelf: 'center',
+                          flexGrow: 1,
+                        }}
+                      >
                         <Icon circular name={'time'} size="small" />
                         <div className={'dib pa1 f6'}>
                           {new Date(mnv.time * 1000)
@@ -95,7 +106,12 @@ class Maneuvers extends React.Component {
                             .substr(11, 8)}
                         </div>
                       </div>
-                      <div style={{ alignSelf: 'center', flexBasis: '80px' }}>
+                      <div
+                        style={{
+                          alignSelf: 'center',
+                          flexBasis: '80px',
+                        }}
+                      >
                         <Icon circular name={'bolt'} size="small" />
                         <div className={'dib pa1 f6'}>
                           {mnv.cost.toFixed(2)}
@@ -115,10 +131,10 @@ class Maneuvers extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { results } = state.directions
   return {
-    results
+    results,
   }
 }
 

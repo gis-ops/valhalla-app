@@ -13,7 +13,7 @@ import {
   Segment,
   Accordion,
   Dropdown,
-  Button
+  Button,
 } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { profile_settings, settings_general } from './settings-options'
@@ -21,14 +21,14 @@ import {
   updateSettings,
   doShowSettings,
   filterProfileSettings,
-  resetSettings
+  resetSettings,
 } from 'actions/commonActions'
 
 import CustomSlider from '../components/CustomSlider'
 import { makeRequest } from 'actions/directionsActions'
 import { makeIsochronesRequest } from 'actions/isochronesActions'
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   const { settings, option, dispatch } = props
 
   const handleChange = (e, { checked }) => {
@@ -36,7 +36,7 @@ const Checkbox = props => {
     dispatch(
       updateSettings({
         name: option.param,
-        value
+        value,
       })
     )
   }
@@ -56,7 +56,7 @@ const Checkbox = props => {
 Checkbox.propTypes = {
   option: PropTypes.object,
   settings: PropTypes.object,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
 }
 
 class SettingsPanel extends React.Component {
@@ -68,7 +68,7 @@ class SettingsPanel extends React.Component {
     profile: PropTypes.string,
     settings: PropTypes.object,
     showSettings: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -79,7 +79,7 @@ class SettingsPanel extends React.Component {
       activeIndexGeneral: 0,
       generalSettings: {},
       extraSettings: {},
-      copied: false
+      copied: false,
     }
   }
 
@@ -88,7 +88,7 @@ class SettingsPanel extends React.Component {
     dispatch(
       updateSettings({
         name,
-        value
+        value,
       })
     )
   }
@@ -120,18 +120,20 @@ class SettingsPanel extends React.Component {
 
     if (!R.equals(profile, nextProps.profile)) {
       const { generalSettings } = this.state
-      Object.keys(generalSettings).forEach(v => (generalSettings[v] = false))
+      Object.keys(generalSettings).forEach((v) => (generalSettings[v] = false))
 
       const { extraSettings } = this.state
-      Object.keys(extraSettings).forEach(v => (extraSettings[v] = false))
+      Object.keys(extraSettings).forEach((v) => (extraSettings[v] = false))
 
       this.setState({ generalSettings, extraSettings })
     }
 
     if (!R.equals(settings, nextProps.settings)) {
-      activeTab == 0
-        ? dispatch(makeRequest())
-        : dispatch(makeIsochronesRequest())
+      if (activeTab === 0) {
+        dispatch(makeRequest())
+      } else {
+        dispatch(makeIsochronesRequest())
+      }
     }
   }
 
@@ -147,7 +149,7 @@ class SettingsPanel extends React.Component {
     dispatch(
       updateSettings({
         name,
-        value
+        value,
       })
     )
   }
@@ -178,8 +180,9 @@ class SettingsPanel extends React.Component {
               right: 60,
               top: -5,
               height: '95%',
-              overflow: 'auto'
-            }}>
+              overflow: 'auto',
+            }}
+          >
             <Grid columns={16} divided>
               <Grid.Row>
                 {!no_profile_settings && (
@@ -192,7 +195,8 @@ class SettingsPanel extends React.Component {
                             <div
                               onClick={() =>
                                 this.handleShowSettings('extraSettings', key)
-                              }>
+                              }
+                            >
                               <Icon
                                 name={
                                   this.state.extraSettings[key]
@@ -202,7 +206,11 @@ class SettingsPanel extends React.Component {
                               />
                               <span className="b f6">{option.name}</span>
                             </div>
-                            <div style={{ marginLeft: 'auto' }}>
+                            <div
+                              style={{
+                                marginLeft: 'auto',
+                              }}
+                            >
                               <Popup
                                 content={option.description}
                                 size={'tiny'}
@@ -234,7 +242,11 @@ class SettingsPanel extends React.Component {
                                   dispatch={dispatch}
                                   settings={settings}
                                 />
-                                <div style={{ marginLeft: 'auto' }}>
+                                <div
+                                  style={{
+                                    marginLeft: 'auto',
+                                  }}
+                                >
                                   <Popup
                                     content={option.description}
                                     size={'tiny'}
@@ -263,7 +275,11 @@ class SettingsPanel extends React.Component {
                                 options={option.enums}
                               />
 
-                              <div style={{ marginLeft: 'auto' }}>
+                              <div
+                                style={{
+                                  marginLeft: 'auto',
+                                }}
+                              >
                                 <Popup
                                   content={option.description}
                                   size={'tiny'}
@@ -296,7 +312,8 @@ class SettingsPanel extends React.Component {
                             <div
                               onClick={() =>
                                 this.handleShowSettings('generalSettings', key)
-                              }>
+                              }
+                            >
                               <Icon
                                 name={
                                   this.state.generalSettings[key]
@@ -306,7 +323,11 @@ class SettingsPanel extends React.Component {
                               />
                               <span className="b f6">{option.name}</span>
                             </div>
-                            <div style={{ marginLeft: 'auto' }}>
+                            <div
+                              style={{
+                                marginLeft: 'auto',
+                              }}
+                            >
                               <Popup
                                 content={option.description}
                                 size={'tiny'}
@@ -338,7 +359,11 @@ class SettingsPanel extends React.Component {
                             dispatch={dispatch}
                             settings={settings}
                           />
-                          <div style={{ marginLeft: 'auto' }}>
+                          <div
+                            style={{
+                              marginLeft: 'auto',
+                            }}
+                          >
                             <Popup
                               content={option.description}
                               size={'tiny'}
@@ -357,7 +382,11 @@ class SettingsPanel extends React.Component {
                             dispatch={dispatch}
                             settings={settings}
                           />
-                          <div style={{ marginLeft: 'auto' }}>
+                          <div
+                            style={{
+                              marginLeft: 'auto',
+                            }}
+                          >
                             <Popup
                               content={option.description}
                               size={'tiny'}
@@ -374,13 +403,15 @@ class SettingsPanel extends React.Component {
                 <Grid.Column width={16}>
                   <CopyToClipboard
                     text={this.extractSettings(profile, settings)}
-                    onCopy={() => this.setState({ copied: true })}>
+                    onCopy={() => this.setState({ copied: true })}
+                  >
                     <Button
                       basic
                       size="mini"
                       icon
                       color={this.state.copied ? 'green' : undefined}
-                      labelPosition="left">
+                      labelPosition="left"
+                    >
                       <Icon name="download" />
                       Copy to Clipboard
                     </Button>
@@ -390,7 +421,8 @@ class SettingsPanel extends React.Component {
                     size="mini"
                     icon
                     onClick={this.resetConfigSettings}
-                    labelPosition="left">
+                    labelPosition="left"
+                  >
                     <Icon name="remove" />
                     Reset
                   </Button>
@@ -406,14 +438,14 @@ class SettingsPanel extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { message, profile, settings, activeTab, showSettings } = state.common
   return {
     showSettings,
     message,
     profile,
     settings,
-    activeTab
+    activeTab,
   }
 }
 

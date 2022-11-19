@@ -1,5 +1,4 @@
 {
-  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "node": true
@@ -11,12 +10,8 @@
     }
   },
   "plugins": ["prettier", "import", "react"],
-  "extends": [
-    "prettier",
-    "standard",
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "overrides": [],
   "parserOptions": {
     "ecmaVersion": 9,
     "sourceType": "module",
@@ -32,7 +27,10 @@
     "dot-notation": 2,
     "id-length": [
       "error",
-      { "min": 2, "exceptions": ["_", "L", "R", "i", "v", "e", "j"] }
+      {
+        "min": 2,
+        "exceptions": ["_", "L", "R", "i", "v", "e", "j"]
+      }
     ],
     "no-const-assign": 2,
     "no-dupe-class-members": 2,

@@ -6,17 +6,18 @@ import { settingsInit } from 'Controls/settings-options'
 
 import PropTypes from 'prop-types'
 
-const CustomSlider = props => {
+const CustomSlider = (props) => {
   const { settings, option, handleUpdateSettings } = props
   const { min, max, step } = option.settings
 
   const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
 
+  console.log(sliderVal)
   useEffect(() => {
     setSliderVal(parseFloat(settings[option.param]))
-  }, [props])
+  }, [settings, option.param])
 
-  const handleChange = value => {
+  const handleChange = (value) => {
     // reset
     if (isNaN(value)) {
       value = settingsInit[option.param]
@@ -26,7 +27,7 @@ const CustomSlider = props => {
       300,
       handleUpdateSettings({
         name: option.param,
-        value: parseFloat(value)
+        value: parseFloat(value),
       })
     )
   }
@@ -49,7 +50,7 @@ const CustomSlider = props => {
           value={sliderVal}
           placeholder="Enter Value"
           name={option.param}
-          onChange={e => handleChange(e.target.value)}
+          onChange={(e) => handleChange(e.target.value)}
         />
         <Popup
           content={'Units'}
@@ -71,7 +72,7 @@ const CustomSlider = props => {
           color="secondary"
           aria-label="Default"
           valueLabelDisplay="auto"
-          onChange={e => {
+          onChange={(e) => {
             handleChange(e.target.value)
           }}
         />
@@ -83,7 +84,7 @@ const CustomSlider = props => {
 CustomSlider.propTypes = {
   option: PropTypes.object,
   settings: PropTypes.object,
-  handleUpdateSettings: PropTypes.func
+  handleUpdateSettings: PropTypes.func,
 }
 
 export default CustomSlider

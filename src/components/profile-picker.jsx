@@ -15,7 +15,7 @@ const iconMap = {
   bicycle: <BikeSvg />,
   pedestrian: <PedestrianSvg />,
   motor_scooter: <ScooterSvg />,
-  bus: <BusSvg />
+  bus: <BusSvg />,
 }
 
 export const ProfilePicker = ({
@@ -24,7 +24,7 @@ export const ProfilePicker = ({
   popupContent,
   profiles,
   activeProfile,
-  handleUpdateProfile
+  handleUpdateProfile,
 }) => (
   <Button.Group basic size="small" style={{ height: '40px' }}>
     {profiles.map((profile, i) => (
@@ -54,5 +54,5 @@ ProfilePicker.propTypes = {
   activeProfile: PropTypes.string,
   handleUpdateProfile: PropTypes.func,
   group: PropTypes.string,
-  popupContent: PropTypes.array
+  popupContent: PropTypes.array,
 }

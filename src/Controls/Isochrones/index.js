@@ -11,7 +11,7 @@ import { Settings } from './settings'
 import {
   updateProfile,
   doShowSettings,
-  updatePermalink
+  updatePermalink,
 } from 'actions/commonActions'
 import { clearIsos, makeIsochronesRequest } from 'actions/isochronesActions'
 
@@ -19,7 +19,7 @@ class IsochronesControl extends React.Component {
   static propTypes = {
     profile: PropTypes.string.isRequired,
     loading: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
   }
 
   handleUpdateProfile = (event, data) => {
@@ -60,7 +60,7 @@ class IsochronesControl extends React.Component {
                 'car',
                 'truck',
                 'bus',
-                'motor_scooter'
+                'motor_scooter',
               ]}
               popupContent={[
                 'bicycle',
@@ -68,7 +68,7 @@ class IsochronesControl extends React.Component {
                 'car',
                 'truck',
                 'bus',
-                'motor scooter'
+                'motor scooter',
               ]}
               activeProfile={profile}
               handleUpdateProfile={this.handleUpdateProfile}
@@ -86,14 +86,16 @@ class IsochronesControl extends React.Component {
               <a
                 href="https://github.com/valhalla/valhalla"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer"
+              >
                 Valhalla
               </a>{' '}
               • visualized with{' '}
               <a
                 href="https://github.com/gis-ops/valhalla-app/"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer"
+              >
                 Valhalla App
               </a>
             </span>
@@ -104,11 +106,11 @@ class IsochronesControl extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { profile, loading } = state.common
   return {
     profile,
-    loading
+    loading,
   }
 }
 

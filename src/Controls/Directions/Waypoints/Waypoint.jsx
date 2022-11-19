@@ -6,7 +6,7 @@ import {
   doRemoveWaypoint,
   updateTextInput,
   fetchGeocode,
-  makeRequest
+  makeRequest,
 } from 'actions/directionsActions'
 
 import { zoomTo } from 'actions/commonActions'
@@ -23,7 +23,7 @@ class Waypoint extends React.Component {
     isFetching: PropTypes.bool,
     results: PropTypes.array,
     use_geocoding: PropTypes.bool,
-    geocodeResults: PropTypes.array
+    geocodeResults: PropTypes.array,
   }
 
   constructor(props) {
@@ -39,19 +39,19 @@ class Waypoint extends React.Component {
 
     this.setState({ open: true })
 
-    if (userInput.length > 0 && e == 'Enter') {
+    if (userInput.length > 0 && e === 'Enter') {
       // make results visible
       if (use_geocoding) {
         dispatch(
           fetchGeocode({
             inputValue: userInput,
-            index: index
+            index: index,
           })
         )
       } else {
         const coords = userInput.split(/[\s,;]+/)
         // is this a coordinate?
-        if (coords.length == 2) {
+        if (coords.length === 2) {
           const lat = coords[1]
           const lng = coords[0]
           if (isValidCoordinates(lat, lng)) {
@@ -59,7 +59,7 @@ class Waypoint extends React.Component {
               fetchGeocode({
                 inputValue: userInput,
                 index: index,
-                lngLat: [parseFloat(lng), parseFloat(lat)]
+                lngLat: [parseFloat(lng), parseFloat(lat)],
               })
             )
           }
@@ -68,13 +68,13 @@ class Waypoint extends React.Component {
     }
   }
 
-  handleSearchChange = event => {
+  handleSearchChange = (event) => {
     const { dispatch, index } = this.props
 
     dispatch(
       updateTextInput({
         inputValue: event.target.value,
-        index: index
+        index: index,
       })
     )
   }
@@ -92,7 +92,7 @@ class Waypoint extends React.Component {
       updateTextInput({
         inputValue: result.title,
         index: index,
-        addressindex: result.addressindex
+        addressindex: result.addressindex,
       })
     )
     dispatch(makeRequest())
@@ -107,7 +107,7 @@ class Waypoint extends React.Component {
         <div>
           <Icon disabled name="linkify" />
           <span className="description b">
-            <a target="_blank" rel="noreferrer" href={description}>
+            <a target="_blank" rel="noopener noreferrer" href={description}>
               OSM Link
             </a>
           </span>
@@ -123,7 +123,7 @@ class Waypoint extends React.Component {
       geocodeResults,
       userInput,
       use_geocoding,
-      index
+      index,
     } = this.props
 
     return (
@@ -170,7 +170,7 @@ class Waypoint extends React.Component {
               <Icon
                 className="pointer"
                 name="checkmark"
-                disabled={userInput.length == 0}
+                disabled={userInput.length === 0}
                 size="small"
                 onClick={() => this.fetchGeocodeResults('Enter')}
               />
@@ -203,7 +203,7 @@ const mapStateToProps = (state, ownProps) => {
     userInput,
     geocodeResults,
     isFetching,
-    use_geocoding
+    use_geocoding,
   }
 }
 

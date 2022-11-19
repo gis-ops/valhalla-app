@@ -13,7 +13,7 @@ class Summary extends React.Component {
     results: PropTypes.object,
     inclineDeclineTotal: PropTypes.object,
     header: PropTypes.string,
-    provider: PropTypes.string
+    provider: PropTypes.string,
   }
 
   handleChange = (event, data) => {
@@ -21,10 +21,10 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
-  formatDuration = durationInSeconds => {
+  formatDuration = (durationInSeconds) => {
     const duration = intervalToDuration({
       start: 0,
-      end: durationInSeconds * 1000
+      end: durationInSeconds * 1000,
     })
 
     let durationStr = ''
@@ -56,7 +56,12 @@ class Summary extends React.Component {
               <span className="b">Directions</span>
             </div>
             <div className={'flex justify-between pb2 pointer'}>
-              <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
+              <div
+                style={{
+                  alignSelf: 'center',
+                  flexBasis: '100px',
+                }}
+              >
                 <Icon
                   circular
                   name={'arrows alternate horizontal'}
@@ -86,7 +91,12 @@ class Summary extends React.Component {
             </div>
             {inclineDeclineTotal && (
               <div className={'flex pb3 pointer'}>
-                <div style={{ alignSelf: 'center', marginRight: '1em' }}>
+                <div
+                  style={{
+                    alignSelf: 'center',
+                    marginRight: '1em',
+                  }}
+                >
                   <Popup
                     content={'Total incline'}
                     size={'tiny'}
@@ -100,7 +110,12 @@ class Summary extends React.Component {
                     }
                   />
                 </div>
-                <div style={{ alignSelf: 'center', flexBasis: '100px' }}>
+                <div
+                  style={{
+                    alignSelf: 'center',
+                    flexBasis: '100px',
+                  }}
+                >
                   <Popup
                     content={'Total decline'}
                     size={'tiny'}
@@ -125,11 +140,11 @@ class Summary extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { results, inclineDeclineTotal } = state.directions
   return {
     results,
-    inclineDeclineTotal
+    inclineDeclineTotal,
   }
 }
 

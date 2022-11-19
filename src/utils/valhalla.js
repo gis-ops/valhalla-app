@@ -9,11 +9,11 @@ export const buildLocateRequest = (latLng, profile) => {
   }
   return {
     costing: valhalla_profile,
-    locations: [{ lat: latLng.lat, lon: latLng.lng }]
+    locations: [{ lat: latLng.lat, lon: latLng.lng }],
   }
 }
 
-export const buildHeightRequest = latLngs => {
+export const buildHeightRequest = (latLngs) => {
   const shape = []
   for (const latLng of latLngs) {
     shape.push({ lat: latLng[0], lon: latLng[1] })
@@ -21,14 +21,14 @@ export const buildHeightRequest = latLngs => {
   return {
     range: latLngs.length > 1,
     shape,
-    id: 'valhalla_height'
+    id: 'valhalla_height',
   }
 }
 
 export const buildDirectionsRequest = ({
   profile,
   activeWaypoints,
-  settings
+  settings,
 }) => {
   let valhalla_profile = profile
   if (profile === 'car') {
@@ -39,19 +39,19 @@ export const buildDirectionsRequest = ({
     json: {
       costing: valhalla_profile,
       costing_options: {
-        [valhalla_profile]: { ...settings }
+        [valhalla_profile]: { ...settings },
       },
       exclude_polygons: settings.exclude_polygons,
       locations: makeLocations(activeWaypoints),
       directions_options: {
-        units: 'kilometers'
+        units: 'kilometers',
       },
-      id: 'valhalla_directions'
-    }
+      id: 'valhalla_directions',
+    },
   }
 }
 
-export const parseDirectionsGeometry = data => {
+export const parseDirectionsGeometry = (data) => {
   const coordinates = []
 
   for (const feat of data.trip.legs) {
@@ -66,7 +66,7 @@ export const buildIsochronesRequest = ({
   center,
   settings,
   maxRange,
-  interval
+  interval,
 }) => {
   let valhalla_profile = profile
   if (profile === 'car') {
@@ -76,15 +76,15 @@ export const buildIsochronesRequest = ({
     json: {
       costing: valhalla_profile,
       costing_options: {
-        [profile]: { ...settings }
+        [profile]: { ...settings },
       },
       contours: makeContours({ maxRange, interval }),
       locations: makeLocations([center]),
       directions_options: {
-        units: 'kilometers'
+        units: 'kilometers',
       },
-      id: `valhalla_isochrones_lonlat_${center.displaylnglat.toString()}_range_${maxRange.toString()}_interval_${interval.toString()}`
-    }
+      id: `valhalla_isochrones_lonlat_${center.displaylnglat.toString()}_range_${maxRange.toString()}_interval_${interval.toString()}`,
+    },
   }
 }
 
@@ -98,12 +98,12 @@ const makeContours = ({ maxRange, interval }) => {
   return contours
 }
 
-const makeLocations = waypoints => {
+const makeLocations = (waypoints) => {
   const locations = []
   for (const waypoint of waypoints) {
     locations.push({
       lon: waypoint.displaylnglat[0],
-      lat: waypoint.displaylnglat[1]
+      lat: waypoint.displaylnglat[1],
     })
   }
 
