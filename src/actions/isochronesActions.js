@@ -71,7 +71,6 @@ const fetchValhallaIsochrones = (valhallaRequest) => (dispatch, getState) => {
         },
       })
       .then(({ data }) => {
-        console.log(data)
         data.features.forEach((feature) => {
           feature.properties.area = calcArea(feature)
         })
