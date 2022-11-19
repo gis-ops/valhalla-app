@@ -520,6 +520,12 @@ export const settingsInit = {
   use_geocoding: true,
 }
 
+export const settingsInitTruckOverride = {
+  ...settingsInit,
+  width: 2.6,
+  height: 4.11,
+}
+
 export const profile_settings = {
   truck: {
     numeric: [

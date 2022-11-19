@@ -18,6 +18,7 @@ import {
   updateProfile,
   doShowSettings,
   updatePermalink,
+  resetSettings,
 } from 'actions/commonActions'
 
 class DirectionsControl extends React.Component {
@@ -30,6 +31,7 @@ class DirectionsControl extends React.Component {
   handleUpdateProfile = (event, data) => {
     const { dispatch } = this.props
     dispatch(updateProfile({ profile: data.valhalla_profile }))
+    dispatch(resetSettings())
     dispatch(updatePermalink())
   }
 

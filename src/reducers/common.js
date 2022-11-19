@@ -8,7 +8,10 @@ import {
   ZOOM_TO,
   RESET_SETTINGS,
 } from 'actions/types'
-import { settingsInit } from 'Controls/settings-options'
+import {
+  settingsInit,
+  settingsInitTruckOverride,
+} from 'Controls/settings-options'
 
 const initialState = {
   activeTab: 0,
@@ -70,7 +73,9 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         settings: {
-          ...settingsInit,
+          ...(state.profile === 'truck'
+            ? settingsInitTruckOverride
+            : settingsInit),
         },
       }
     }

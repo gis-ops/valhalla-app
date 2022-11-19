@@ -226,6 +226,7 @@ class SettingsPanel extends React.Component {
                               option={option}
                               dispatch={dispatch}
                               settings={settings}
+                              profile={profile}
                               handleUpdateSettings={this.handleUpdateSettings}
                             />
                           ) : null}
@@ -343,6 +344,7 @@ class SettingsPanel extends React.Component {
                               option={option}
                               dispatch={dispatch}
                               settings={settings}
+                              profile={profile}
                               handleUpdateSettings={this.handleUpdateSettings}
                             />
                           ) : null}
