@@ -13,7 +13,7 @@ import { settingsInit } from 'Controls/settings-options'
 
 const initialState = {
   activeTab: 0,
-  showSettings: true,
+  showSettings: false,
   showDirectionsPanel: true,
   coordinates: [],
   loading: false,

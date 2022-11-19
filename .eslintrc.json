@@ -13,8 +13,11 @@
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "overrides": [],
   "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "ecmaVersion": 9,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "standard/computed-property-even-spacing": 0,

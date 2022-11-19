@@ -89,8 +89,7 @@ const fetchValhallaDirections = (valhallaRequest) => (dispatch) => {
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
       dispatch(zoomTo(data.decodedGeometry))
     })
-    .catch((response) => {
-      console.log(response)
+    .catch(({ response }) => {
       let error_msg = response.data.error
       if (response.data.error_code === 154) {
         error_msg += ` for ${valhallaRequest.json.costing}.`

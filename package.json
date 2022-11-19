@@ -41,7 +41,7 @@
     "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
-    "fix:other": "npm run prettier --write .",
+    "fix:other": "yarn prettier --write",
     "fix:js": "yarn test:js --fix",
     "fix": "yarn fix:js && yarn fix:other",
     "prettier": "prettier \"**/*.{json,md,scss,yaml,yml}\"",
