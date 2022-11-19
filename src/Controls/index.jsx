@@ -22,17 +22,6 @@ import {
   updateIsoSettings,
 } from 'actions/isochronesActions'
 
-const controlStyle = {
-  // zIndex: 1000,
-  // position: 'absolute',
-  // maxWidth: '90%',
-  // minWidth: '350px',
-  // top: '10px',
-  // left: '10px',
-  // overflow: 'auto',
-  // maxHeight: 'calc(100vh - 3vw)',
-}
-
 const pairwise = (arr, func) => {
   let cnt = 0
   for (let i = 0; i < arr.length - 1; i += 2) {
