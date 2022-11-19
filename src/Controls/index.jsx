@@ -1,17 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Drawer from 'react-modern-drawer'
+import 'react-modern-drawer/dist/index.css'
 import { SemanticToastContainer, toast } from 'react-semantic-toasts'
 import DirectionsControl from './Directions'
 import IsochronesControl from './Isochrones'
 import DirectionOutputControl from './Directions/OutputControl'
 import IsochronesOutputControl from './Isochrones/OutputControl'
-import { Segment, Tab } from 'semantic-ui-react'
+import { Segment, Tab, Button, Icon } from 'semantic-ui-react'
 import {
   updateTab,
   updateProfile,
   updatePermalink,
   zoomTo,
+  toggleDirections,
 } from 'actions/commonActions'
 import { fetchReverseGeocodePerma } from 'actions/directionsActions'
 import {
@@ -43,6 +46,7 @@ class MainControl extends React.Component {
     message: PropTypes.object,
     activeDataset: PropTypes.string,
     activeTab: PropTypes.number,
+    showDirectionsPanel: PropTypes.bool,
   }
 
   componentDidMount = () => {
@@ -149,6 +153,11 @@ class MainControl extends React.Component {
     dispatch(updatePermalink())
   }
 
+  handleDirectionsToggle = (event, data) => {
+    const { dispatch } = this.props
+    dispatch(toggleDirections())
+  }
+
   render() {
     const { activeTab } = this.props
     const appPanes = [
@@ -171,34 +180,65 @@ class MainControl extends React.Component {
     ]
 
     const ServiceTabs = () => (
-      <Tab
-        activeIndex={activeTab}
-        onTabChange={this.handleTabChange}
-        menu={{ pointing: true }}
-        panes={appPanes}
-      />
+      <>
+        <Button
+          icon
+          style={{ float: 'right', marginLeft: '5px' }}
+          onClick={this.handleDirectionsToggle}
+        >
+          <Icon name="close" />
+        </Button>
+        <Tab
+          activeIndex={activeTab}
+          onTabChange={this.handleTabChange}
+          menu={{ pointing: true }}
+          panes={appPanes}
+        />
+      </>
     )
 
     return (
-      <div style={controlStyle}>
-        <Segment basic style={{ paddingBottom: 0 }}>
+      <>
+        <Button
+          primary
+          style={{
+            zIndex: 999,
+            top: '10px',
+            left: '10px',
+            position: 'absolute',
+          }}
+          onClick={this.handleDirectionsToggle}
+        >
+          Directions
+        </Button>
+        <Drawer
+          enableOverlay={false}
+          open={this.props.showDirectionsPanel}
+          direction="left"
+          style={controlStyle}
+        >
           <div>
-            <ServiceTabs />
+            <Segment basic style={{ paddingBottom: 0 }}>
+              <div>
+                <ServiceTabs />
+              </div>
+            </Segment>
+            <DirectionOutputControl />
+            <IsochronesOutputControl />
           </div>
-        </Segment>
-        <DirectionOutputControl />
-        <IsochronesOutputControl />
+        </Drawer>
         <SemanticToastContainer position="bottom-center" />
-      </div>
+      </>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  const { message, activeTab } = state.common
+  const { message, activeTab, showDirectionsPanel } = state.common
   return {
     message,
     activeTab,
+    showDirectionsPanel,
   }
 }
 

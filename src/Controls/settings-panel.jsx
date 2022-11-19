@@ -3,6 +3,8 @@ import * as R from 'ramda'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { debounce } from 'throttle-debounce'
+import Drawer from 'react-modern-drawer'
+import 'react-modern-drawer/dist/index.css'
 import {
   Divider,
   Form,
@@ -170,19 +172,22 @@ class SettingsPanel extends React.Component {
     const width = no_profile_settings ? 200 : 400
 
     return (
-      <React.Fragment>
-        {showSettings ? (
-          <Segment
-            style={{
-              width: width,
-              zIndex: 999,
-              position: 'absolute',
-              right: 60,
-              top: -5,
-              height: '95%',
-              overflow: 'auto',
-            }}
-          >
+      <>
+        <Drawer
+          enableOverlay={false}
+          open={showSettings}
+          direction="right"
+          style={{
+            zIndex: 999,
+            width,
+            position: 'absolute',
+            right: 60,
+            top: -5,
+            height: '95%',
+            // overflow: 'auto',
+          }}
+        >
+          <Segment>
             <Grid columns={16} divided>
               <Grid.Row>
                 {!no_profile_settings && (
@@ -430,10 +435,8 @@ class SettingsPanel extends React.Component {
               </Grid.Row>
             </Grid>
           </Segment>
-        ) : (
-          ''
-        )}
-      </React.Fragment>
+        </Drawer>
+      </>
     )
   }
 }
