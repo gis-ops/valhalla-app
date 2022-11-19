@@ -56,6 +56,7 @@ class Maneuvers extends React.Component {
             leg.maneuvers.map((mnv, j) => (
               <React.Fragment key={j}>
                 <div
+                  style={{ maxWidth: '300px' }}
                   className={'flex-column pt3 pb3 pointer'}
                   onMouseEnter={() =>
                     this.highlightMnv(

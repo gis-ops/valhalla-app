@@ -23,13 +23,14 @@ import {
 } from 'actions/isochronesActions'
 
 const controlStyle = {
-  zIndex: 1000,
-  position: 'absolute',
-  width: '420px',
-  top: '10px',
-  left: '10px',
-  overflow: 'auto',
-  maxHeight: 'calc(100vh - 3vw)',
+  // zIndex: 1000,
+  // position: 'absolute',
+  // maxWidth: '90%',
+  // minWidth: '350px',
+  // top: '10px',
+  // left: '10px',
+  // overflow: 'auto',
+  // maxHeight: 'calc(100vh - 3vw)',
 }
 
 const pairwise = (arr, func) => {
@@ -202,20 +203,24 @@ class MainControl extends React.Component {
         <Button
           primary
           style={{
-            zIndex: 999,
+            zIndex: 998,
             top: '10px',
             left: '10px',
             position: 'absolute',
           }}
           onClick={this.handleDirectionsToggle}
         >
-          Directions
+          {activeTab === 0 ? 'Directions' : 'Isochrones'}
         </Button>
         <Drawer
           enableOverlay={false}
           open={this.props.showDirectionsPanel}
           direction="left"
-          style={controlStyle}
+          size="400"
+          style={{
+            zIndex: 1000,
+            overflow: 'auto',
+          }}
         >
           <div>
             <Segment basic style={{ paddingBottom: 0 }}>
