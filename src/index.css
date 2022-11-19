@@ -29,10 +29,6 @@ i.help.grey.icon {
   background-repeat: no-repeat;
 }
 
-.ui.search input {
-  width: 250px;
-}
-
 .ui.checkbox label,
 .ui.checkbox + label,
 .custom-label {

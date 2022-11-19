@@ -65,7 +65,7 @@ class DirectionsControl extends React.Component {
         <div className="flex flex-column content-between">
           <div>
             <div
-              className="pa3 flex flex-row justify-between"
+              className="flex flex-wrap justify-between"
               style={{ height: '60px' }}
             >
               <ProfilePicker
@@ -96,9 +96,9 @@ class DirectionsControl extends React.Component {
                 handleSettings={this.handleSettings}
               />
             </div>
-            <React.Fragment>
+            <div className="flex flex-wrap justify-between">
               <Waypoints />
-            </React.Fragment>
+            </div>
           </div>
           <Divider fitted />
           <div className="ml2">

@@ -177,14 +177,11 @@ class SettingsPanel extends React.Component {
           enableOverlay={false}
           open={showSettings}
           direction="right"
+          size="400"
           style={{
-            zIndex: 999,
-            width,
-            position: 'absolute',
-            right: 60,
-            top: -5,
-            height: '95%',
-            // overflow: 'auto',
+            zIndex: 1001,
+            maxWidth: width,
+            overflow: 'auto',
           }}
         >
           <Segment>
@@ -304,11 +301,9 @@ class SettingsPanel extends React.Component {
                   <Form size={'small'}>
                     <div className={'flex flex-row justify-between'}>
                       <Header as="h4">General Settings</Header>
-                      <Icon
-                        style={{ cursor: 'pointer' }}
-                        name="remove circle"
-                        onClick={() => dispatch(doShowSettings())}
-                      />
+                      <Button icon onClick={() => dispatch(doShowSettings())}>
+                        <Icon name="close" />
+                      </Button>
                     </div>
                     <Accordion>
                       {settings_general[profile].numeric.map((option, key) => (
