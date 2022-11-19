@@ -100,10 +100,12 @@ const makeContours = ({ maxRange, interval }) => {
 
 const makeLocations = (waypoints) => {
   const locations = []
-  for (const waypoint of waypoints) {
+  for (const [idx, waypoint] of waypoints.entries()) {
+    const type = [0, waypoints.length - 1].indexOf(idx) > -1 ? 'break' : 'via'
     locations.push({
       lon: waypoint.displaylnglat[0],
       lat: waypoint.displaylnglat[1],
+      type: type,
     })
   }
 
