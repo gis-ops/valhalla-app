@@ -21,6 +21,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^17.0.0",
+    "react-modern-drawer": "^1.1.2",
     "react-redux": "^8.0.4",
     "react-scripts": "^5.0.1",
     "react-semantic-toasts": "^0.6.6",
