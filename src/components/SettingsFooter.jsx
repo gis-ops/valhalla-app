@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const SettingsFooter = () => {
   return (
     <div className="ml2">

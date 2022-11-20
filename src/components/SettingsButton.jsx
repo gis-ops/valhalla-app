@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Button, Popup, Icon } from 'semantic-ui-react'
 
 export const SettingsButton = ({ handleSettings }) => {
@@ -11,4 +13,8 @@ export const SettingsButton = ({ handleSettings }) => {
       }
     />
   )
+}
+
+SettingsButton.propTypes = {
+  handleSettings: PropTypes.func,
 }

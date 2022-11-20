@@ -233,7 +233,7 @@ export const fetchGeocode = (object) => (dispatch) => {
       .catch((error) => {
         console.log(error) //eslint-disable-line
       })
-      .finally(() => { })
+      .finally(() => {})
   }
 }
 
