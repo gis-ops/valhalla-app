@@ -76,7 +76,7 @@ class IsochronesControl extends React.Component {
             />
             <SettingsButton handleSettings={this.handleSettings} />
           </div>
-          <Waypoints handleRemoveIsos={this.handleRemoveIsos} />
+          <Waypoints />
           <Divider fitted />
           <SettingsFooter />
         </div>
