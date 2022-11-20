@@ -84,7 +84,6 @@ const fetchValhallaDirections = (valhallaRequest) => (dispatch) => {
   axios
     .get(VALHALLA_OSM_URL + '/route', config)
     .then(({ data }) => {
-      console.log(data)
       data.decodedGeometry = parseDirectionsGeometry(data)
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
       dispatch(zoomTo(data.decodedGeometry))
@@ -234,7 +233,7 @@ export const fetchGeocode = (object) => (dispatch) => {
       .catch((error) => {
         console.log(error) //eslint-disable-line
       })
-      .finally(() => {})
+      .finally(() => { })
   }
 }
 
