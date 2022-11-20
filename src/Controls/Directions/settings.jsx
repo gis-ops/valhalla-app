@@ -2,21 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Popup, Icon } from 'semantic-ui-react'
 
-export const Settings = ({
-  handleAddWaypoint,
-  handleRemoveWaypoints,
-  handleSettings,
-}) => (
-  <div>
-    <Popup
-      content={'Reset waypoints'}
-      size={'tiny'}
-      trigger={
-        <Button basic size="tiny" icon onClick={() => handleRemoveWaypoints()}>
-          <Icon name="trash" />
-        </Button>
-      }
-    />
+export const Settings = ({ handleAddWaypoint, handleRemoveWaypoints }) => (
+  <div
+    style={{
+      marginLeft: 'auto',
+      marginRight: 0,
+    }}
+  >
     <Popup
       content={'Add waypoint'}
       size={'tiny'}
@@ -27,11 +19,11 @@ export const Settings = ({
       }
     />
     <Popup
-      content={'Show/hide settings'}
+      content={'Reset waypoints'}
       size={'tiny'}
       trigger={
-        <Button basic size="tiny" icon onClick={() => handleSettings()}>
-          <Icon name="cogs" />
+        <Button basic size="tiny" icon onClick={() => handleRemoveWaypoints()}>
+          <Icon name="trash" />
         </Button>
       }
     />
@@ -40,6 +32,5 @@ export const Settings = ({
 Settings.propTypes = {
   handleAddWaypoint: PropTypes.func,
   handleRemoveWaypoints: PropTypes.func,
-  handleSettings: PropTypes.func,
   group: PropTypes.string,
 }

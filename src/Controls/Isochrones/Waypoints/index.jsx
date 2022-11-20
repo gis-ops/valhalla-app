@@ -6,12 +6,15 @@ import * as R from 'ramda'
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
 
+import { Settings } from '../settings'
+
 import { isValidCoordinates } from 'utils/geom'
 import {
   updateTextInput,
   updateIsoSettings,
   fetchGeocode,
   makeIsochronesRequest,
+  clearIsos,
 } from 'actions/isochronesActions'
 
 import { updatePermalink, zoomTo } from 'actions/commonActions'
@@ -47,6 +50,11 @@ class Waypoints extends Component {
   handleSearchChange = (event, { value }) => {
     const { dispatch } = this.props
     dispatch(updateTextInput({ userInput: value }))
+  }
+
+  handleRemoveIsos = (event, { value }) => {
+    const { dispatch } = this.props
+    dispatch(clearIsos())
   }
 
   fetchGeocodeResults(e) {
@@ -200,28 +208,33 @@ class Waypoints extends Component {
 
     return (
       <div>
-        <Search
-          size="small"
-          type="text"
-          minCharacters={3}
-          className={'pt2 pl3'}
-          input={{ icon: 'search', iconPosition: 'left' }}
-          onSearchChange={this.handleSearchChange}
-          onResultSelect={this.handleResultSelect}
-          resultRenderer={this.resultRenderer}
-          showNoResults={false}
-          open={this.state.open}
-          onFocus={() => this.setState({ open: true })}
-          onMouseDown={() => this.setState({ open: true })}
-          loading={isFetching}
-          results={geocodeResults}
-          value={userInput}
-          onKeyPress={(event: React.KeyboardEvent) => {
-            this.fetchGeocodeResults(event.key)
-          }}
-          placeholder="Hit enter for search..."
-        />
-
+        <div
+          className="pa2 flex flex-row justify-between"
+          style={{ alignItems: 'center' }}
+        >
+          <Search
+            size="small"
+            type="text"
+            minCharacters={3}
+            className={'pt2 pl3'}
+            input={{ icon: 'search', iconPosition: 'left' }}
+            onSearchChange={this.handleSearchChange}
+            onResultSelect={this.handleResultSelect}
+            resultRenderer={this.resultRenderer}
+            showNoResults={false}
+            open={this.state.open}
+            onFocus={() => this.setState({ open: true })}
+            onMouseDown={() => this.setState({ open: true })}
+            loading={isFetching}
+            results={geocodeResults}
+            value={userInput}
+            onKeyPress={(event: React.KeyboardEvent) => {
+              this.fetchGeocodeResults(event.key)
+            }}
+            placeholder="Hit enter for search..."
+          />
+          <Settings handleRemoveIsos={this.handleRemoveIsos} />
+        </div>
         <div className="pa2">
           <Accordion>
             <Accordion.Title

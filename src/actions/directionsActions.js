@@ -81,7 +81,6 @@ const fetchValhallaDirections = (valhallaRequest) => (dispatch) => {
       'Content-Type': 'application/json',
     },
   }
-
   axios
     .get(VALHALLA_OSM_URL + '/route', config)
     .then(({ data }) => {

@@ -7,12 +7,14 @@ import {
   SHOW_SETTINGS,
   ZOOM_TO,
   RESET_SETTINGS,
+  TOGGLE_DIRECTIONS,
 } from 'actions/types'
 import { settingsInit } from 'Controls/settings-options'
 
 const initialState = {
   activeTab: 0,
-  showSettings: true,
+  showSettings: false,
+  showDirectionsPanel: true,
   coordinates: [],
   loading: false,
   message: {
@@ -52,6 +54,13 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         showSettings: !state.showSettings,
+      }
+    }
+
+    case TOGGLE_DIRECTIONS: {
+      return {
+        ...state,
+        showDirectionsPanel: !state.showDirectionsPanel,
       }
     }
 
