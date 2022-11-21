@@ -272,6 +272,7 @@ class Map extends React.Component {
       highlightStyle: {
         color: 'blue',
       },
+      width: window.innerWidth * 0.9,
     })
     this.hg.addTo(this.map)
     const hg = this.hg
