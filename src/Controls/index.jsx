@@ -14,6 +14,7 @@ import {
   updateProfile,
   updatePermalink,
   zoomTo,
+  resetSettings,
   toggleDirections,
 } from 'actions/commonActions'
 import { fetchReverseGeocodePerma } from 'actions/directionsActions'
@@ -118,6 +119,7 @@ class MainControl extends React.Component {
         }
       })
       dispatch(zoomTo(processedCoords))
+      dispatch(resetSettings())
     }
   }
 

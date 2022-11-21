@@ -2,12 +2,15 @@ import React, { Fragment, useState, useEffect } from 'react'
 import { Form, Label, Popup, Icon } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
 import { debounce } from 'throttle-debounce'
-import { settingsInit } from 'Controls/settings-options'
+import {
+  settingsInit,
+  settingsInitTruckOverride,
+} from 'Controls/settings-options'
 
 import PropTypes from 'prop-types'
 
 const CustomSlider = (props) => {
-  const { settings, option, handleUpdateSettings } = props
+  const { settings, option, profile, handleUpdateSettings } = props
   const { min, max, step } = option.settings
 
   const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
@@ -20,7 +23,10 @@ const CustomSlider = (props) => {
   const handleChange = (value) => {
     // reset
     if (isNaN(value)) {
-      value = settingsInit[option.param]
+      value =
+        profile === 'truck'
+          ? settingsInitTruckOverride[option.param]
+          : settingsInit[option.param]
     }
     setSliderVal(parseFloat(value))
     debounce(
@@ -84,6 +90,7 @@ const CustomSlider = (props) => {
 CustomSlider.propTypes = {
   option: PropTypes.object,
   settings: PropTypes.object,
+  profile: PropTypes.string,
   handleUpdateSettings: PropTypes.func,
 }
 
