@@ -14,7 +14,7 @@ Install the dependencies.
 
 Runs the app in hot-reload mode on [http://localhost:3000](http://localhost:3000) to view changes in the browser.
 
-### `npm build`
+### `npm run build`
 
 Builds and bundles the minified app for production to the `./build` folder.
 

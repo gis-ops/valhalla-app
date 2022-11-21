@@ -6,6 +6,8 @@ import { Divider } from 'semantic-ui-react'
 import Waypoints from './Waypoints'
 
 import { ProfilePicker } from 'components/profile-picker'
+import { SettingsButton } from 'components/SettingsButton'
+import { SettingsFooter } from 'components/SettingsFooter'
 import { Settings } from './settings'
 
 import {
@@ -66,10 +68,7 @@ class DirectionsControl extends React.Component {
       <React.Fragment>
         <div className="flex flex-column content-between">
           <div>
-            <div
-              className="pa3 flex flex-row justify-between"
-              style={{ height: '60px' }}
-            >
+            <div className="pa2 flex flex-row justify-between">
               <ProfilePicker
                 group={'directions'}
                 profiles={[
@@ -92,37 +91,20 @@ class DirectionsControl extends React.Component {
                 activeProfile={profile}
                 handleUpdateProfile={this.handleUpdateProfile}
               />
+              <SettingsButton handleSettings={this.handleSettings} />
+            </div>
+            <div className="flex flex-wrap justify-between">
+              <Waypoints />
+            </div>
+            <div className="pa2 flex flex-wrap justify-between">
               <Settings
                 handleAddWaypoint={this.handleAddWaypoint}
                 handleRemoveWaypoints={this.handleRemoveWaypoints}
-                handleSettings={this.handleSettings}
               />
             </div>
-            <React.Fragment>
-              <Waypoints />
-            </React.Fragment>
           </div>
           <Divider fitted />
-          <div className="ml2">
-            <span className="custom-label">
-              Calculations by{' '}
-              <a
-                href="https://github.com/valhalla/valhalla"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Valhalla
-              </a>{' '}
-              • visualized with{' '}
-              <a
-                href="https://github.com/gis-ops/valhalla-app/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Valhalla App
-              </a>
-            </span>
-          </div>
+          <SettingsFooter />
         </div>
       </React.Fragment>
     )

@@ -6,7 +6,8 @@ import { Divider } from 'semantic-ui-react'
 import Waypoints from './Waypoints'
 
 import { ProfilePicker } from '../../components/profile-picker'
-import { Settings } from './settings'
+import { SettingsButton } from '../../components/SettingsButton'
+import { SettingsFooter } from 'components/SettingsFooter'
 
 import {
   updateProfile,
@@ -50,7 +51,7 @@ class IsochronesControl extends React.Component {
     return (
       <React.Fragment>
         <div className="flex flex-column content-between">
-          <div className="pa3 flex flex-row justify-between">
+          <div className="pa2 flex flex-row justify-between">
             <ProfilePicker
               group={'directions'}
               loading={loading}
@@ -73,33 +74,11 @@ class IsochronesControl extends React.Component {
               activeProfile={profile}
               handleUpdateProfile={this.handleUpdateProfile}
             />
-            <Settings
-              handleRemoveIsos={this.handleRemoveIsos}
-              handleSettings={this.handleSettings}
-            />
+            <SettingsButton handleSettings={this.handleSettings} />
           </div>
           <Waypoints />
           <Divider fitted />
-          <div className="ml2">
-            <span className="custom-label">
-              Calculations by{' '}
-              <a
-                href="https://github.com/valhalla/valhalla"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Valhalla
-              </a>{' '}
-              • visualized with{' '}
-              <a
-                href="https://github.com/gis-ops/valhalla-app/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Valhalla App
-              </a>
-            </span>
-          </div>
+          <SettingsFooter />
         </div>
       </React.Fragment>
     )
