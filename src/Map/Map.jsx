@@ -31,13 +31,10 @@ import {
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 
-const OSMTiles = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution:
-      '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }
-)
+const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
+  attribution:
+    '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+})
 
 // defining the container styles the map sits in
 const style = {
@@ -68,9 +65,23 @@ const highlightRouteSegmentlayer = L.featureGroup()
 const highlightRouteIndexLayer = L.featureGroup()
 const excludePolygonsLayer = L.featureGroup()
 
+const centerCoords = process.env.REACT_APP_CENTER_COORDS.split(',')
+const center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
+
+const maxBoundsString = process.env.REACT_APP_MAX_BOUNDS?.split(',')
+const maxBounds = maxBoundsString
+  ? [
+      //south west corner
+      [parseFloat(maxBoundsString[0]), parseFloat(maxBoundsString[1])],
+      //north east corner
+      [parseFloat(maxBoundsString[2]), parseFloat(maxBoundsString[3])],
+    ]
+  : undefined
+
 // a leaflet map consumes parameters, I'd say they are quite self-explanatory
 const mapParams = {
-  center: [52.51831, 13.393707],
+  center,
+  maxBounds,
   zoomControl: false,
   zoom: 10,
   maxZoom: 18,
