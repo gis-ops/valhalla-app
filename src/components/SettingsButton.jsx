@@ -7,7 +7,7 @@ export const SettingsButton = ({ handleSettings }) => {
     <Popup
       content={'Show/hide settings'}
       trigger={
-        <Button tertiary icon onClick={() => handleSettings()}>
+        <Button tertiary="true" icon onClick={() => handleSettings()}>
           <Icon name="cogs" />{' '}
         </Button>
       }
