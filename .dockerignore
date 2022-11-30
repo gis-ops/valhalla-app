@@ -5,18 +5,18 @@ yarn.lock
 .idea/
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # production
-/build
+build
 
 # misc
-.DS_Store
+**/.DS_Store
 .env.local
 .env.development.local
 .env.test.local
@@ -28,7 +28,6 @@ yarn-error.log*
 
 # docker
 .dockerignore
-node_modules
 npm-debug.log
 Dockerfile
 .git
