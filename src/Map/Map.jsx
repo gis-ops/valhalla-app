@@ -415,7 +415,7 @@ class Map extends React.Component {
 
   zoomToCoordinates = () => {
     const { coordinates } = this.props
-    this.map.fitBounds(coordinates, { padding: [50, 50], maxZoom: 11 })
+    this.map.fitBounds(coordinates, { padding: [50, 50] })
   }
 
   zoomTo = (idx) => {
