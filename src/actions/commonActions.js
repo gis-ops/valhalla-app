@@ -63,7 +63,7 @@ export const updatePermalink = () => (dispatch, getState) => {
   const queryParams = new URLSearchParams()
   queryParams.set('profile', profile)
 
-  let path = '/directions?'
+  let path = '#directions?'
   if (activeTab === 0) {
     const wps = []
     for (const wp of waypoints) {
@@ -77,7 +77,7 @@ export const updatePermalink = () => (dispatch, getState) => {
       queryParams.set('wps', wps.toString())
     }
   } else {
-    path = '/isochrones?'
+    path = '#isochrones?'
 
     let center
     for (const result of geocodeResults) {
