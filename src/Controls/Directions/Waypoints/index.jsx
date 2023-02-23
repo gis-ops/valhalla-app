@@ -57,7 +57,7 @@ class Waypoints extends Component {
     this.setState({ visible: true })
 
     if (directions.waypoints.length === 0) {
-      Array(3)
+      Array(2)
         .fill()
         .map((_, i) => dispatch(doAddWaypoint()))
     }
@@ -82,6 +82,7 @@ class Waypoints extends Component {
 
   render() {
     const { waypoints } = this.props.directions
+    console.log('waypoints', waypoints)
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable">
