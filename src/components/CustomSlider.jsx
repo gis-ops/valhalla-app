@@ -22,12 +22,20 @@ const CustomSlider = (props) => {
 
   const handleChange = (value) => {
     // reset
+    // console.log("Before: value", value)
     if (isNaN(value)) {
       value =
         profile === 'truck'
           ? settingsInitTruckOverride[option.param]
           : settingsInit[option.param]
     }
+    if (value < min) {
+      value = min
+    }
+    if (value > max) {
+      value = max
+    }
+    // console.log("After: value", value)
     setSliderVal(parseFloat(value))
     debounce(
       300,
