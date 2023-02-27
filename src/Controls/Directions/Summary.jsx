@@ -8,20 +8,6 @@ import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
 class Summary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { tileset_last_modified: 0 }
-  }
-  componentDidMount() {
-    this.getTileModifiedData()
-  }
-  async getTileModifiedData() {
-    const res = await (
-      await fetch('https://valhalla1.openstreetmap.de/status')
-    ).json()
-    console.log(res)
-    this.setState({ tileset_last_modified: res.tileset_last_modified })
-  }
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     results: PropTypes.object,
@@ -56,12 +42,6 @@ class Summary extends React.Component {
     }
     return durationStr
   }
-  tileLastModifiedTime = (durationInSeconds) => {
-    const date = new Date(durationInSeconds * 1000)
-    const days = new Date().getDate() - date.getDate() + 'd'
-    const hours = new Date().getHours() - date.getHours() + 'h'
-    return days + ' ' + hours
-  }
   render() {
     const { provider, results, inclineDeclineTotal } = this.props
 
@@ -73,13 +53,6 @@ class Summary extends React.Component {
           <React.Fragment>
             <div className="flex mb1">
               <span className="b">Directions</span>&nbsp;&nbsp;
-              <span className="b">
-                TileSet_Last_Modified:&nbsp;
-                {`${this.tileLastModifiedTime(
-                  this.state.tileset_last_modified
-                )}`}
-                &nbsp;ago
-              </span>
             </div>
             <div className={'flex justify-between pb2 pointer'}>
               <div
