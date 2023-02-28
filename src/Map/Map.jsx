@@ -30,6 +30,7 @@ import {
   buildLocateRequest,
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
+import { throttle } from 'throttle-debounce'
 
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
@@ -135,9 +136,21 @@ class Map extends React.Component {
   componentDidMount() {
     // our map!
     //const { dispatch } = this.props
-
+    if (window.localStorage.getItem('lastCenter')) {
+      try {
+        const { lat, lng } = JSON.parse(
+          window.localStorage.getItem('lastCenter')
+        )
+        mapParams.center = [lat, lng]
+      } catch (err) {
+        //eslint-disable-line
+        //just in case
+      }
+    }
+    if (window.localStorage.getItem('lastZoom')) {
+      mapParams.zoom = window.localStorage.getItem('lastZoom')
+    }
     this.map = L.map('map', mapParams)
-
     // we create a leaflet pane which will hold all isochrone polygons with a given opacity
     const isochronesPane = this.map.createPane('isochronesPane')
     isochronesPane.style.opacity = 0.9
@@ -209,7 +222,17 @@ class Map extends React.Component {
         popup.update()
       }, 20) //eslint-disable-line
     })
-
+    //save the current center debounced for every 5 seconds
+    this.map.on(
+      'dragend',
+      throttle(5000, (_) => {
+        window.localStorage.setItem(
+          'lastCenter',
+          JSON.stringify(this.map.getCenter())
+        )
+        window.localStorage.setItem('lastZoom', this.map.getZoom())
+      })
+    )
     this.map.on('click', (event) => {
       if (
         !this.map.pm.globalRemovalEnabled() &&
