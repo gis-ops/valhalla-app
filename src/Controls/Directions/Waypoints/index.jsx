@@ -82,7 +82,6 @@ class Waypoints extends Component {
 
   render() {
     const { waypoints } = this.props.directions
-    console.log('waypoints', waypoints)
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable">
