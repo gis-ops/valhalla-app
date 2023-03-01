@@ -114,6 +114,7 @@ export const downloadFile = ({ data, fileName, fileType }) => {
 export const filterProfileSettings = (profile, settings) => {
   const filteredSettings = {
     exclude_polygons: settings.exclude_polygons,
+    language: settings.language,
   }
   for (const setting in settings) {
     for (const item of settings_general[profile].numeric) {

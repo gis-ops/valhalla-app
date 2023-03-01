@@ -518,6 +518,7 @@ export const settingsInit = {
   max_hiking_difficulty: 1,
   exclude_polygons: [],
   use_geocoding: true,
+  language: 'en-US',
 }
 
 export const settingsInitTruckOverride = {
@@ -672,3 +673,66 @@ export const settings_general = {
     boolean: [useGeocoding],
   },
 }
+
+export const availableLanguageOptions = [
+  {
+    key: 'bg-BG',
+    text: 'Bulgarian',
+    value: 'bg-BG',
+  },
+  {
+    key: 'ca-ES',
+    text: 'Catalan',
+    value: 'ca-ES',
+  },
+  {
+    key: 'cs-CZ',
+    text: 'Czech',
+    value: 'cs-CZ',
+  },
+  {
+    key: 'da-DK',
+    text: 'Danish',
+    value: 'da-DK',
+  },
+  {
+    key: 'de-DE',
+    text: 'German',
+    value: 'de-DE',
+  },
+  {
+    key: 'el-GR',
+    text: 'Greek',
+    value: 'el-GR',
+  },
+  {
+    key: 'en-GB',
+    text: 'English (UK)',
+    value: 'en-GB	',
+  },
+  {
+    key: 'en-US',
+    text: 'English (US)',
+    value: 'en-US',
+  },
+  {
+    key: 'es-ES',
+    text: 'Spanish',
+    value: 'es-Es',
+  },
+  {
+    key: 'et-EE',
+    text: 'Estonian',
+    value: 'et-EE',
+  },
+  {
+    key: 'fi-FI',
+    text: 'Finnish',
+    value: 'fi-FI',
+  },
+  {
+    key: 'fr-FR',
+    text: 'French',
+    value: 'fr-FR',
+  },
+]

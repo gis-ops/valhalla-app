@@ -37,6 +37,7 @@ export const buildDirectionsRequest = ({
 
   return {
     json: {
+      language: settings.language,
       costing: valhalla_profile,
       costing_options: {
         [valhalla_profile]: { ...settings },

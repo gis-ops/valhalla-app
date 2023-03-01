@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { Header, Icon, Divider } from 'semantic-ui-react'
+import { Header, Icon, Divider, Dropdown } from 'semantic-ui-react'
 
 import { highlightManeuver, zoomToManeuver } from 'actions/directionsActions'
+import { updateSettings } from 'actions/commonActions'
+import { availableLanguageOptions } from 'Controls/settings-options'
 
 const getLength = (length) => {
   const visibleLength = length * 1000
@@ -18,6 +20,7 @@ class Maneuvers extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     results: PropTypes.object,
+    language: PropTypes.string,
     header: PropTypes.string,
     provider: PropTypes.string,
     profile: PropTypes.string,
@@ -32,7 +35,15 @@ class Maneuvers extends React.Component {
     const { dispatch } = this.props
     dispatch(zoomToManeuver({ index: sIdx, timeNow: Date.now() }))
   }
-
+  handleUpdateSettings = ({ name, value }) => {
+    const { dispatch } = this.props
+    dispatch(
+      updateSettings({
+        name,
+        value,
+      })
+    )
+  }
   render() {
     const { provider, results } = this.props
 
@@ -51,6 +62,15 @@ class Maneuvers extends React.Component {
 
     return (
       <React.Fragment>
+        <Dropdown
+          className="mv3"
+          placeholder="Select Language"
+          onChange={(_, data) => this.handleUpdateSettings(data)}
+          value={this.props.language}
+          selection
+          name={'language'}
+          options={availableLanguageOptions}
+        />
         {legs &&
           legs.map((leg, i) =>
             leg.maneuvers.map((mnv, j) => (
@@ -134,8 +154,10 @@ class Maneuvers extends React.Component {
 
 const mapStateToProps = (state) => {
   const { results } = state.directions
+  const language = state.common.settings.language
   return {
     results,
+    language,
   }
 }
 
