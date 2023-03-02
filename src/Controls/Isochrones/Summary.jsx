@@ -6,6 +6,7 @@ import { Checkbox, Icon } from 'semantic-ui-react'
 import { showProvider } from 'actions/directionsActions'
 
 import { downloadFile } from 'actions/commonActions'
+import jsonFormat from 'json-format'
 
 class Summary extends React.Component {
   static propTypes = {
@@ -31,10 +32,14 @@ class Summary extends React.Component {
       ) +
       '_' +
       [dateNow.getHours(), dateNow.getMinutes(), dateNow.getSeconds()].join(':')
-
+    const config = {
+      type: 'space',
+      size: 2,
+    }
+    const formattedData = jsonFormat(data, config)
     e.preventDefault()
     downloadFile({
-      data: JSON.stringify(data),
+      data: formattedData,
       fileName: 'valhalla-isochrones_' + dformat + '.geojson',
       fileType: 'text/json',
     })
