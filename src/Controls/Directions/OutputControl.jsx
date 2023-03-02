@@ -10,6 +10,7 @@ import Summary from './Summary'
 import Maneuvers from './Maneuvers'
 import { VALHALLA_OSM_URL } from 'utils/valhalla'
 import jsonFormat from 'json-format'
+import { jsonConfig } from 'Controls/settings-options'
 
 class OutputControl extends React.Component {
   static propTypes = {
@@ -57,11 +58,7 @@ class OutputControl extends React.Component {
   exportToJson = (e) => {
     const { results } = this.props
     const { data } = results[VALHALLA_OSM_URL]
-    const config = {
-      type: 'space',
-      size: 2,
-    }
-    const formattedData = jsonFormat(data, config)
+    const formattedData = jsonFormat(data, jsonConfig)
     e.preventDefault()
     downloadFile({
       data: formattedData,
@@ -73,13 +70,9 @@ class OutputControl extends React.Component {
   exportToGeoJson = (e) => {
     const { results } = this.props
     const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
-    const config = {
-      type: 'space',
-      size: 2,
-    }
     const formattedData = jsonFormat(
       L.polyline(coordinates).toGeoJSON(),
-      config
+      jsonConfig
     )
     e.preventDefault()
     downloadFile({

@@ -7,7 +7,7 @@ import { showProvider } from 'actions/directionsActions'
 
 import { downloadFile } from 'actions/commonActions'
 import jsonFormat from 'json-format'
-
+import { jsonConfig } from 'Controls/settings-options'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -32,11 +32,7 @@ class Summary extends React.Component {
       ) +
       '_' +
       [dateNow.getHours(), dateNow.getMinutes(), dateNow.getSeconds()].join(':')
-    const config = {
-      type: 'space',
-      size: 2,
-    }
-    const formattedData = jsonFormat(data, config)
+    const formattedData = jsonFormat(data, jsonConfig)
     e.preventDefault()
     downloadFile({
       data: formattedData,
