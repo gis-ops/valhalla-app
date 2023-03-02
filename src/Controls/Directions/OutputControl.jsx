@@ -9,6 +9,7 @@ import { downloadFile } from 'actions/commonActions'
 import Summary from './Summary'
 import Maneuvers from './Maneuvers'
 import { VALHALLA_OSM_URL } from 'utils/valhalla'
+import jsonFormat from 'json-format'
 
 class OutputControl extends React.Component {
   static propTypes = {
@@ -56,10 +57,14 @@ class OutputControl extends React.Component {
   exportToJson = (e) => {
     const { results } = this.props
     const { data } = results[VALHALLA_OSM_URL]
-
+    const config = {
+      type: 'space',
+      size: 2,
+    }
+    const formattedData = jsonFormat(data, config)
     e.preventDefault()
     downloadFile({
-      data: JSON.stringify(data),
+      data: formattedData,
       fileName: 'valhalla-directions_' + this.dateNow() + '.json',
       fileType: 'text/json',
     })
@@ -68,10 +73,17 @@ class OutputControl extends React.Component {
   exportToGeoJson = (e) => {
     const { results } = this.props
     const coordinates = results[VALHALLA_OSM_URL].data.decodedGeometry
-
+    const config = {
+      type: 'space',
+      size: 2,
+    }
+    const formattedData = jsonFormat(
+      L.polyline(coordinates).toGeoJSON(),
+      config
+    )
     e.preventDefault()
     downloadFile({
-      data: JSON.stringify(L.polyline(coordinates).toGeoJSON()),
+      data: formattedData,
       fileName: 'valhalla-directions_' + this.dateNow() + '.geojson',
       fileType: 'text/json',
     })
