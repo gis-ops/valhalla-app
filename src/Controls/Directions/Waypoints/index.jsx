@@ -33,7 +33,7 @@ const getListStyle = (isDraggingOver) => ({
   //height: 200,
   paddingBottom: 20,
   maxHeight: 80 + 'vh',
-  height: 65 'vh',
+  height: 65 + 'vh',
 })
 
 class Waypoints extends Component {
