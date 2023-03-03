@@ -219,8 +219,17 @@ class MainControl extends React.Component {
                 <ServiceTabs />
               </div>
             </Segment>
-            <DirectionOutputControl />
-            <IsochronesOutputControl />
+            {(activeTab === 0 && (
+              <>
+                <DirectionOutputControl />
+                <IsochronesOutputControl />
+              </>
+            )) || (
+              <>
+                <IsochronesOutputControl />
+                <DirectionOutputControl />
+              </>
+            )}
           </div>
         </Drawer>
         <SemanticToastContainer position="bottom-center" />
