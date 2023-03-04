@@ -28,6 +28,11 @@ const CustomSlider = (props) => {
           ? settingsInitTruckOverride[option.param]
           : settingsInit[option.param]
     }
+    if (value < min) {
+      value = min
+    } else if (value > max) {
+      value = max
+    }
     setSliderVal(parseFloat(value))
     debounce(
       300,
