@@ -15,7 +15,7 @@ const CustomSlider = (props) => {
 
   const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
 
- // console.log(sliderVal)
+
   useEffect(() => {
     setSliderVal(parseFloat(settings[option.param]))
   }, [settings, option.param])
