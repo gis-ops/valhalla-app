@@ -32,8 +32,9 @@ const getListStyle = (isDraggingOver) => ({
   width: '100%',
   //height: 200,
   paddingBottom: 20,
-  maxHeight: 80 + 'vh',
-  height: 65 + 'vh',
+  maxHeight: 350,
+  height: 300',
+  oveflow: 'inherit',
 })
 
 class Waypoints extends Component {
