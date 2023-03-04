@@ -89,7 +89,7 @@ class Waypoints extends Component {
           {(provided, snapshot) => (
             <React.Fragment>
               <div
-                className={`flex flex-column overflow-auto`}
+                className={`flex flex-column`}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
