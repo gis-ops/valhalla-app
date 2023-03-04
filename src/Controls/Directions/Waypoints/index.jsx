@@ -33,7 +33,7 @@ const getListStyle = (isDraggingOver) => ({
   //height: 200,
   paddingBottom: 20,
   maxHeight: 350,
-  height: 300',
+  height: 300,
   oveflow: 'inherit',
 })
 
