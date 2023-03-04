@@ -206,5 +206,4 @@ const mapStateToProps = (state, ownProps) => {
     use_geocoding,
   }
 }
-
 export default connect(mapStateToProps)(Waypoint)
