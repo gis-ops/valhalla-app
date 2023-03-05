@@ -52,7 +52,12 @@
     "prefer-arrow-callback": 2,
     "prefer-const": 2,
     "prefer-promise-reject-errors": 2,
-    "prettier/prettier": 2,
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine":"auto"
+      }
+    ],
     "sort-imports": 0,
     "sort-keys": [0],
     "sort-vars": 2,
