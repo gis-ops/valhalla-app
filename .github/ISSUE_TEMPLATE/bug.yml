@@ -18,6 +18,6 @@ body:
     id: screenshots
     attributes:
       label: Screenshots
-      description: Please add screenshots if applicable
+      description: Please add screenshots if applicable (NOT of code!)
     validations:
       required: false

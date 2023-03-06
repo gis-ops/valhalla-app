@@ -14,6 +14,6 @@ body:
     id: screenshots
     attributes:
       label: Screenshots
-      description: Screenshots if applicable
+      description: Screenshots if applicable (NOT of code!)
     validations:
       required: false
