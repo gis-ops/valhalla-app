@@ -145,6 +145,13 @@ class SettingsPanel extends React.Component {
     this.setState({ [settingsType]: settings })
   }
 
+  handleColorCopy = () => {
+    this.setState({ copied: true })
+    setTimeout(() => {
+      this.setState({ copied: false })
+    }, 1000) // 1 seconds
+  }
+
   handleBikeTypeChange = (e, data) => {
     const { value, name } = data
     const { dispatch } = this.props
@@ -405,7 +412,7 @@ class SettingsPanel extends React.Component {
                 <Grid.Column width={16}>
                   <CopyToClipboard
                     text={this.extractSettings(profile, settings)}
-                    onCopy={() => this.setState({ copied: true })}
+                    onCopy={this.handleColorCopy}
                   >
                     <Button
                       basic
