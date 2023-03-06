@@ -36,7 +36,7 @@ class OutputControl extends React.Component {
     return (
       <Segment
         style={{
-          margin: '0 1rem',
+          margin: '0 1rem 10px',
           display: successful ? 'block' : 'none',
         }}
       >

@@ -5,7 +5,7 @@ import { Button, Popup, Icon } from 'semantic-ui-react'
 export const SettingsButton = ({ handleSettings }) => {
   return (
     <Popup
-      content={'Show/hide settings'}
+      content={'Show/Hide Settings'}
       trigger={
         <Button tertiary="true" icon onClick={() => handleSettings()}>
           <Icon name="cogs" />{' '}
