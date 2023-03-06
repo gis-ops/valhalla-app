@@ -81,12 +81,12 @@ class DirectionsControl extends React.Component {
                 ]}
                 loading={loading}
                 popupContent={[
-                  'bicycle',
-                  'pedestrian',
-                  'car',
-                  'truck',
-                  'bus',
-                  'motor scooter',
+                  'Bicycle',
+                  'Pedestrian',
+                  'Car',
+                  'Truck',
+                  'Bus',
+                  'Motor Scooter',
                 ]}
                 activeProfile={profile}
                 handleUpdateProfile={this.handleUpdateProfile}
