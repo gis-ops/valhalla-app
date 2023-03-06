@@ -12,10 +12,8 @@ import PropTypes from 'prop-types'
 const CustomSlider = (props) => {
   const { settings, option, profile, handleUpdateSettings } = props
   const { min, max, step } = option.settings
-
   const [sliderVal, setSliderVal] = useState(parseFloat(settings[option.param]))
 
-  console.log(sliderVal)
   useEffect(() => {
     setSliderVal(parseFloat(settings[option.param]))
   }, [settings, option.param])
