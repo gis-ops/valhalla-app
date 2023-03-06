@@ -672,3 +672,8 @@ export const settings_general = {
     boolean: [useGeocoding],
   },
 }
+
+export const jsonConfig = {
+  type: 'space',
+  size: 2,
+}
