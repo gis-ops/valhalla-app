@@ -414,7 +414,7 @@ class SettingsPanel extends React.Component {
                       color={this.state.copied ? 'green' : undefined}
                       labelPosition="left"
                     >
-                      <Icon name="download" />
+                      <Icon name="copy" />
                       Copy to Clipboard
                     </Button>
                   </CopyToClipboard>
