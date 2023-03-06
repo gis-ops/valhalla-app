@@ -10,7 +10,7 @@ export const Settings = ({ handleAddWaypoint, handleRemoveWaypoints }) => (
     }}
   >
     <Popup
-      content={'Add waypoint'}
+      content={'Add Waypoint'}
       size={'tiny'}
       trigger={
         <Button basic size="tiny" icon onClick={() => handleAddWaypoint()}>
@@ -19,7 +19,7 @@ export const Settings = ({ handleAddWaypoint, handleRemoveWaypoints }) => (
       }
     />
     <Popup
-      content={'Reset waypoints'}
+      content={'Reset Waypoints'}
       size={'tiny'}
       trigger={
         <Button basic size="tiny" icon onClick={() => handleRemoveWaypoints()}>
