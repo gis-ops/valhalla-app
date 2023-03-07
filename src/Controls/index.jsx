@@ -38,6 +38,15 @@ class MainControl extends React.Component {
     activeDataset: PropTypes.string,
     activeTab: PropTypes.number,
     showDirectionsPanel: PropTypes.bool,
+    lastUpdate: PropTypes.object,
+  }
+
+  async getLastUpdate() {
+    const response = await fetch('https://valhalla1.openstreetmap.de/status')
+    const data = await response.json()
+    this.setState({
+      lastUpdate: new Date(data.tileset_last_modified * 1000),
+    })
   }
 
   componentDidMount = () => {
@@ -51,6 +60,8 @@ class MainControl extends React.Component {
     //     'Due to server maintenance, Valhalla is offline until the evening of January 10th.',
     //   time: 5000
     // })
+
+    this.getLastUpdate()
 
     toast({
       type: 'success',
@@ -231,6 +242,22 @@ class MainControl extends React.Component {
                 <DirectionOutputControl />
               </>
             )}
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-start',
+              margin: '1rem',
+            }}
+          >
+            Last Data Update:{' '}
+            {this.state
+              ? `${this.state.lastUpdate
+                  .toISOString()
+                  .slice(0, 10)}, ${this.state.lastUpdate
+                  .toISOString()
+                  .slice(11, 16)}`
+              : '0000-00-00, 00:00'}
           </div>
         </Drawer>
         <SemanticToastContainer position="bottom-center" />
