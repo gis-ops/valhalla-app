@@ -247,7 +247,7 @@ class Waypoints extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === 0}>
               <Form size={'small'}>
-                <div className={'pt3 pl3'}>
+                <div className={'pt3 pl3 pr3'}>
                   <Form.Group inline>
                     <Form.Input
                       width={12}
@@ -314,7 +314,7 @@ class Waypoints extends Component {
                     />
                   </div>
                 </div>
-                <div className={'pt3 pl3'}>
+                <div className={'pt3 pl3 pr3'}>
                   <Form.Group inline>
                     <Form.Input
                       width={12}
