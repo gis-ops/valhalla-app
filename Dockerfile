@@ -1,15 +1,13 @@
-FROM node:16.17.0-alpine as builder
-WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-COPY . /app
-RUN npm i
+FROM node:16
 
-ENV NODE_ENV production
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "development" ]; then npm install --ignore-scripts; else npm install  --omit=dev --ignore-scripts; fi
+
+COPY . ./
+
 RUN npm run build
 
-# production environment
-FROM nginx:1.23.2-alpine
-COPY --from=builder /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-
+CMD ["npm", "start"]

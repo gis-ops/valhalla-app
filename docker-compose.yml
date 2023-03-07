@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  valhalla:
+    container_name: valhalla
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
