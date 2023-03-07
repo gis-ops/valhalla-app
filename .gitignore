@@ -13,6 +13,7 @@ yarn.lock
 
 # testing
 /coverage
+*.patch
 
 # production
 /build
