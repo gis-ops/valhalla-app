@@ -27,21 +27,12 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 })
 
-const getListStyle = (isDraggingOver) => ({
+const getListStyle = (isDraggingOver, isExtendedList) => ({
   //background: isDraggingOver ? 'lightblue' : 'lightgrey',
   width: '100%',
-  //height: 200,
   paddingBottom: 20,
-  maxHeight: 350,
-  height: 300,
-})
-const ExtendedListStyle = (isDraggingOver) => ({
-  //background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  width: '100%',
-  //height: 200,
-  paddingBottom: 20,
-  maxHeight: 80 + 'vh',
-  height: 60 + 'vh',
+  maxHeight: isExtendedList ? '80vh' : '350px',
+  height: isExtendedList ? '60vh' : '300px',
 })
 
 class Waypoints extends Component {
@@ -103,11 +94,7 @@ class Waypoints extends Component {
                 }`}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={
-                  isExtendedList
-                    ? ExtendedListStyle(snapshot.isDraggingOver)
-                    : getListStyle(snapshot.isDraggingOver)
-                }
+                 style={getListStyle(snapshot.isDraggingOver)}
               >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
