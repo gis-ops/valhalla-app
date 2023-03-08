@@ -34,7 +34,14 @@ const getListStyle = (isDraggingOver) => ({
   paddingBottom: 20,
   maxHeight: 350,
   height: 300,
-  oveflow: 'inherit',
+})
+const ExtendedListStyle = (isDraggingOver) => ({
+  //background: isDraggingOver ? 'lightblue' : 'lightgrey',
+  width: '100%',
+  //height: 200,
+  paddingBottom: 20,
+  maxHeight: 80 + 'vh',
+  height: 60 + 'vh',
 })
 
 class Waypoints extends Component {
@@ -83,27 +90,35 @@ class Waypoints extends Component {
 
   render() {
     const { waypoints } = this.props.directions
+    const isExtendedList = waypoints.length > 6 || waypoints.length === 6
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <React.Fragment>
               <div
-                className={`flex flex-column`}
+                className={`flex 
+                ${
+                  isExtendedList ? 'flex-column overflow-auto' : 'flex-column'
+                }`}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
+                style={
+                  isExtendedList
+                    ? ExtendedListStyle(snapshot.isDraggingOver)
+                    : getListStyle(snapshot.isDraggingOver)
+                }
               >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
-                    {(provided_inner, snapshot_inner) => (
+                    {(provided, snapshot) => (
                       <div
-                        ref={provided_inner.innerRef}
-                        {...provided_inner.draggableProps}
-                        {...provided_inner.dragHandleProps}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                         style={getItemStyle(
-                          snapshot_inner.isDragging,
-                          provided_inner.draggableProps.style
+                          snapshot.isDragging,
+                          provided.draggableProps.style
                         )}
                       >
                         <Waypoint
