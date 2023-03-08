@@ -136,7 +136,6 @@ class MainControl extends React.Component {
 
   componentDidUpdate = (prevProps) => {
     const { message } = this.props
-
     if (message.receivedAt > prevProps.message.receivedAt) {
       toast({
         type: message.type,
@@ -260,7 +259,7 @@ class MainControl extends React.Component {
               : '0000-00-00, 00:00'}
           </div>
         </Drawer>
-        <SemanticToastContainer position="bottom-center" />
+        <SemanticToastContainer position="bottom-center" maxToasts={1} />
       </>
     )
   }
