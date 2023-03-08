@@ -94,7 +94,7 @@ class Waypoints extends Component {
                 }`}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                 style={getListStyle(snapshot.isDraggingOver, isExtendedList)}
+                style={getListStyle(snapshot.isDraggingOver, isExtendedList)}
               >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
