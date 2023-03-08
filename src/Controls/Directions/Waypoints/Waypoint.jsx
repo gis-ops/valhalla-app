@@ -156,7 +156,7 @@ class Waypoint extends React.Component {
             loading={isFetching}
             results={geocodeResults}
             value={userInput}
-            onKeyPress={(event: React.KeyboardEvent) => {
+            onKeyPress={(event) => {
               this.fetchGeocodeResults(event.key)
             }}
             placeholder="Hit enter for search..."
@@ -206,5 +206,4 @@ const mapStateToProps = (state, ownProps) => {
     use_geocoding,
   }
 }
-
 export default connect(mapStateToProps)(Waypoint)

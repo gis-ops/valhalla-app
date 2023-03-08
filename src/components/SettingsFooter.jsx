@@ -12,7 +12,7 @@ export const SettingsFooter = () => {
         >
           Valhalla
         </a>{' '}
-        • visualized with{' '}
+        • Visualized with{' '}
         <a
           href="https://github.com/gis-ops/valhalla-app/"
           target="_blank"

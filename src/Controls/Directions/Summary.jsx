@@ -35,10 +35,10 @@ class Summary extends React.Component {
       durationStr += duration.hours + 'h '
     }
     if (duration.minutes > 0) {
-      durationStr += duration.minutes + 'min '
+      durationStr += duration.minutes + 'm '
     }
     if (duration.seconds > 0) {
-      durationStr += duration.seconds + 'sec'
+      durationStr += duration.seconds + 's'
     }
     return durationStr
   }
@@ -73,7 +73,12 @@ class Summary extends React.Component {
                   )} km`}
                 </div>
               </div>
-              <div style={{ alignSelf: 'center', flexGrow: 1 }}>
+              <div
+                style={{
+                  alignSelf: 'center',
+                  flexGrow: 1,
+                }}
+              >
                 <Icon circular name={'time'} size="small" />
                 <div className={'dib v-mid pa1 b f6'}>
                   {this.formatDuration(summary.time)}
@@ -98,7 +103,7 @@ class Summary extends React.Component {
                   }}
                 >
                   <Popup
-                    content={'Total incline'}
+                    content={'Total Incline'}
                     size={'tiny'}
                     trigger={
                       <div>
@@ -117,7 +122,7 @@ class Summary extends React.Component {
                   }}
                 >
                   <Popup
-                    content={'Total decline'}
+                    content={'Total Decline'}
                     size={'tiny'}
                     trigger={
                       <div>
