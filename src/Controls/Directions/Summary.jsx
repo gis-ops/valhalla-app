@@ -54,6 +54,59 @@ class Summary extends React.Component {
           <React.Fragment>
             <div className="flex mb1">
               <span className="b">Directions</span>
+              {summary.has_highway && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Highway'}
+                    size={'tiny'}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon
+                          circular
+                          name={'road'}
+                          size="small"
+                          style={{ marginRight: '-10px' }}
+                        />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+              {summary.has_ferry && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Ferry'}
+                    size={'tiny'}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon
+                          circular
+                          name={'ship'}
+                          size="small"
+                          style={{ marginRight: '-10px' }}
+                        />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+              {summary.has_toll && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Toll'}
+                    size={'tiny'}
+                    style={{ marginRight: '-10px' }}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon circular name={'dollar'} size="small" />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
             </div>
             <div className={'flex justify-between pb2 pointer'}>
               <div
