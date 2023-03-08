@@ -111,14 +111,14 @@ class Waypoints extends Component {
               >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
-                    {(provided, snapshot) => (
+                    {(provided_inner, snapshot_inner) => (
                       <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        ref={provided_inner.innerRef}
+                        {...provided_inner.draggableProps}
+                        {...provided_inner.dragHandleProps}
                         style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
+                          snapshot_inner.isDragging,
+                          provided_inner.draggableProps.style
                         )}
                       >
                         <Waypoint
