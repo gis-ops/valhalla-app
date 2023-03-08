@@ -81,7 +81,7 @@ class Waypoints extends Component {
 
   render() {
     const { waypoints } = this.props.directions
-    const isExtendedList = waypoints.length > 6 || waypoints.length === 6
+    const isExtendedList = waypoints.length >= 6
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable">
