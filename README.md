@@ -6,7 +6,7 @@ This is the ReactJS demo web app running on https://valhalla.openstreetmap.de. I
 
 ## 🛠️ Development
 
-Using one of the following ways you can contribute to the repo; please pick your favourite from:
+Using one of the following ways you can contribute to the repo;
 
 1. Local development
 2. Local development with Docker Compose
@@ -14,8 +14,6 @@ Using one of the following ways you can contribute to the repo; please pick your
 ### Local development
 
 #### Prerequisites
-
-Before contributing or adding a new feature, please make sure you have already installed the following tools:
 
 - [NodeJs](https://nodejs.org/en/download/)
 
@@ -35,7 +33,7 @@ This will allow you to run your favourite IDE but not have to install any depend
 #### Prerequisites
 
 - Docker
-- [Docker Compose](https://github.com/docker/compose) V2.
+- Docker Compose
 
 #### Commands
 
