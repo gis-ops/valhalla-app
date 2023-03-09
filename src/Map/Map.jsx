@@ -502,6 +502,13 @@ class Map extends React.Component {
     }
   }
 
+  handleCopy = () => {
+    this.setState({ hasCopied: true })
+    setTimeout(() => {
+      this.setState({ hasCopied: false })
+    }, 1000)
+  }
+
   addIsochrones = () => {
     const { results } = this.props.isochrones
     isoPolygonLayer.clearLayers()
@@ -837,7 +844,7 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lat.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -866,7 +873,7 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lng.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -896,7 +903,7 @@ class Map extends React.Component {
                       convertDDToDMS(this.state.latLng.lng) +
                       ' E'
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -920,7 +927,7 @@ class Map extends React.Component {
                   />
                   <CopyToClipboard
                     text={JSON.stringify(this.state.locate)}
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button
                       disabled={this.state.locate.length === 0}
@@ -948,7 +955,7 @@ class Map extends React.Component {
                         "lon": ${this.state.latLng.lng.toFixed(6)},
                         "lat": ${this.state.latLng.lat.toFixed(6)}
                       }`}
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
