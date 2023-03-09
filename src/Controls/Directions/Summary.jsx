@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-// import { intervalToDuration } from 'date-fns'
 
 import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
-import formatDuration from 'utils/helperfunctions'
+import formatDuration from 'utils/durationFormatter'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -21,28 +20,6 @@ class Summary extends React.Component {
     const { dispatch } = this.props
     dispatch(showProvider(data.provider, data.checked))
   }
-
-  // formatDuration = (durationInSeconds) => {
-  //   const duration = intervalToDuration({
-  //     start: 0,
-  //     end: durationInSeconds * 1000,
-  //   })
-
-  //   let durationStr = ''
-  //   if (duration.days > 0) {
-  //     durationStr += duration.days + 'd '
-  //   }
-  //   if (duration.hours > 0) {
-  //     durationStr += duration.hours + 'h '
-  //   }
-  //   if (duration.minutes > 0) {
-  //     durationStr += duration.minutes + 'm '
-  //   }
-  //   if (duration.seconds > 0) {
-  //     durationStr += duration.seconds + 's'
-  //   }
-  //   return durationStr
-  // }
 
   render() {
     const { provider, results, inclineDeclineTotal } = this.props

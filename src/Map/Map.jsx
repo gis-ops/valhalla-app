@@ -30,7 +30,7 @@ import {
   buildLocateRequest,
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
-import formatDuration from 'utils/helperfunctions'
+import formatDuration from 'utils/durationFormatter'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -541,14 +541,6 @@ class Map extends React.Component {
       }
     }
   }
-
-  // formatDuration = (durationInSeconds) => {
-  //   const date = new Date(durationInSeconds * 1000)
-  //   const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
-  //   const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
-  //   const minutes = date.getMinutes() > 0 ? date.getMinutes() + 'min' : ''
-  //   return days + hours + minutes
-  // }
 
   getRouteToolTip = (summary, provider) => {
     return `
