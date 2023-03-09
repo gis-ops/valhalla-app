@@ -2,11 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { intervalToDuration } from 'date-fns'
+// import { intervalToDuration } from 'date-fns'
 
 import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
+import formatDuration from 'utils/helperfunctions'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -21,27 +22,27 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
-  formatDuration = (durationInSeconds) => {
-    const duration = intervalToDuration({
-      start: 0,
-      end: durationInSeconds * 1000,
-    })
+  // formatDuration = (durationInSeconds) => {
+  //   const duration = intervalToDuration({
+  //     start: 0,
+  //     end: durationInSeconds * 1000,
+  //   })
 
-    let durationStr = ''
-    if (duration.days > 0) {
-      durationStr += duration.days + 'd '
-    }
-    if (duration.hours > 0) {
-      durationStr += duration.hours + 'h '
-    }
-    if (duration.minutes > 0) {
-      durationStr += duration.minutes + 'm '
-    }
-    if (duration.seconds > 0) {
-      durationStr += duration.seconds + 's'
-    }
-    return durationStr
-  }
+  //   let durationStr = ''
+  //   if (duration.days > 0) {
+  //     durationStr += duration.days + 'd '
+  //   }
+  //   if (duration.hours > 0) {
+  //     durationStr += duration.hours + 'h '
+  //   }
+  //   if (duration.minutes > 0) {
+  //     durationStr += duration.minutes + 'm '
+  //   }
+  //   if (duration.seconds > 0) {
+  //     durationStr += duration.seconds + 's'
+  //   }
+  //   return durationStr
+  // }
 
   render() {
     const { provider, results, inclineDeclineTotal } = this.props
@@ -81,7 +82,7 @@ class Summary extends React.Component {
               >
                 <Icon circular name={'time'} size="small" />
                 <div className={'dib v-mid pa1 b f6'}>
-                  {this.formatDuration(summary.time)}
+                  {formatDuration(summary.time)}
                 </div>
               </div>
               <div style={{ alignSelf: 'center' }}>
