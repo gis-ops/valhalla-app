@@ -97,6 +97,117 @@ const turnPenalityCost = {
   },
 }
 
+const maneuverPenalty = {
+  name: 'Maneuver Penalty',
+  param: 'maneuver_penalty',
+  description:
+    'A penalty applied when transitioning between roads that do not have consistent naming, in order to create simpler routes with fewer maneuvers or guidance instructions. The default maneuver penalty is five seconds.',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 60,
+    step: 1,
+  },
+}
+
+const gateCost = {
+  name: 'Gate Cost',
+  param: 'gate_cost',
+  description:
+    'A cost applied when a gate with undefined or private access is encountered. This cost is added to the estimated time / elapsed time. The default gate cost is 30 seconds.',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 300,
+    step: 10,
+  },
+}
+
+const gatePenalty = {
+  name: 'Gate Penalty',
+  param: 'gate_penalty',
+  description:
+    'A penalty applied when a gate with no access information is on the road. The default gate penalty is 300 seconds.',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 600,
+    step: 30,
+  },
+}
+
+const tollBoothCost = {
+  name: 'Toll Booth Cost',
+  param: 'toll_booth_cost',
+  description:
+    'A cost applied when a toll booth is encountered. This cost is added to the estimated and elapsed times. The default cost is 15 seconds.',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 120,
+    step: 5,
+  },
+}
+
+const tollBoothPenalty = {
+  name: 'Toll Booth Penalty',
+  param: 'toll_booth_penalty',
+  description:
+    'A penalty applied to the cost when a toll booth is encountered. This penalty can be used to create paths that avoid toll roads. The default toll booth penalty is 0.',
+  unit: '',
+  settings: {
+    min: 0,
+    max: 1000,
+    step: 10,
+  },
+}
+
+const fixedSpeed = {
+  name: 'Fixed Speed',
+  param: 'fixed_speed',
+  description:
+    'Fixed speed the vehicle can go. Used to override the calculated speed. Can be useful if speed of vehicle is known. fixed_speed must be between 1 and 252 KPH. The default value is 0 KPH which disables fixed speed and falls back to the standard calculated speed based on the road attribution.',
+  unit: 'kph',
+  settings: {
+    min: 0,
+    max: 252,
+    step: 1,
+  },
+}
+
+const axleCount = {
+  name: 'Axle Count',
+  param: 'axle_count',
+  description: 'The axle count of the truck. Default 5.',
+  unit: 'count',
+  settings: {
+    min: 2,
+    max: 10,
+    step: 1,
+  },
+}
+
+const includeHOV2 = {
+  name: 'Include HOV2',
+  param: 'include_hov2',
+  description:
+    'A boolean value which indicates the desire to include HOV roads with a 2-occupant requirement in the route when advantageous. Default false.',
+}
+
+const includeHOV3 = {
+  name: 'Include HOV 3',
+  param: 'include_hov3',
+  description:
+    'A boolean value which indicates the desire to include HOV roads with a 3-occupant requirement in the route when advantageous. Default false.',
+}
+
+const includeHot = {
+  name: 'Include HOT Lanes',
+  param: 'include_hot',
+  description:
+    "A boolean value which indicates the desire to include tolled HOV roads which require the driver to pay a toll if the occupant requirement isn't met. Default false.",
+}
+
 const hazardousMaterials = {
   name: 'Hazardous materials',
   description: 'Whether the vehicle is carrying hazardous materials',
@@ -132,6 +243,45 @@ const useFerry = {
   param: 'use_ferry',
   description:
     'This value indicates the willingness to take ferries. This is a range of values between 0 and 1. Values near 0 attempt to avoid ferries and values near 1 will favor ferries. The default value is 0.5. Note that sometimes ferries are required to complete a route so values of 0 are not guaranteed to avoid ferries entirely.',
+  unit: 'willingness',
+  settings: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
+}
+
+const bssReturnCost = {
+  name: 'Bss Return Cost',
+  param: 'bss_return_cost',
+  description:
+    'The time (in seconds) it takes to return a rental bike to a bikeshare station. This value will be displayed in the final directions and used to calculate the total duration of the trip. The default value is 120 seconds (2 minutes).',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 1000,
+    step: 10,
+  },
+}
+
+const bssReturnPenalty = {
+  name: 'Bss Return Penalty',
+  param: 'bss_return_penalty',
+  description:
+    'A penalty applied when returning a rental bike to a bike share station. This penalty is added to the estimated and elapsed times. The default penalty is 60 seconds (1 minute).',
+  unit: 'sec',
+  settings: {
+    min: 0,
+    max: 300,
+    step: 10,
+  },
+}
+
+const useLit = {
+  name: 'Use Lit Streets',
+  param: 'use_lit',
+  description:
+    'A range of values from 0 to 1, where 0 indicates indifference towards lit streets, and 1 indicates that unlit streets should be avoided. Note that even with values near 1, there is no guarantee the returned route will include lit segments. The default value is 0.',
   unit: 'willingness',
   settings: {
     min: 0,
@@ -278,7 +428,8 @@ const bicycleType = {
   Road: a road-style bicycle with narrow tires that is generally lightweight and designed for speed on paved surfaces.
   Hybrid or City: a bicycle made mostly for city riding or casual riding on roads and paths with good surfaces.
   Cross: a cyclo-cross bicycle, which is similar to a road bicycle but with wider tires suitable to rougher surfaces.
-  Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.`,
+  Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.
+  Bikeshare: The bikeshare line is a transportation option that allows users to rent bicycles from one station and return them to another station.`,
   param: 'bicycle_type',
   enums: [
     {
@@ -305,6 +456,11 @@ const bicycleType = {
       key: 'Mountain',
       text: 'Mountain',
       value: 'Mountain',
+    },
+    {
+      key: 'Bikeshare',
+      text: 'Bikeshare',
+      value: 'Bikeshare',
     },
   ],
 }
@@ -518,6 +674,18 @@ export const settingsInit = {
   max_hiking_difficulty: 1,
   exclude_polygons: [],
   use_geocoding: true,
+  bss_return_cost: 120,
+  bss_return_penalty: 60,
+  use_lit: 0,
+  axle_count: 5,
+  fixed_speed: 0,
+  toll_booth_penalty: 0,
+  toll_booth_cost: 15,
+  gate_penalty: 300,
+  gate_cost: 30,
+  include_hov2: false,
+  include_hov3: false,
+  include_hot: false,
 }
 
 export const settingsInitTruckOverride = {
@@ -534,11 +702,18 @@ export const profile_settings = {
       weight,
       height,
       axleLoad,
+      axleCount,
       topSpeed,
+      fixedSpeed,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
       privateAccessPenalty,
       closureFactor,
       servicePenalty,
       serviceFactor,
+      countryCrossingCost,
+      countryCrossingPenality,
     ],
     boolean: [hazardousMaterials, shortest],
     enum: [],
@@ -553,7 +728,7 @@ export const profile_settings = {
       servicePenalty,
       serviceFactor,
     ],
-    boolean: [shortest],
+    boolean: [shortest, includeHOV2, includeHOV3, includeHot],
     enum: [],
   },
   bus: {
@@ -562,18 +737,25 @@ export const profile_settings = {
       width,
       weight,
       height,
+      useLivingStreets,
       topSpeed,
+      fixedSpeed,
       privateAccessPenalty,
+      gateCost,
+      gatePenalty,
       closureFactor,
       servicePenalty,
       serviceFactor,
+      countryCrossingCost,
+      countryCrossingPenality,
     ],
-    boolean: [shortest],
+    boolean: [shortest, includeHOV2, includeHOV3],
     enum: [],
   },
   pedestrian: {
     numeric: [
       useHills,
+      useLit,
       walkingSpeed,
       walkwayFactor,
       sidewalkFactor,
@@ -586,12 +768,19 @@ export const profile_settings = {
     enum: [],
   },
   motor_scooter: {
-    numeric: [useHills, topSpeed, usePrimary],
+    numeric: [useHills, topSpeed, usePrimary, useLivingStreets],
     boolean: [shortest],
     enum: [],
   },
   bicycle: {
-    numeric: [cyclingSpeed, useRoads, useHills, avoidBadSurfaces],
+    numeric: [
+      cyclingSpeed,
+      useRoads,
+      useHills,
+      avoidBadSurfaces,
+      bssReturnCost,
+      bssReturnPenalty,
+    ],
     boolean: [shortest],
     enum: [bicycleType],
   },
@@ -605,13 +794,21 @@ export const settings_general = {
       countryCrossingCost,
       useHighways,
       useTollways,
+      tollBoothCost,
+      tollBoothPenalty,
       useFerry,
       ferryCost,
       useLivingStreets,
       useTracks,
       excludeUnpaved,
     ],
-    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    boolean: [
+      ignoreClosures,
+      excludeCashOnlyTolls,
+      includeHOV3,
+      includeHOV2,
+      includeHot,
+    ],
     enum: [],
   },
   car: {
@@ -633,10 +830,13 @@ export const settings_general = {
   bus: {
     numeric: [
       turnPenalityCost,
+      maneuverPenalty,
       countryCrossingPenality,
       countryCrossingCost,
       useHighways,
       useTollways,
+      tollBoothCost,
+      tollBoothPenalty,
       useFerry,
       ferryCost,
       useTracks,
