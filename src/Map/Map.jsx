@@ -15,6 +15,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 
 import * as R from 'ramda'
+import { intervalToDuration } from 'date-fns'
 import ExtraMarkers from './extraMarkers'
 import { Button, Label, Icon, Popup } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -550,11 +551,25 @@ class Map extends React.Component {
   }
 
   formatDuration = (durationInSeconds) => {
-    const date = new Date(durationInSeconds * 1000)
-    const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
-    const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
-    const minutes = date.getMinutes() > 0 ? date.getMinutes() + 'min' : ''
-    return days + hours + minutes
+    const duration = intervalToDuration({
+      start: 0,
+      end: durationInSeconds * 1000,
+    })
+
+    let durationStr = ''
+    if (duration.days > 0) {
+      durationStr += duration.days + 'd '
+    }
+    if (duration.hours > 0) {
+      durationStr += duration.hours + 'h '
+    }
+    if (duration.minutes > 0) {
+      durationStr += duration.minutes + 'min '
+    }
+    if (duration.seconds > 0) {
+      durationStr += duration.seconds + 'sec'
+    }
+    return durationStr
   }
 
   getRouteToolTip = (summary, provider) => {
