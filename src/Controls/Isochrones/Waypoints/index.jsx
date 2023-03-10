@@ -212,26 +212,33 @@ class Waypoints extends Component {
           className="pa2 flex flex-row justify-between"
           style={{ alignItems: 'center' }}
         >
-          <Search
-            size="small"
-            type="text"
-            minCharacters={3}
-            className={'pt2 pl3'}
-            input={{ icon: 'search', iconPosition: 'left' }}
-            onSearchChange={this.handleSearchChange}
-            onResultSelect={this.handleResultSelect}
-            resultRenderer={this.resultRenderer}
-            showNoResults={false}
-            open={this.state.open}
-            onFocus={() => this.setState({ open: true })}
-            onMouseDown={() => this.setState({ open: true })}
-            loading={isFetching}
-            results={geocodeResults}
-            value={userInput}
-            onKeyPress={(event: React.KeyboardEvent) => {
-              this.fetchGeocodeResults(event.key)
-            }}
-            placeholder="Hit enter for search..."
+          <Popup
+            content={userInput.length === 0 ? 'Enter Address' : userInput}
+            size="tiny"
+            mouseEnterDelay={500}
+            trigger={
+              <Search
+                size="small"
+                type="text"
+                minCharacters={3}
+                className={'pt2 pl3'}
+                input={{ icon: 'search', iconPosition: 'left' }}
+                onSearchChange={this.handleSearchChange}
+                onResultSelect={this.handleResultSelect}
+                resultRenderer={this.resultRenderer}
+                showNoResults={false}
+                open={this.state.open}
+                onFocus={() => this.setState({ open: true })}
+                onMouseDown={() => this.setState({ open: true })}
+                loading={isFetching}
+                results={geocodeResults}
+                value={userInput}
+                onKeyPress={(event: React.KeyboardEvent) => {
+                  this.fetchGeocodeResults(event.key)
+                }}
+                placeholder="Hit enter for search..."
+              />
+            }
           />
           <Settings handleRemoveIsos={this.handleRemoveIsos} />
         </div>
