@@ -139,27 +139,35 @@ class Waypoint extends React.Component {
               </Label>
             }
           />
-          <Search
-            className={'pa2 ' + index}
-            size="small"
-            fluid
-            input={{ icon: 'search', iconPosition: 'left' }}
-            onSearchChange={this.handleSearchChange}
-            onResultSelect={this.handleResultSelect}
-            resultRenderer={this.resultRenderer}
-            type="text"
-            showNoResults={false}
-            open={this.state.open}
-            onFocus={() => this.setState({ open: true })}
-            onMouseDown={() => this.setState({ open: true })}
-            onBlur={() => this.setState({ open: false })}
-            loading={isFetching}
-            results={geocodeResults}
-            value={userInput}
-            onKeyPress={(event) => {
-              this.fetchGeocodeResults(event.key)
-            }}
-            placeholder="Hit enter for search..."
+
+          <Popup
+            content={userInput.length === 0 ? 'Enter Address' : userInput}
+            size="tiny"
+            mouseEnterDelay={500}
+            trigger={
+              <Search
+                className={'pa2 ' + index}
+                size="small"
+                fluid
+                input={{ icon: 'search', iconPosition: 'left' }}
+                onSearchChange={this.handleSearchChange}
+                onResultSelect={this.handleResultSelect}
+                resultRenderer={this.resultRenderer}
+                type="text"
+                showNoResults={false}
+                open={this.state.open}
+                onFocus={() => this.setState({ open: true })}
+                onMouseDown={() => this.setState({ open: true })}
+                onBlur={() => this.setState({ open: false })}
+                loading={isFetching}
+                results={geocodeResults}
+                value={userInput}
+                onKeyPress={(event) => {
+                  this.fetchGeocodeResults(event.key)
+                }}
+                placeholder="Hit enter for search..."
+              />
+            }
           />
           <Popup
             content={
