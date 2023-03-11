@@ -208,6 +208,32 @@ const includeHot = {
     "A boolean value which indicates the desire to include tolled HOV roads which require the driver to pay a toll if the occupant requirement isn't met. Default false.",
 }
 
+const transitStartEndMaxDistance = {
+  name: 'Transit Start/End Max Distance',
+  param: 'transit_start_end_max_distance',
+  description:
+    'Maximum walking distance at the beginning or end of a transit route',
+  unit: 'meters',
+  settings: {
+    min: 0,
+    max: 10000,
+    step: 100,
+  },
+}
+
+const transitTransferMaxDistance = {
+  name: 'Transit Transfer Max Distance',
+  param: 'transit_transfer_max_distance',
+  description:
+    'A pedestrian option that can be added to the request to extend the defaults (800 meters or 0.5 miles). This is the maximum walking distance between transfers.',
+  unit: 'meters',
+  settings: {
+    min: 0,
+    max: 8000,
+    step: 1,
+  },
+}
+
 const hazardousMaterials = {
   name: 'Hazardous materials',
   description: 'Whether the vehicle is carrying hazardous materials',
@@ -248,32 +274,6 @@ const useFerry = {
     min: 0,
     max: 1,
     step: 0.1,
-  },
-}
-
-const bssReturnCost = {
-  name: 'Bss Return Cost',
-  param: 'bss_return_cost',
-  description:
-    'The time (in seconds) it takes to return a rental bike to a bikeshare station. This value will be displayed in the final directions and used to calculate the total duration of the trip. The default value is 120 seconds (2 minutes).',
-  unit: 'sec',
-  settings: {
-    min: 0,
-    max: 1000,
-    step: 10,
-  },
-}
-
-const bssReturnPenalty = {
-  name: 'Bss Return Penalty',
-  param: 'bss_return_penalty',
-  description:
-    'A penalty applied when returning a rental bike to a bike share station. This penalty is added to the estimated and elapsed times. The default penalty is 60 seconds (1 minute).',
-  unit: 'sec',
-  settings: {
-    min: 0,
-    max: 300,
-    step: 10,
   },
 }
 
@@ -428,8 +428,7 @@ const bicycleType = {
   Road: a road-style bicycle with narrow tires that is generally lightweight and designed for speed on paved surfaces.
   Hybrid or City: a bicycle made mostly for city riding or casual riding on roads and paths with good surfaces.
   Cross: a cyclo-cross bicycle, which is similar to a road bicycle but with wider tires suitable to rougher surfaces.
-  Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.
-  Bikeshare: The bikeshare line is a transportation option that allows users to rent bicycles from one station and return them to another station.`,
+  Mountain: a mountain bicycle suitable for most surfaces but generally heavier and slower on paved surfaces.`,
   param: 'bicycle_type',
   enums: [
     {
@@ -456,11 +455,6 @@ const bicycleType = {
       key: 'Mountain',
       text: 'Mountain',
       value: 'Mountain',
-    },
-    {
-      key: 'Bikeshare',
-      text: 'Bikeshare',
-      value: 'Bikeshare',
     },
   ],
 }
@@ -674,8 +668,6 @@ export const settingsInit = {
   max_hiking_difficulty: 1,
   exclude_polygons: [],
   use_geocoding: true,
-  bss_return_cost: 120,
-  bss_return_penalty: 60,
   use_lit: 0,
   axle_count: 5,
   fixed_speed: 0,
@@ -686,6 +678,8 @@ export const settingsInit = {
   include_hov2: false,
   include_hov3: false,
   include_hot: false,
+  transit_start_end_max_distance: 2145,
+  transit_transfer_max_distance: 800,
 }
 
 export const settingsInitTruckOverride = {
@@ -723,10 +717,16 @@ export const profile_settings = {
       width,
       height,
       topSpeed,
+      fixedSpeed,
       privateAccessPenalty,
       closureFactor,
       servicePenalty,
       serviceFactor,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
+      countryCrossingCost,
+      countryCrossingPenality,
     ],
     boolean: [shortest, includeHOV2, includeHOV3, includeHot],
     enum: [],
@@ -737,9 +737,9 @@ export const profile_settings = {
       width,
       weight,
       height,
-      useLivingStreets,
       topSpeed,
       fixedSpeed,
+      maneuverPenalty,
       privateAccessPenalty,
       gateCost,
       gatePenalty,
@@ -749,7 +749,7 @@ export const profile_settings = {
       countryCrossingCost,
       countryCrossingPenality,
     ],
-    boolean: [shortest, includeHOV2, includeHOV3],
+    boolean: [shortest, includeHOV2, includeHOV3, includeHot],
     enum: [],
   },
   pedestrian: {
@@ -768,7 +768,17 @@ export const profile_settings = {
     enum: [],
   },
   motor_scooter: {
-    numeric: [useHills, topSpeed, usePrimary, useLivingStreets],
+    numeric: [
+      useHills,
+      topSpeed,
+      usePrimary,
+      useLivingStreets,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
+      countryCrossingCost,
+      countryCrossingPenality,
+    ],
     boolean: [shortest],
     enum: [],
   },
@@ -778,8 +788,9 @@ export const profile_settings = {
       useRoads,
       useHills,
       avoidBadSurfaces,
-      bssReturnCost,
-      bssReturnPenalty,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
     ],
     boolean: [shortest],
     enum: [bicycleType],
@@ -818,6 +829,8 @@ export const settings_general = {
       countryCrossingCost,
       useHighways,
       useTollways,
+      tollBoothCost,
+      tollBoothPenalty,
       useFerry,
       ferryCost,
       useLivingStreets,
@@ -830,10 +843,10 @@ export const settings_general = {
   bus: {
     numeric: [
       turnPenalityCost,
-      maneuverPenalty,
       countryCrossingPenality,
       countryCrossingCost,
       useHighways,
+      useLivingStreets,
       useTollways,
       tollBoothCost,
       tollBoothPenalty,
@@ -846,12 +859,20 @@ export const settings_general = {
     enum: [],
   },
   pedestrian: {
-    numeric: [useFerry, servicePenalty, serviceFactor],
+    numeric: [
+      useFerry,
+      servicePenalty,
+      serviceFactor,
+      useLivingStreets,
+      useTracks,
+      transitStartEndMaxDistance,
+      transitTransferMaxDistance,
+    ],
     boolean: [],
     enum: [],
   },
   motor_scooter: {
-    numeric: [useFerry, useTracks],
+    numeric: [useFerry, useTracks, servicePenalty],
     boolean: [],
     enum: [],
   },
