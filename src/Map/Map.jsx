@@ -66,7 +66,11 @@ const highlightRouteIndexLayer = L.featureGroup()
 const excludePolygonsLayer = L.featureGroup()
 
 const centerCoords = process.env.REACT_APP_CENTER_COORDS.split(',')
-const center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
+let center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
+
+if (localStorage.getItem('lat') && localStorage.getItem('lng')) {
+  center = [localStorage.getItem('lat'), localStorage.getItem('lng')]
+}
 
 const maxBoundsString = process.env.REACT_APP_MAX_BOUNDS?.split(',')
 const maxBounds = maxBoundsString
@@ -228,6 +232,14 @@ class Map extends React.Component {
           popup.update()
         }, 20) //eslint-disable-line
       }
+    })
+
+    this.map.on('moveend', () => {
+      const new_center = this.map.getCenter()
+      const latitude = new_center.lat
+      const longitude = new_center.lng
+      localStorage.setItem('lat', latitude)
+      localStorage.setItem('lng', longitude)
     })
 
     // add Leaflet-Geoman controls with some options to the map
