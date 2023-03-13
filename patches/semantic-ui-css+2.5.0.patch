@@ -1,0 +1,13 @@
+diff --git a/node_modules/semantic-ui-css/semantic.css b/node_modules/semantic-ui-css/semantic.css
+index 1d93bd7..d0ee6a2 100755
+--- a/node_modules/semantic-ui-css/semantic.css
++++ b/node_modules/semantic-ui-css/semantic.css
+@@ -35394,6 +35394,8 @@ a.ui.nag {
+   box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+   border: 1px solid #D4D4D5;
+   z-index: 998;
++  height:200px;
++  overflow-y:scroll;
+ }
+ 
+ .ui.search > .results > :first-child {
