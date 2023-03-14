@@ -307,6 +307,8 @@ class Map extends React.Component {
     })
     this.hg.addTo(this.map)
     const hg = this.hg
+    // Added title property to heightgraph-toggle element to show "Distance Graph" tooltip
+    $('.heightgraph-toggle').prop('title', 'Distance Graph')
     $('.heightgraph').resizable({
       handles: 'w, n, nw',
       minWidth: 380,
