@@ -161,7 +161,17 @@ class Map extends React.Component {
       Isochrones: isoPolygonLayer,
     }
 
-    this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map)
+    this.layerControl = L.control
+      .layers(baseMaps, overlayMaps, {
+        collapsed: true,
+      })
+      .addTo(this.map)
+
+    const layersToggle = document.getElementsByClassName(
+      'leaflet-control-layers'
+    )[0]
+    layersToggle.style.position = 'absolute'
+    layersToggle.style.right = '0px'
 
     // we do want a zoom control
     L.control
