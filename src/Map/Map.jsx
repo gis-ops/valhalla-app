@@ -283,6 +283,8 @@ class Map extends React.Component {
 
     const getHeightData = this.getHeightData
 
+    console.log('rendered insided', this.props.directions.showHeightGraphDiv)
+
     this.hg = L.control.heightgraph({
       mappings: colorMappings,
       graphStyle: {
@@ -298,7 +300,7 @@ class Map extends React.Component {
           getHeightData()
         }
       },
-      expandControls: true,
+      expandControls: this.props.directions.showHeightGraphDiv,
       expand: false,
       highlightStyle: {
         color: 'blue',
@@ -721,11 +723,9 @@ class Map extends React.Component {
   getHeightData = () => {
     const { results } = this.props.directions
     const { dispatch } = this.props
-
     const heightPayload = buildHeightRequest(
       results[VALHALLA_OSM_URL].data.decodedGeometry
     )
-
     if (!R.equals(this.state.heightPayload, heightPayload)) {
       this.hg._removeChart()
       this.setState({ isHeightLoading: true, heightPayload })
@@ -754,7 +754,6 @@ class Map extends React.Component {
               declineTotal,
             })
           )
-
           this.hg.addData(heightData)
         })
         .catch(({ response }) => {
@@ -802,7 +801,6 @@ class Map extends React.Component {
             prefix: 'fa',
             number: (index + 1).toString(),
           })
-
           L.marker([address.displaylnglat[1], address.displaylnglat[0]], {
             icon: wpMarker,
             draggable: true,
@@ -828,6 +826,7 @@ class Map extends React.Component {
   }
 
   render() {
+    console.log('rendered outside', this.props.directions.showHeightGraphDiv)
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
       return (

@@ -35,6 +35,7 @@ const initialState = {
       show: true,
     },
   },
+  showHeightGraphDiv: false,
 }
 
 export const directions = (state = initialState, action) => {
@@ -121,8 +122,11 @@ export const directions = (state = initialState, action) => {
           )
         })
       })
+
+      // const showHeightGraphDiv = state.directions.showHeightGraphDiv
       return {
         ...state,
+        showHeightGraphDiv: action.payload.showHeightGraphDiv ?? false,
         selectedAddresses: selectedAddresses,
         waypoints: state.waypoints.map((waypoint, i) =>
           i === action.payload.index

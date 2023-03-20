@@ -24,6 +24,7 @@ class Waypoint extends React.Component {
     results: PropTypes.array,
     use_geocoding: PropTypes.bool,
     geocodeResults: PropTypes.array,
+    directions: PropTypes.object,
   }
 
   constructor(props) {
@@ -71,10 +72,23 @@ class Waypoint extends React.Component {
   handleSearchChange = (event) => {
     const { dispatch, index } = this.props
 
+    // check if min 2 directions are available and their names are not empty
+    // default there are 2 directions available but with empty names
+    const directions = this.props?.directions?.waypoints || []
+    let minimumCount = 0
+    directions.map((direction) => {
+      if (direction.userInput !== '') {
+        minimumCount++
+      }
+    })
+
+    // if minimumCount greater than 2 return true or false
+
     dispatch(
       updateTextInput({
         inputValue: event.target.value,
         index: index,
+        showHeightGraphDiv: minimumCount >= 2,
       })
     )
   }
@@ -213,11 +227,13 @@ const mapStateToProps = (state, ownProps) => {
   const waypoint = state.directions.waypoints[index]
   const { geocodeResults, userInput, isFetching } = waypoint
   const { use_geocoding } = state.common.settings
+  const { directions } = state
   return {
     userInput,
     geocodeResults,
     isFetching,
     use_geocoding,
+    directions,
   }
 }
 export default connect(mapStateToProps)(Waypoint)
