@@ -283,8 +283,6 @@ class Map extends React.Component {
 
     const getHeightData = this.getHeightData
 
-    console.log('rendered insided', this.props.directions.showHeightGraphDiv)
-
     this.hg = L.control.heightgraph({
       mappings: colorMappings,
       graphStyle: {
@@ -826,7 +824,6 @@ class Map extends React.Component {
   }
 
   render() {
-    console.log('rendered outside', this.props.directions.showHeightGraphDiv)
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
       return (
