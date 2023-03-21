@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-// import * as R from 'ramda'
 
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
@@ -85,21 +84,6 @@ class Waypoints extends Component {
       }
     }
   }
-
-  // we really only want to call the valhalla backend if settings have changed
-  // therefor using rambda for deep object comparison
-  // componentDidUpdate(nextProps) {
-  //   const { dispatch } = this.props
-  //   const { maxRange, interval } = this.props.isochrones
-  //   const nextMaxRange = nextProps.isochrones.maxRange
-  //   const nextInterval = nextProps.isochrones.interval
-  //   if (
-  //     !R.equals(maxRange, nextMaxRange) ||
-  //     !R.equals(interval, nextInterval)
-  //   ) {
-  //     dispatch(makeIsochronesRequest())
-  //   }
-  // }
 
   handleResultSelect = (e, { result }) => {
     this.setState({ open: false })
