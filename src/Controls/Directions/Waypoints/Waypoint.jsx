@@ -139,55 +139,69 @@ class Waypoint extends React.Component {
               </Label>
             }
           />
-          <Search
-            className={'pa2 ' + index}
-            size="small"
-            fluid
-            input={{ icon: 'search', iconPosition: 'left' }}
-            onSearchChange={this.handleSearchChange}
-            onResultSelect={this.handleResultSelect}
-            resultRenderer={this.resultRenderer}
-            type="text"
-            showNoResults={false}
-            open={this.state.open}
-            onFocus={() => this.setState({ open: true })}
-            onMouseDown={() => this.setState({ open: true })}
-            onBlur={() => this.setState({ open: false })}
-            loading={isFetching}
-            results={geocodeResults}
-            value={userInput}
-            onKeyPress={(event) => {
-              this.fetchGeocodeResults(event.key)
-            }}
-            placeholder="Hit enter for search..."
-          />
+
           <Popup
-            content={
-              use_geocoding ? 'Search for address' : 'Enter Lon/lat coordinates'
-            }
-            size={'tiny'}
+            content={userInput.length === 0 ? 'Enter Address' : userInput}
+            size="tiny"
+            mouseEnterDelay={500}
             trigger={
-              <Icon
-                className="pointer"
-                name="checkmark"
-                disabled={userInput.length === 0}
+              <Search
+                className={'pa2 ' + index}
                 size="small"
-                onClick={() => this.fetchGeocodeResults('Enter')}
+                fluid
+                input={{ icon: 'search', iconPosition: 'left' }}
+                onSearchChange={this.handleSearchChange}
+                onResultSelect={this.handleResultSelect}
+                resultRenderer={this.resultRenderer}
+                type="text"
+                showNoResults={false}
+                open={this.state.open}
+                onFocus={() => this.setState({ open: true })}
+                onMouseDown={() => this.setState({ open: true })}
+                onBlur={() => this.setState({ open: false })}
+                loading={isFetching}
+                results={geocodeResults}
+                value={userInput}
+                onKeyPress={(event) => {
+                  this.fetchGeocodeResults(event.key)
+                }}
+                placeholder="Hit enter for search..."
               />
             }
           />
-          <Popup
-            content={'Remove this waypoint'}
-            size={'tiny'}
-            trigger={
-              <Icon
-                className="pointer"
-                name="remove"
-                size="small"
-                onClick={() => dispatch(doRemoveWaypoint(index))}
-              />
-            }
-          />
+          <div style={{ margin: '3px' }}>
+            <Popup
+              content={
+                use_geocoding
+                  ? 'Search for address'
+                  : 'Enter Lon/lat coordinates'
+              }
+              size={'tiny'}
+              trigger={
+                <Icon
+                  className="pointer"
+                  name="checkmark"
+                  disabled={userInput.length === 0}
+                  size="32px"
+                  onClick={() => this.fetchGeocodeResults('Enter')}
+                />
+              }
+            />
+          </div>
+          <div style={{ margin: '3px' }}>
+            <Popup
+              content={'Remove this waypoint'}
+              size={'tiny'}
+              trigger={
+                <Icon
+                  className="pointer"
+                  name="remove"
+                  size="32px"
+                  onClick={() => dispatch(doRemoveWaypoint(index))}
+                />
+              }
+            />
+          </div>
         </div>
       </React.Fragment>
     )
