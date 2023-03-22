@@ -123,6 +123,7 @@ class Maneuvers extends React.Component {
                             <Popup
                               content={'Toll'}
                               size={'tiny'}
+                              offset={[-6, 0]}
                               trigger={
                                 <div>
                                   <Icon circular name={'dollar'} size="small" />
@@ -137,6 +138,7 @@ class Maneuvers extends React.Component {
                             <Popup
                               content={'Ferry'}
                               size={'tiny'}
+                              offset={[-6, 0]}
                               trigger={
                                 <div>
                                   <Icon circular name={'ship'} size="small" />
