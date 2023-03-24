@@ -31,16 +31,11 @@ import {
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 import formatDuration from 'utils/date_time'
+import './Map.css'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 })
-
-// defining the container styles the map sits in
-const style = {
-  width: '100%',
-  height: '100vh',
-}
 
 const convertDDToDMS = (decimalDegrees) =>
   [
@@ -827,6 +822,14 @@ class Map extends React.Component {
     }
   }
 
+  handleOpenOSM = () => {
+    const { map } = this
+    const { lat, lng } = map.getCenter()
+    const zoom = map.getZoom()
+    const osmURL = `https://www.openstreetmap.org/#map=${zoom}/${lat}/${lng}`
+    window.open(osmURL, '_blank')
+  }
+
   render() {
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
@@ -1028,7 +1031,16 @@ class Map extends React.Component {
     const leafletPopupDiv = document.querySelector('.leaflet-popup-content')
     return (
       <React.Fragment>
-        <div id="map" style={style} />
+        <div>
+          <div id="map" className="map-style" />
+          <button
+            className="ui primary button"
+            id="osm-button"
+            onClick={this.handleOpenOSM}
+          >
+            Open OSM
+          </button>
+        </div>
         <div>
           {this.state.showPopup && leafletPopupDiv
             ? ReactDOM.createPortal(
