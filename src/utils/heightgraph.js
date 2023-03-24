@@ -44,13 +44,12 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
   const features = []
 
   let LineStringCoordinates = []
-  const heightClasses = []
+  let previousHeightClass
 
   let inclineTotal = 0
   let declineTotal = 0
 
   rangeHeightData.forEach((item, index) => {
-    //console.log("Current: " + item.name);
     if (index < rangeHeightData.length - 1) {
       const riseThis = item[1]
       const riseNext = rangeHeightData[index + 1][1]
@@ -66,17 +65,11 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
         declineTotal += rise * -1
       }
 
-      LineStringCoordinates.push([
-        coordinates[index][0],
-        coordinates[index][1],
-        item[1],
-      ])
-
-      if (heightClasses[heightClasses.length - 1] !== heightClass) {
+      if (previousHeightClass !== heightClass) {
         LineStringCoordinates.push([
-          coordinates[index + 1][0],
-          coordinates[index + 1][1],
-          rangeHeightData[index + 1][1],
+          coordinates[index][0],
+          coordinates[index][1],
+          rangeHeightData[index][1],
         ])
 
         features.push({
@@ -86,12 +79,17 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
             coordinates: LineStringCoordinates,
           },
           properties: {
-            attributeType: heightClass,
+            attributeType: previousHeightClass || 0,
           },
         })
         LineStringCoordinates = []
       }
-      heightClasses.push(heightClass)
+      LineStringCoordinates.push([
+        coordinates[index][0],
+        coordinates[index][1],
+        rangeHeightData[index][1],
+      ])
+      previousHeightClass = heightClass
     }
   })
 
