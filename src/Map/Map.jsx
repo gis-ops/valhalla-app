@@ -1033,7 +1033,11 @@ class Map extends React.Component {
       <React.Fragment>
         <div>
           <div id="map" className="map-style" />
-          <button className="osm-button" onClick={this.handleOpenOSM}>
+          <button
+            className="ui primary button"
+            id="osm-button"
+            onClick={this.handleOpenOSM}
+          >
             Open OSM
           </button>
         </div>
