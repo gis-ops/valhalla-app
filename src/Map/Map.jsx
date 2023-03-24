@@ -31,34 +31,11 @@ import {
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 import formatDuration from 'utils/date_time'
+import './Map.css'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 })
-
-// defining the container styles the map sits in
-const style = {
-  width: '100%',
-  height: '100vh',
-}
-
-const button_style = {
-  position: 'absolute',
-  bottom: '20px',
-  right: '60px',
-  zIndex: '1000',
-  backgroundColor: '#2185D0',
-  color: '#FFFFFF',
-  border: '1px none #333',
-  borderRadius: '4px',
-  padding: '8px 16px',
-  fontSize: '14px',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  cursor: 'pointer',
-  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-  transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
-}
 
 const convertDDToDMS = (decimalDegrees) =>
   [
@@ -1055,8 +1032,8 @@ class Map extends React.Component {
     return (
       <React.Fragment>
         <div>
-          <div id="map" style={style} />
-          <button style={button_style} onClick={this.handleOpenOSM}>
+          <div id="map" className="map-style" />
+          <button className="osm-button" onClick={this.handleOpenOSM}>
             Open OSM
           </button>
         </div>

@@ -14,7 +14,6 @@
     "jquery-ui-bundle": "^1.12.1-migrate",
     "json-format": "^1.0.1",
     "leaflet": "^1.9.3",
-    "leaflet-easybutton": "^2.4.0",
     "leaflet-extra-markers": "^1.2.1",
     "leaflet.heightgraph": "^1.4.0",
     "prop-types": "^15.8.1",
