@@ -265,6 +265,8 @@ class Map extends React.Component {
 
     const getHeightData = this.getHeightData
 
+    const { showDirectionsPanel } = this.props
+
     this.hg = L.control.heightgraph({
       mappings: colorMappings,
       graphStyle: {
@@ -285,7 +287,9 @@ class Map extends React.Component {
       highlightStyle: {
         color: 'blue',
       },
-      width: window.innerWidth * 0.9,
+      width: showDirectionsPanel
+        ? window.innerWidth * 0.75
+        : window.innerWidth * 0.9,
     })
     this.hg.addTo(this.map)
     const hg = this.hg
