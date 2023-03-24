@@ -42,6 +42,24 @@ const style = {
   height: '100vh',
 }
 
+const button_style = {
+  position: 'absolute',
+  bottom: '20px',
+  right: '60px',
+  zIndex: '1000',
+  backgroundColor: '#2185D0',
+  color: '#FFFFFF',
+  border: '1px none #333',
+  borderRadius: '4px',
+  padding: '8px 16px',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  cursor: 'pointer',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+  transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
+}
+
 const convertDDToDMS = (decimalDegrees) =>
   [
     0 | decimalDegrees,
@@ -827,6 +845,14 @@ class Map extends React.Component {
     }
   }
 
+  handleOpenOSM = () => {
+    const { map } = this
+    const { lat, lng } = map.getCenter()
+    const zoom = map.getZoom()
+    const osmURL = `https://www.openstreetmap.org/#map=${zoom}/${lat}/${lng}`
+    window.open(osmURL, '_blank')
+  }
+
   render() {
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
@@ -1028,7 +1054,12 @@ class Map extends React.Component {
     const leafletPopupDiv = document.querySelector('.leaflet-popup-content')
     return (
       <React.Fragment>
-        <div id="map" style={style} />
+        <div>
+          <div id="map" style={style} />
+          <button style={button_style} onClick={this.handleOpenOSM}>
+            Open OSM
+          </button>
+        </div>
         <div>
           {this.state.showPopup && leafletPopupDiv
             ? ReactDOM.createPortal(
