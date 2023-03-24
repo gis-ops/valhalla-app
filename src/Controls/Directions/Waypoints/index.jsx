@@ -27,16 +27,6 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 })
 
-const getListStyle = (isDraggingOver) => ({
-  //background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  width: '100%',
-  //height: 200,
-  paddingBottom: 20,
-  maxHeight: 350,
-  height: 300,
-  oveflow: 'inherit',
-})
-
 class Waypoints extends Component {
   static propTypes = {
     directions: PropTypes.object,
@@ -89,21 +79,21 @@ class Waypoints extends Component {
           {(provided, snapshot) => (
             <React.Fragment>
               <div
-                className={`flex flex-column`}
+                className="flex flex-column"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
+                style={{ minHeight: '22rem' }}
               >
                 {waypoints.map((wp, index) => (
                   <Draggable key={wp.id} draggableId={wp.id} index={index}>
-                    {(provided, snapshot) => (
+                    {(provided_inner, snapshot_inner) => (
                       <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        ref={provided_inner.innerRef}
+                        {...provided_inner.draggableProps}
+                        {...provided_inner.dragHandleProps}
                         style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
+                          snapshot_inner.isDragging,
+                          provided_inner.draggableProps.style
                         )}
                       >
                         <Waypoint

@@ -140,6 +140,7 @@ class Waypoint extends React.Component {
             }
           />
 
+
           <Popup
             content={userInput.length === 0 ? 'Enter Address' : userInput}
             size="tiny"
@@ -169,33 +170,39 @@ class Waypoint extends React.Component {
               />
             }
           />
-          <Popup
-            content={
-              use_geocoding ? 'Search for address' : 'Enter Lon/lat coordinates'
-            }
-            size={'tiny'}
-            trigger={
-              <Icon
-                className="pointer"
-                name="checkmark"
-                disabled={userInput.length === 0}
-                size="small"
-                onClick={() => this.fetchGeocodeResults('Enter')}
-              />
-            }
-          />
-          <Popup
-            content={'Remove this waypoint'}
-            size={'tiny'}
-            trigger={
-              <Icon
-                className="pointer"
-                name="remove"
-                size="small"
-                onClick={() => dispatch(doRemoveWaypoint(index))}
-              />
-            }
-          />
+          <div style={{ margin: '3px' }}>
+            <Popup
+              content={
+                use_geocoding
+                  ? 'Search for address'
+                  : 'Enter Lon/lat coordinates'
+              }
+              size={'tiny'}
+              trigger={
+                <Icon
+                  className="pointer"
+                  name="checkmark"
+                  disabled={userInput.length === 0}
+                  size="32px"
+                  onClick={() => this.fetchGeocodeResults('Enter')}
+                />
+              }
+            />
+          </div>
+          <div style={{ margin: '3px' }}>
+            <Popup
+              content={'Remove this waypoint'}
+              size={'tiny'}
+              trigger={
+                <Icon
+                  className="pointer"
+                  name="remove"
+                  size="32px"
+                  onClick={() => dispatch(doRemoveWaypoint(index))}
+                />
+              }
+            />
+          </div>
         </div>
       </React.Fragment>
     )

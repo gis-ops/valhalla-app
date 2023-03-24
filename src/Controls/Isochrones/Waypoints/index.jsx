@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
@@ -34,6 +33,9 @@ class Waypoints extends Component {
     this.handleIsoSliderUpdateSettings = debounce(
       10,
       this.handleIsoSliderUpdateSettings
+    )
+    this.makeIsochronesRequest = debounce(100, () =>
+      this.props.dispatch(makeIsochronesRequest())
     )
   }
 
@@ -83,21 +85,6 @@ class Waypoints extends Component {
     }
   }
 
-  // we really only want to call the valhalla backend if settings have changed
-  // therefor using rambda for deep object comparison
-  UNSAFE_componentWillUpdate(nextProps) {
-    const { dispatch } = this.props
-    const { maxRange, interval } = this.props.isochrones
-    const nextMaxRange = nextProps.isochrones.maxRange
-    const nextInterval = nextProps.isochrones.interval
-    if (
-      !R.equals(maxRange, nextMaxRange) ||
-      !R.equals(interval, nextInterval)
-    ) {
-      dispatch(makeIsochronesRequest())
-    }
-  }
-
   handleResultSelect = (e, { result }) => {
     this.setState({ open: false })
 
@@ -109,7 +96,7 @@ class Waypoints extends Component {
       })
     )
     dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
-    dispatch(makeIsochronesRequest())
+    this.makeIsochronesRequest()
   }
 
   handleIntervalChange = (e, { value }) => {
@@ -142,6 +129,7 @@ class Waypoints extends Component {
       intervalName,
       value,
     })
+    this.makeIsochronesRequest()
   }
 
   handleIsoSliderUpdateSettings = ({ value, maxRangeName, intervalName }) => {
@@ -233,7 +221,8 @@ class Waypoints extends Component {
                 loading={isFetching}
                 results={geocodeResults}
                 value={userInput}
-                onKeyPress={(event: React.KeyboardEvent) => {
+
+                onKeyPress={(event) => {
                   this.fetchGeocodeResults(event.key)
                 }}
                 placeholder="Hit enter for search..."
@@ -318,6 +307,9 @@ class Waypoints extends Component {
                           value: e.target.value,
                         })
                       }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
+                      }}
                     />
                   </div>
                 </div>
@@ -380,6 +372,9 @@ class Waypoints extends Component {
                           intervalName,
                           value: e.target.value,
                         })
+                      }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
                       }}
                     />
                   </div>
