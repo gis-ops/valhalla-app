@@ -221,7 +221,6 @@ class Waypoints extends Component {
                 loading={isFetching}
                 results={geocodeResults}
                 value={userInput}
-
                 onKeyPress={(event) => {
                   this.fetchGeocodeResults(event.key)
                 }}

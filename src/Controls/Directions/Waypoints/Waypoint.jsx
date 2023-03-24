@@ -139,8 +139,6 @@ class Waypoint extends React.Component {
               </Label>
             }
           />
-
-
           <Popup
             content={userInput.length === 0 ? 'Enter Address' : userInput}
             size="tiny"

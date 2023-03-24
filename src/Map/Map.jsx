@@ -282,9 +282,8 @@ class Map extends React.Component {
     })
 
     const getHeightData = this.getHeightData
-
     const { showDirectionsPanel } = this.props
-
+    
     this.hg = L.control.heightgraph({
       mappings: colorMappings,
       graphStyle: {
