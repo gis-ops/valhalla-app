@@ -8,6 +8,7 @@ import DirectionsControl from './Directions'
 import IsochronesControl from './Isochrones'
 import DirectionOutputControl from './Directions/OutputControl'
 import IsochronesOutputControl from './Isochrones/OutputControl'
+// import Popup from './popup'
 import { Segment, Tab, Button, Icon } from 'semantic-ui-react'
 import {
   updateTab,
@@ -22,6 +23,7 @@ import {
   fetchReverseGeocodeIso,
   updateIsoSettings,
 } from 'actions/isochronesActions'
+import WeatherApp from './Weather'
 
 const pairwise = (arr, func) => {
   let cnt = 0
@@ -179,13 +181,21 @@ class MainControl extends React.Component {
           </Tab.Pane>
         ),
       },
+      {
+        menuItem: 'Weather',
+        render: () => (
+          <Tab.Pane style={{ padding: '0 0 0 0' }} attached={false}>
+            <WeatherApp />
+          </Tab.Pane>
+        ),
+      },
     ]
 
     const ServiceTabs = () => (
       <>
         <Button
           icon
-          style={{ float: 'right', marginLeft: '5px' }}
+          style={{ float: 'right', marginLeft: '90px' }}
           onClick={this.handleDirectionsToggle}
         >
           <Icon name="close" />

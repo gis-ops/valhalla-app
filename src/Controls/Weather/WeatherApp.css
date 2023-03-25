@@ -1,0 +1,171 @@
+
+   .weather-app {
+    /* background: url('https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg'); */
+    background-size: cover;
+    background-position: center;
+    height: 30vh;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    margin-left: 9%;
+    margin-right: 3%;
+  }
+  
+  .form-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 700px;
+    height: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 15px;
+  }
+  
+  label {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1px;
+  }
+  
+  input[type='text'] {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  input[type='text']::placeholder {
+    color: #999;
+  }
+  
+  button[type='submit'] {
+    padding: 6px 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0077cc;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  button[type='submit']:hover {
+    background-color: #005fa3;
+  }
+  
+  .weather-data {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  h1{
+    margin-bottom: 50%;
+  }
+  
+  .weather-icon {
+    font-size: 64px;
+    color: #0077cc;
+    margin-bottom: 10px;
+  }
+  .tag{
+    padding-left: 1rem;
+  }
+  
+  .weather-description {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+  }
+  
+  .weather-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .weather-info__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33.33%;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .weather-info__item__label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .weather-info__item__value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .weather-info__item__unit {
+    font-size: 14px;
+font-weight: bold;
+color: #555;
+margin-left: 5px;
+}
+
+.weather-info__item__value--temperature {
+color: #ff9933;
+}
+
+.weather-info__item__value--air-quality {
+color: #ff4444;
+}
+
+.weather-info__item__value--wind-speed {
+color: #0077cc;
+}
+
+.weather-info__item__value--humidity {
+color: #4caf50;
+}
+
+.weather-info__item__value--cloudiness {
+color: #9c27b0;
+}
+
+.weather-info__item__value--pressure {
+color: #ff5722;
+}
+  

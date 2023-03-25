@@ -91,6 +91,7 @@ class DirectionsControl extends React.Component {
                 activeProfile={profile}
                 handleUpdateProfile={this.handleUpdateProfile}
               />
+
               <SettingsButton handleSettings={this.handleSettings} />
             </div>
             <div className="flex flex-wrap justify-between">
