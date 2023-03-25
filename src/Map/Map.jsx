@@ -88,6 +88,7 @@ const mapParams = {
   zoom: zoom_initial,
   maxZoom: 18,
   minZoom: 3,
+  worldCopyJump: true,
   layers: [
     isoCenterLayer,
     routeMarkersLayer,
