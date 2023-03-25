@@ -8,7 +8,7 @@ import DirectionsControl from './Directions'
 import IsochronesControl from './Isochrones'
 import DirectionOutputControl from './Directions/OutputControl'
 import IsochronesOutputControl from './Isochrones/OutputControl'
-// import Popup from './popup'
+
 import { Segment, Tab, Button, Icon } from 'semantic-ui-react'
 import {
   updateTab,
