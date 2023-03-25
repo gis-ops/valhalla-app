@@ -311,6 +311,13 @@ export const doRemoveWaypoint = (index) => (dispatch, getState) => {
   dispatch(updatePermalink())
 }
 
+export const isWaypoint = (index) => (dispatch, getState) => {
+  const waypoints = getState().directions.waypoints
+  if (waypoints[index].geocodeResults.length > 0) {
+    dispatch(clearRoutes(VALHALLA_OSM_URL))
+  }
+}
+
 export const highlightManeuver = (fromTo) => (dispatch, getState) => {
   const highlightSegment = getState().directions.highlightSegment
   // this is dehighlighting
@@ -364,6 +371,7 @@ export const doAddWaypoint = (doInsert) => (dispatch, getState) => {
     isFetching: false,
     userInput: '',
   }
+  //console.log(emptyWp)
   if (doInsert) {
     dispatch(insertWaypoint(emptyWp))
   } else {

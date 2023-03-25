@@ -7,10 +7,8 @@ import {
   updateTextInput,
   fetchGeocode,
   makeRequest,
-  clearRoutes,
+  isWaypoint,
 } from 'actions/directionsActions'
-
-import { VALHALLA_OSM_URL } from 'utils/valhalla'
 
 import { zoomTo } from 'actions/commonActions'
 import { isValidCoordinates } from 'utils/geom'
@@ -80,7 +78,7 @@ class Waypoint extends React.Component {
         index: index,
       })
     )
-    dispatch(clearRoutes(VALHALLA_OSM_URL))
+    dispatch(isWaypoint(index))
   }
 
   // handleSelectionChange = event => {
