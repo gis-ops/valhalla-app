@@ -84,10 +84,11 @@ const maxBounds = maxBoundsString
 const mapParams = {
   center,
   maxBounds,
+  maxBoundsViscosity: 1.0,
   zoomControl: false,
   zoom: zoom_initial,
   maxZoom: 18,
-  minZoom: 3,
+  minZoom: 2,
   worldCopyJump: true,
   layers: [
     isoCenterLayer,
