@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 
 import { Search, Form, Popup, Icon, Label, Accordion } from 'semantic-ui-react'
 import { Slider } from '@mui/material'
@@ -34,6 +33,9 @@ class Waypoints extends Component {
     this.handleIsoSliderUpdateSettings = debounce(
       10,
       this.handleIsoSliderUpdateSettings
+    )
+    this.makeIsochronesRequest = debounce(100, () =>
+      this.props.dispatch(makeIsochronesRequest())
     )
   }
 
@@ -83,21 +85,6 @@ class Waypoints extends Component {
     }
   }
 
-  // we really only want to call the valhalla backend if settings have changed
-  // therefor using rambda for deep object comparison
-  UNSAFE_componentWillUpdate(nextProps) {
-    const { dispatch } = this.props
-    const { maxRange, interval } = this.props.isochrones
-    const nextMaxRange = nextProps.isochrones.maxRange
-    const nextInterval = nextProps.isochrones.interval
-    if (
-      !R.equals(maxRange, nextMaxRange) ||
-      !R.equals(interval, nextInterval)
-    ) {
-      dispatch(makeIsochronesRequest())
-    }
-  }
-
   handleResultSelect = (e, { result }) => {
     this.setState({ open: false })
 
@@ -109,7 +96,7 @@ class Waypoints extends Component {
       })
     )
     dispatch(zoomTo([[result.addresslnglat[1], result.addresslnglat[0]]]))
-    dispatch(makeIsochronesRequest())
+    this.makeIsochronesRequest()
   }
 
   handleIntervalChange = (e, { value }) => {
@@ -142,6 +129,7 @@ class Waypoints extends Component {
       intervalName,
       value,
     })
+    this.makeIsochronesRequest()
   }
 
   handleIsoSliderUpdateSettings = ({ value, maxRangeName, intervalName }) => {
@@ -212,26 +200,33 @@ class Waypoints extends Component {
           className="pa2 flex flex-row justify-between"
           style={{ alignItems: 'center' }}
         >
-          <Search
-            size="small"
-            type="text"
-            minCharacters={3}
-            className={'pt2 pl3'}
-            input={{ icon: 'search', iconPosition: 'left' }}
-            onSearchChange={this.handleSearchChange}
-            onResultSelect={this.handleResultSelect}
-            resultRenderer={this.resultRenderer}
-            showNoResults={false}
-            open={this.state.open}
-            onFocus={() => this.setState({ open: true })}
-            onMouseDown={() => this.setState({ open: true })}
-            loading={isFetching}
-            results={geocodeResults}
-            value={userInput}
-            onKeyPress={(event: React.KeyboardEvent) => {
-              this.fetchGeocodeResults(event.key)
-            }}
-            placeholder="Hit enter for search..."
+          <Popup
+            content={userInput.length === 0 ? 'Enter Address' : userInput}
+            size="tiny"
+            mouseEnterDelay={500}
+            trigger={
+              <Search
+                size="small"
+                type="text"
+                minCharacters={3}
+                className={'pt2 pl3'}
+                input={{ icon: 'search', iconPosition: 'left' }}
+                onSearchChange={this.handleSearchChange}
+                onResultSelect={this.handleResultSelect}
+                resultRenderer={this.resultRenderer}
+                showNoResults={false}
+                open={this.state.open}
+                onFocus={() => this.setState({ open: true })}
+                onMouseDown={() => this.setState({ open: true })}
+                loading={isFetching}
+                results={geocodeResults}
+                value={userInput}
+                onKeyPress={(event) => {
+                  this.fetchGeocodeResults(event.key)
+                }}
+                placeholder="Hit enter for search..."
+              />
+            }
           />
           <Settings handleRemoveIsos={this.handleRemoveIsos} />
         </div>
@@ -247,7 +242,7 @@ class Waypoints extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === 0}>
               <Form size={'small'}>
-                <div className={'pt3 pl3'}>
+                <div className={'pt3 pl3 pr3'}>
                   <Form.Group inline>
                     <Form.Input
                       width={12}
@@ -311,10 +306,13 @@ class Waypoints extends Component {
                           value: e.target.value,
                         })
                       }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
+                      }}
                     />
                   </div>
                 </div>
-                <div className={'pt3 pl3'}>
+                <div className={'pt3 pl3 pr3'}>
                   <Form.Group inline>
                     <Form.Input
                       width={12}
@@ -373,6 +371,9 @@ class Waypoints extends Component {
                           intervalName,
                           value: e.target.value,
                         })
+                      }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
                       }}
                     />
                   </div>

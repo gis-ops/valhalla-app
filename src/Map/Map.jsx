@@ -30,17 +30,12 @@ import {
   buildLocateRequest,
 } from 'utils/valhalla'
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
-
+import formatDuration from 'utils/date_time'
+import './Map.css'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 })
-
-// defining the container styles the map sits in
-const style = {
-  width: '100%',
-  height: '100vh',
-}
 
 const convertDDToDMS = (decimalDegrees) =>
   [
@@ -66,7 +61,14 @@ const highlightRouteIndexLayer = L.featureGroup()
 const excludePolygonsLayer = L.featureGroup()
 
 const centerCoords = process.env.REACT_APP_CENTER_COORDS.split(',')
-const center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
+let center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
+let zoom_initial = 10
+
+if (localStorage.getItem('last_center')) {
+  const last_center = JSON.parse(localStorage.getItem('last_center'))
+  center = last_center.center
+  zoom_initial = last_center.zoom_level
+}
 
 const maxBoundsString = process.env.REACT_APP_MAX_BOUNDS?.split(',')
 const maxBounds = maxBoundsString
@@ -83,9 +85,10 @@ const mapParams = {
   center,
   maxBounds,
   zoomControl: false,
-  zoom: 10,
+  zoom: zoom_initial,
   maxZoom: 18,
   minZoom: 3,
+  worldCopyJump: true,
   layers: [
     isoCenterLayer,
     routeMarkersLayer,
@@ -230,6 +233,17 @@ class Map extends React.Component {
       }
     })
 
+    this.map.on('moveend', () => {
+      const last_coords = this.map.getCenter()
+      const zoom_level = this.map.getZoom()
+
+      const last_center = JSON.stringify({
+        center: [last_coords.lat, last_coords.lng],
+        zoom_level: zoom_level,
+      })
+      localStorage.setItem('last_center', last_center)
+    })
+
     // add Leaflet-Geoman controls with some options to the map
     this.map.pm.addControls({
       position: 'topright',
@@ -289,6 +303,8 @@ class Map extends React.Component {
     })
     this.hg.addTo(this.map)
     const hg = this.hg
+    // Added title property to heightgraph-toggle element to show "Height Graph" tooltip
+    $('.heightgraph-toggle').prop('title', 'Height Graph')
     $('.heightgraph').resizable({
       handles: 'w, n, nw',
       minWidth: 380,
@@ -502,6 +518,13 @@ class Map extends React.Component {
     }
   }
 
+  handleCopy = () => {
+    this.setState({ hasCopied: true })
+    setTimeout(() => {
+      this.setState({ hasCopied: false })
+    }, 1000)
+  }
+
   addIsochrones = () => {
     const { results } = this.props.isochrones
     isoPolygonLayer.clearLayers()
@@ -542,14 +565,6 @@ class Map extends React.Component {
     }
   }
 
-  formatDuration = (durationInSeconds) => {
-    const date = new Date(durationInSeconds * 1000)
-    const days = date.getDate() - 1 > 0 ? date.getDate() - 1 + 'd ' : ''
-    const hours = date.getHours() > 0 ? date.getHours() + 'h ' : ''
-    const minutes = date.getMinutes() > 0 ? date.getMinutes() + 'min' : ''
-    return days + hours + minutes
-  }
-
   getRouteToolTip = (summary, provider) => {
     return `
     <div class="ui list">
@@ -567,7 +582,7 @@ class Map extends React.Component {
         <div class="item">
           <i class="time icon"></i>
           <div class="content">
-            ${this.formatDuration(summary.time)}
+            ${formatDuration(summary.time)}
           </div>
         </div>
       </div>
@@ -808,6 +823,14 @@ class Map extends React.Component {
     }
   }
 
+  handleOpenOSM = () => {
+    const { map } = this
+    const { lat, lng } = map.getCenter()
+    const zoom = map.getZoom()
+    const osmURL = `https://www.openstreetmap.org/#map=${zoom}/${lat}/${lng}`
+    window.open(osmURL, '_blank')
+  }
+
   render() {
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
@@ -837,7 +860,7 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lat.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -866,7 +889,7 @@ class Map extends React.Component {
                       ',' +
                       this.state.latLng.lng.toFixed(6)
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -896,7 +919,7 @@ class Map extends React.Component {
                       convertDDToDMS(this.state.latLng.lng) +
                       ' E'
                     }
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -920,7 +943,7 @@ class Map extends React.Component {
                   />
                   <CopyToClipboard
                     text={JSON.stringify(this.state.locate)}
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button
                       disabled={this.state.locate.length === 0}
@@ -948,7 +971,7 @@ class Map extends React.Component {
                         "lon": ${this.state.latLng.lng.toFixed(6)},
                         "lat": ${this.state.latLng.lat.toFixed(6)}
                       }`}
-                    onCopy={() => this.setState({ hasCopied: true })}
+                    onCopy={this.handleCopy}
                   >
                     <Button compact icon="copy" />
                   </CopyToClipboard>
@@ -1009,7 +1032,16 @@ class Map extends React.Component {
     const leafletPopupDiv = document.querySelector('.leaflet-popup-content')
     return (
       <React.Fragment>
-        <div id="map" style={style} />
+        <div>
+          <div id="map" className="map-style" />
+          <button
+            className="ui primary button"
+            id="osm-button"
+            onClick={this.handleOpenOSM}
+          >
+            Open OSM
+          </button>
+        </div>
         <div>
           {this.state.showPopup && leafletPopupDiv
             ? ReactDOM.createPortal(

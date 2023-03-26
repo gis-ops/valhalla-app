@@ -129,8 +129,8 @@ export const directions = (state = initialState, action) => {
             ? {
                 ...waypoint,
                 userInput: action.payload.inputValue,
-                geocodeResults: waypoint.geocodeResults.map((result, i) =>
-                  i === action.payload.addressindex
+                geocodeResults: waypoint.geocodeResults.map((result, j) =>
+                  j === action.payload.addressindex
                     ? { ...result, selected: true }
                     : { ...result, selected: false }
                 ),

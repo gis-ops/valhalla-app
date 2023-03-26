@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { intervalToDuration } from 'date-fns'
 
 import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
+import formatDuration from 'utils/date_time'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -21,28 +21,6 @@ class Summary extends React.Component {
     dispatch(showProvider(data.provider, data.checked))
   }
 
-  formatDuration = (durationInSeconds) => {
-    const duration = intervalToDuration({
-      start: 0,
-      end: durationInSeconds * 1000,
-    })
-
-    let durationStr = ''
-    if (duration.days > 0) {
-      durationStr += duration.days + 'd '
-    }
-    if (duration.hours > 0) {
-      durationStr += duration.hours + 'h '
-    }
-    if (duration.minutes > 0) {
-      durationStr += duration.minutes + 'm '
-    }
-    if (duration.seconds > 0) {
-      durationStr += duration.seconds + 's'
-    }
-    return durationStr
-  }
-
   render() {
     const { provider, results, inclineDeclineTotal } = this.props
 
@@ -54,6 +32,59 @@ class Summary extends React.Component {
           <React.Fragment>
             <div className="flex mb1">
               <span className="b">Directions</span>
+              {summary.has_highway && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Highway'}
+                    size={'tiny'}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon
+                          circular
+                          name={'road'}
+                          size="small"
+                          style={{ marginRight: '-10px' }}
+                        />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+              {summary.has_ferry && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Ferry'}
+                    size={'tiny'}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon
+                          circular
+                          name={'ship'}
+                          size="small"
+                          style={{ marginRight: '-10px' }}
+                        />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
+              {summary.has_toll && (
+                <div style={{ marginLeft: '1em' }}>
+                  <Popup
+                    content={'Toll'}
+                    size={'tiny'}
+                    style={{ marginRight: '-10px' }}
+                    trigger={
+                      <div className={'flex'}>
+                        <Icon circular name={'dollar'} size="small" />
+                        <div className={'dib pa1 f6'}></div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
             </div>
             <div className={'flex justify-between pb2 pointer'}>
               <div
@@ -81,7 +112,7 @@ class Summary extends React.Component {
               >
                 <Icon circular name={'time'} size="small" />
                 <div className={'dib v-mid pa1 b f6'}>
-                  {this.formatDuration(summary.time)}
+                  {formatDuration(summary.time)}
                 </div>
               </div>
               <div style={{ alignSelf: 'center' }}>

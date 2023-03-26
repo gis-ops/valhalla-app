@@ -61,3 +61,11 @@ i.help.grey.icon {
   font-size: 12px;
   font-weight: bold;
 }
+
+.ui.menu .item{
+  width: 50%;
+}
+
+.ui.menu:not(.vertical) .item{
+  justify-content: center;
+}

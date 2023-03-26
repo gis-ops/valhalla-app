@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
-import { Header, Icon, Divider } from 'semantic-ui-react'
+import { Header, Icon, Divider, Popup } from 'semantic-ui-react'
 
 import { highlightManeuver, zoomToManeuver } from 'actions/directionsActions'
 
@@ -109,14 +109,45 @@ class Maneuvers extends React.Component {
                       </div>
                       <div
                         style={{
-                          alignSelf: 'center',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent:
+                            mnv.toll && mnv.ferry
+                              ? 'space-between'
+                              : 'flex-start',
                           flexBasis: '80px',
                         }}
                       >
-                        <Icon circular name={'bolt'} size="small" />
-                        <div className={'dib pa1 f6'}>
-                          {mnv.cost.toFixed(2)}
-                        </div>
+                        {mnv.toll && (
+                          <div className={'flex align-center'}>
+                            <Popup
+                              content={'Toll'}
+                              size={'tiny'}
+                              offset={[-6, 0]}
+                              trigger={
+                                <div>
+                                  <Icon circular name={'dollar'} size="small" />
+                                  <div className={'dib pa1 f6'}></div>
+                                </div>
+                              }
+                            />
+                          </div>
+                        )}
+                        {mnv.ferry && (
+                          <div className={'flex align-center'}>
+                            <Popup
+                              content={'Ferry'}
+                              size={'tiny'}
+                              offset={[-6, 0]}
+                              trigger={
+                                <div>
+                                  <Icon circular name={'ship'} size="small" />
+                                  <div className={'dib pa1 f6'}></div>
+                                </div>
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
