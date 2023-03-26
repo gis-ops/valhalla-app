@@ -132,6 +132,8 @@ class Map extends React.Component {
       isHeightLoading: false,
       locate: [],
     }
+    this.map = null
+    this.handleLocateMe = this.handleLocateMe.bind(this)
   }
 
   // and once the component has mounted we add everything to it
@@ -831,6 +833,13 @@ class Map extends React.Component {
     window.open(osmURL, '_blank')
   }
 
+  handleLocateMe = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { longitude, latitude } = position.coords
+      this.map.setView([latitude, longitude], 12)
+    })
+  }
+
   render() {
     const { activeTab } = this.props
     const MapPopup = (isInfo) => {
@@ -1040,6 +1049,14 @@ class Map extends React.Component {
             onClick={this.handleOpenOSM}
           >
             Open OSM
+          </button>
+          <button
+            className="ui primary button"
+            id="locateme"
+            onClick={this.handleLocateMe}
+            title="Move to your location"
+          >
+            <Icon name="map marker alternate" />
           </button>
         </div>
         <div>
