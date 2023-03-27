@@ -371,7 +371,6 @@ export const doAddWaypoint = (doInsert) => (dispatch, getState) => {
     isFetching: false,
     userInput: '',
   }
-  //console.log(emptyWp)
   if (doInsert) {
     dispatch(insertWaypoint(emptyWp))
   } else {
