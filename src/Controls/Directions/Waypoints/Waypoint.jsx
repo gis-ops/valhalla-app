@@ -7,6 +7,7 @@ import {
   updateTextInput,
   fetchGeocode,
   makeRequest,
+  isWaypoint,
 } from 'actions/directionsActions'
 
 import { zoomTo } from 'actions/commonActions'
@@ -77,6 +78,7 @@ class Waypoint extends React.Component {
         index: index,
       })
     )
+    dispatch(isWaypoint(index))
   }
 
   // handleSelectionChange = event => {
