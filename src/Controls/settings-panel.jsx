@@ -8,7 +8,6 @@ import 'react-modern-drawer/dist/index.css'
 import {
   Divider,
   Form,
-  Grid,
   Header,
   Icon,
   Popup,
@@ -82,6 +81,7 @@ class SettingsPanel extends React.Component {
       generalSettings: {},
       extraSettings: {},
       copied: false,
+      activeIndex: -1,
     }
   }
 
@@ -172,12 +172,18 @@ class SettingsPanel extends React.Component {
     return JSON.stringify(filterProfileSettings(profile, settings))
   }
 
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const newIndex = this.state.activeIndex === index ? -1 : index
+    this.setState({ activeIndex: newIndex })
+  }
+
   render() {
     const { dispatch, profile, settings, showSettings } = this.props
 
     const no_profile_settings = profile_settings[profile].boolean.length === 0
     const width = no_profile_settings ? 200 : 400
-
+    const { activeIndex } = this.state
     return (
       <>
         <Drawer
@@ -192,127 +198,24 @@ class SettingsPanel extends React.Component {
           }}
         >
           <Segment>
-            <Grid columns={16} divided>
-              <Grid.Row>
-                {!no_profile_settings && (
-                  <Grid.Column width={8}>
-                    <Form size={'small'}>
-                      <Header as="h4">Extra Settings</Header>
-                      {profile_settings[profile].numeric.map((option, key) => (
-                        <Fragment key={key}>
-                          <div className="flex pointer">
-                            <div
-                              onClick={() =>
-                                this.handleShowSettings('extraSettings', key)
-                              }
-                            >
-                              <Icon
-                                name={
-                                  this.state.extraSettings[key]
-                                    ? 'caret down'
-                                    : 'caret right'
-                                }
-                              />
-                              <span className="b f6">{option.name}</span>
-                            </div>
-                            <div
-                              style={{
-                                marginLeft: 'auto',
-                              }}
-                            >
-                              <Popup
-                                content={option.description}
-                                size={'tiny'}
-                                trigger={
-                                  <Icon color="grey" name="help circle" />
-                                }
-                              />
-                            </div>
-                          </div>
-                          {this.state.extraSettings[key] ? (
-                            <CustomSlider
-                              key={key}
-                              option={option}
-                              dispatch={dispatch}
-                              settings={settings}
-                              profile={profile}
-                              handleUpdateSettings={this.handleUpdateSettings}
-                            />
-                          ) : null}
-                        </Fragment>
-                      ))}
-                      <Divider />
-                      <Fragment>
-                        {profile_settings[profile].boolean.map(
-                          (option, key) => {
-                            return (
-                              <div key={key} className="flex">
-                                <Checkbox
-                                  option={option}
-                                  dispatch={dispatch}
-                                  settings={settings}
-                                />
-                                <div
-                                  style={{
-                                    marginLeft: 'auto',
-                                  }}
-                                >
-                                  <Popup
-                                    content={option.description}
-                                    size={'tiny'}
-                                    trigger={
-                                      <Icon color="grey" name="help circle" />
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            )
-                          }
-                        )}
-                      </Fragment>
-                      <Divider />
-                      <Fragment>
-                        {profile_settings[profile].enum.map((option, key) => {
-                          return (
-                            <div key={key} className="flex">
-                              <Dropdown
-                                placeholder="Select Bicycle Type"
-                                fluid
-                                onChange={this.handleBikeTypeChange}
-                                value={settings.bicycle_type}
-                                selection
-                                name={'bicycle_type'}
-                                options={option.enums}
-                              />
-
-                              <div
-                                style={{
-                                  marginLeft: 'auto',
-                                }}
-                              >
-                                <Popup
-                                  content={option.description}
-                                  size={'tiny'}
-                                  trigger={
-                                    <Icon color="grey" name="help circle" />
-                                  }
-                                />
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </Fragment>
-                    </Form>
-                  </Grid.Column>
-                )}
-                <Grid.Column width={no_profile_settings ? 16 : 8}>
-                  <Form size={'small'}>
-                    <div className={'flex flex-row justify-between'}>
-                      <Header as="h4">General Settings</Header>
-                      <Button icon onClick={() => dispatch(doShowSettings())}>
-                        <Icon name="close" />
-                      </Button>
-                    </div>
+            <div className="panel-container">
+              <div className="panel-section general-settings">
+                <Form size={'small'}>
+                  <div className="panel-header">
+                    <Header as="h4">General Settings</Header>
+                    <Button
+                      icon
+                      onClick={() => dispatch(doShowSettings())}
+                      style={{
+                        position: 'absolute',
+                        right: -10,
+                        top: -6,
+                      }}
+                    >
+                      <Icon name="close" />
+                    </Button>
+                  </div>
+                  <div className="panel-content">
                     <Accordion>
                       {settings_general[profile].numeric.map((option, key) => (
                         <Fragment key={key}>
@@ -405,39 +308,176 @@ class SettingsPanel extends React.Component {
                         </div>
                       )
                     })}
-                  </Form>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={16}>
-                  <CopyToClipboard
-                    text={this.extractSettings(profile, settings)}
-                    onCopy={this.handleColorCopy}
-                  >
-                    <Button
-                      basic
-                      size="mini"
-                      icon
-                      color={this.state.copied ? 'green' : undefined}
-                      labelPosition="left"
+                  </div>
+                </Form>
+              </div>
+              {!no_profile_settings && (
+                <div className="panel-section extra-settings">
+                  <Accordion>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={this.handleClick}
                     >
-                      <Icon name="copy" />
-                      Copy to Clipboard
-                    </Button>
-                  </CopyToClipboard>
-                  <Button
-                    basic
-                    size="mini"
-                    icon
-                    onClick={this.resetConfigSettings}
-                    labelPosition="left"
-                  >
-                    <Icon name="remove" />
-                    Reset
-                  </Button>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+                      <Header as="h4">
+                        <Icon name="dropdown" />
+                        Extra Settings
+                      </Header>
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <Form size={'small'}>
+                        <div className="panel-content">
+                          {profile_settings[profile].numeric.map(
+                            (option, key) => (
+                              <Fragment key={key}>
+                                <div className="flex pointer">
+                                  <div
+                                    onClick={() =>
+                                      this.handleShowSettings(
+                                        'extraSettings',
+                                        key
+                                      )
+                                    }
+                                  >
+                                    <Icon
+                                      name={
+                                        this.state.extraSettings[key]
+                                          ? 'caret down'
+                                          : 'caret right'
+                                      }
+                                    />
+                                    <span className="b f6">{option.name}</span>
+                                  </div>
+                                  <div
+                                    style={{
+                                      marginLeft: 'auto',
+                                    }}
+                                  >
+                                    <Popup
+                                      content={option.description}
+                                      size={'tiny'}
+                                      trigger={
+                                        <Icon color="grey" name="help circle" />
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                {this.state.extraSettings[key] ? (
+                                  <CustomSlider
+                                    key={key}
+                                    option={option}
+                                    dispatch={dispatch}
+                                    settings={settings}
+                                    profile={profile}
+                                    handleUpdateSettings={
+                                      this.handleUpdateSettings
+                                    }
+                                  />
+                                ) : null}
+                              </Fragment>
+                            )
+                          )}
+                          <Divider />
+                          <Fragment>
+                            {profile_settings[profile].boolean.map(
+                              (option, key) => {
+                                return (
+                                  <div key={key} className="flex">
+                                    <Checkbox
+                                      option={option}
+                                      dispatch={dispatch}
+                                      settings={settings}
+                                    />
+                                    <div
+                                      style={{
+                                        marginLeft: 'auto',
+                                      }}
+                                    >
+                                      <Popup
+                                        content={option.description}
+                                        size={'tiny'}
+                                        trigger={
+                                          <Icon
+                                            color="grey"
+                                            name="help circle"
+                                          />
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                )
+                              }
+                            )}
+                          </Fragment>
+                          <Divider />
+                          <Fragment>
+                            {profile_settings[profile].enum.map(
+                              (option, key) => {
+                                return (
+                                  <div key={key} className="flex">
+                                    <Dropdown
+                                      placeholder="Select Bicycle Type"
+                                      fluid
+                                      onChange={this.handleBikeTypeChange}
+                                      value={settings.bicycle_type}
+                                      selection
+                                      name={'bicycle_type'}
+                                      options={option.enums}
+                                    />
+
+                                    <div
+                                      style={{
+                                        marginLeft: 'auto',
+                                      }}
+                                    >
+                                      <Popup
+                                        content={option.description}
+                                        size={'tiny'}
+                                        trigger={
+                                          <Icon
+                                            color="grey"
+                                            name="help circle"
+                                          />
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                )
+                              }
+                            )}
+                          </Fragment>
+                        </div>
+                      </Form>
+                    </Accordion.Content>
+                  </Accordion>
+                </div>
+              )}
+            </div>
+            <CopyToClipboard
+              text={this.extractSettings(profile, settings)}
+              onCopy={this.handleColorCopy}
+            >
+              <Button
+                basic
+                size="mini"
+                icon
+                color={this.state.copied ? 'green' : undefined}
+                labelPosition="left"
+              >
+                <Icon name="copy" />
+                Copy to Clipboard
+              </Button>
+            </CopyToClipboard>
+            <Button
+              basic
+              size="mini"
+              icon
+              onClick={this.resetConfigSettings}
+              labelPosition="left"
+            >
+              <Icon name="remove" />
+              Reset
+            </Button>
           </Segment>
         </Drawer>
       </>

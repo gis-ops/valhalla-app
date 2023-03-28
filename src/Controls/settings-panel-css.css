@@ -1,0 +1,44 @@
+/* Custom styles for the panel */
+.panel-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-section {
+  margin-bottom: 1rem;
+}
+
+.general-settings {
+  order: 1;
+}
+
+.extra-settings {
+  order: 2;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.panel-header h4 {
+  margin: 0;
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-content .setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.panel-content .setting-row:last-child {
+  margin-bottom: 0;
+}
