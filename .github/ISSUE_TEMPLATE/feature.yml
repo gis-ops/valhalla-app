@@ -1,7 +1,7 @@
 name: 🌟 Feature Request
 description: Have a new idea/feature for this project? Please suggest!
-title: '[FEATURE] <description>'
-labels: ['🌟feature']
+title: '<description>'
+labels: enhancement
 body:
   - type: textarea
     id: description
