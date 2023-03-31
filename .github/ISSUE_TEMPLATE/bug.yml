@@ -1,7 +1,7 @@
 name: 🐛 Bug
 description: Report an issue to help improve the project.
-title: "[BUG] <description>"
-labels: ['🐛bug']
+title: "<description>"
+labels: bug
 body:
   - type: textarea
     id: description
