@@ -2,7 +2,7 @@ import React from 'react'
 
 export const SettingsFooter = () => {
   return (
-    <div className="ml2">
+    <div className="ml2 mr2">
       <span className="custom-label">
         Calculations by{' '}
         <a
