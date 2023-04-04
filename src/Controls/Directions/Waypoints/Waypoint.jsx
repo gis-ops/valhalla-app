@@ -184,7 +184,8 @@ class Waypoint extends React.Component {
                   className="pointer"
                   name="checkmark"
                   disabled={userInput.length === 0}
-                  size="32px"
+                  // size="32px"
+                  size="tiny"
                   onClick={() => this.fetchGeocodeResults('Enter')}
                 />
               }
@@ -198,7 +199,8 @@ class Waypoint extends React.Component {
                 <Icon
                   className="pointer"
                   name="remove"
-                  size="32px"
+                  // size="32px"
+                  size="tiny"
                   onClick={() => dispatch(doRemoveWaypoint(index))}
                 />
               }
