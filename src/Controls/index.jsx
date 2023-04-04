@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
-import { SemanticToastContainer, toast } from 'react-semantic-toasts'
+import { toast } from 'react-toastify'
 import DirectionsControl from './Directions'
 import IsochronesControl from './Isochrones'
 import DirectionOutputControl from './Directions/OutputControl'
@@ -52,24 +52,21 @@ class MainControl extends React.Component {
   componentDidMount = () => {
     const { dispatch } = this.props
 
-    // toast({
-    //   type: 'warning',
-    //   icon: 'desktop',
-    //   title: 'Expected Downtime',
-    //   description:
-    //     'Due to server maintenance, Valhalla is offline until the evening of January 10th.',
-    //   time: 5000
-    // })
-
     this.getLastUpdate()
 
-    toast({
-      type: 'success',
-      icon: 'heart',
-      title: 'Welcome to Valhalla!',
-      description: 'Global Routing Service - funded by FOSSGIS e.V.',
-      time: 5000,
-    })
+    toast.success(
+      'Welcome to Valhalla! Global Routing Service - funded by FOSSGIS e.V.',
+      {
+        position: 'bottom-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      }
+    )
 
     const params = Object.fromEntries(new URL(document.location).searchParams)
 
@@ -137,12 +134,15 @@ class MainControl extends React.Component {
   componentDidUpdate = (prevProps) => {
     const { message } = this.props
     if (message.receivedAt > prevProps.message.receivedAt) {
-      toast({
-        type: message.type,
-        icon: message.icon,
-        title: message.topic,
-        description: message.description,
-        time: 5000,
+      toast.message.type(message.description, {
+        position: 'bottom-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
       })
     }
   }
@@ -259,7 +259,6 @@ class MainControl extends React.Component {
               : '0000-00-00, 00:00'}
           </div>
         </Drawer>
-        <SemanticToastContainer position="bottom-center" maxToasts={1} />
       </>
     )
   }

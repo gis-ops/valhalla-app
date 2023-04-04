@@ -17,6 +17,7 @@ import axios from 'axios'
 import * as R from 'ramda'
 import ExtraMarkers from './extraMarkers'
 import { Button, Label, Icon, Popup } from 'semantic-ui-react'
+import { ToastContainer } from 'react-toastify'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   fetchReverseGeocode,
@@ -646,12 +647,9 @@ class Map extends React.Component {
       }
       excludePolygons.push(lngLatArray)
     })
-
     const { dispatch } = this.props
-
     const name = 'exclude_polygons'
     const value = excludePolygons
-
     dispatch(
       updateSettings({
         name,
@@ -1034,6 +1032,19 @@ class Map extends React.Component {
     return (
       <React.Fragment>
         <div>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={5000}
+            limit={1}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           <div id="map" className="map-style" />
           <button
             className="ui primary button"
