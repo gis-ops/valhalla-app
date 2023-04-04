@@ -32,7 +32,7 @@ import {
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 import formatDuration from 'utils/date_time'
 import './Map.css'
-const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
+const OSMTiles = L.tileLayer(import.meta.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 })
@@ -60,7 +60,7 @@ const highlightRouteSegmentlayer = L.featureGroup()
 const highlightRouteIndexLayer = L.featureGroup()
 const excludePolygonsLayer = L.featureGroup()
 
-const centerCoords = process.env.REACT_APP_CENTER_COORDS.split(',')
+const centerCoords = import.meta.env.REACT_APP_CENTER_COORDS.split(',')
 let center = [parseFloat(centerCoords[0]), parseFloat(centerCoords[1])]
 let zoom_initial = 10
 
@@ -70,7 +70,7 @@ if (localStorage.getItem('last_center')) {
   zoom_initial = last_center.zoom_level
 }
 
-const maxBoundsString = process.env.REACT_APP_MAX_BOUNDS?.split(',')
+const maxBoundsString = import.meta.env.REACT_APP_MAX_BOUNDS?.split(',')
 const maxBounds = maxBoundsString
   ? [
       //south west corner
