@@ -15,11 +15,13 @@ import {
   ZOOM_TO_MNV,
   UPDATE_INCLINE_DECLINE,
 } from './types'
+
 import {
   reverse_geocode,
   forward_geocode,
   parseGeocodeResponse,
 } from 'utils/nominatim'
+
 import {
   VALHALLA_OSM_URL,
   buildDirectionsRequest,
@@ -47,7 +49,6 @@ export const makeRequest = () => (dispatch, getState) => {
   const activeWaypoints = getActiveWaypoints(waypoints)
   if (activeWaypoints.length >= 2) {
     settings = filterProfileSettings(profile, settings)
-
     const valhallaRequest = buildDirectionsRequest({
       profile,
       activeWaypoints,
@@ -250,9 +251,6 @@ const processGeocodeResponse =
           title: 'No addresses',
         })
       )
-      // for (const results of document.getElementsByClassName('results')) {
-      //   results.classList.remove('visible')
-      // }
     }
     dispatch(receiveGeocodeResults({ addresses, index }))
 
