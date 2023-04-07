@@ -25,7 +25,7 @@
     "react-modern-drawer": "^1.1.2",
     "react-redux": "^8.0.4",
     "react-scripts": "^5.0.1",
-    "react-semantic-toasts": "^0.6.6",
+    "react-toastify": "^9.1.2",
     "redux": "^4.2.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
