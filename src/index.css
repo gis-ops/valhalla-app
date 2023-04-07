@@ -1,7 +1,7 @@
 @import '~semantic-ui-css/semantic.css';
 @import '~leaflet/dist/leaflet.css';
 @import '~tachyons/css/tachyons.css';
-@import '~react-semantic-toasts/styles/react-semantic-alert.css';
+@import '~react-toastify/dist/ReactToastify.css';
 @import '~leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css';
 
 body {
