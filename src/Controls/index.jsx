@@ -157,6 +157,16 @@ class MainControl extends React.Component {
 
   handleDirectionsToggle = (event, data) => {
     const { dispatch } = this.props
+    const { showDirectionsPanel } = this.props
+    if (!showDirectionsPanel) {
+      document
+        .getElementsByClassName('heightgraph-container')[0]
+        .setAttribute('width', window.innerWidth * 0.75)
+    } else {
+      document
+        .getElementsByClassName('heightgraph-container')[0]
+        .setAttribute('width', window.innerWidth * 0.9)
+    }
     dispatch(toggleDirections())
   }
 
