@@ -44,13 +44,12 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
   const features = []
 
   let LineStringCoordinates = []
-  const heightClasses = []
+  let previousHeightClass
 
   let inclineTotal = 0
   let declineTotal = 0
 
   rangeHeightData.forEach((item, index) => {
-    //console.log("Current: " + item.name);
     if (index < rangeHeightData.length - 1) {
       const riseThis = item[1]
       const riseNext = rangeHeightData[index + 1][1]
@@ -66,19 +65,22 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
         declineTotal += rise * -1
       }
 
-      LineStringCoordinates.push([
-        coordinates[index][0],
-        coordinates[index][1],
-        item[1],
-      ])
+      // IDEA FOR BUILDING GEOJSON FOR HEIGHTGRAPH:
+      // Basic idea is keepon adding points to current LineString as long as they have same heightClass
+      // If we sense that the heightClass has changed, we add current LineString as one feature in GeoJSON
+      // new heightClass new LineString
+      // height graph works by taking a geojson with collection of LineStrings and coloring them based on heightClass property
 
-      if (heightClasses[heightClasses.length - 1] !== heightClass) {
+      // this checks if heightClass has changed and we need to add current LineString as one feature in GeoJSON
+      if (previousHeightClass !== heightClass) {
+        // since at this point we have a change in height class this will be the last point in current LineString
         LineStringCoordinates.push([
-          coordinates[index + 1][0],
-          coordinates[index + 1][1],
-          rangeHeightData[index + 1][1],
+          coordinates[index][0],
+          coordinates[index][1],
+          rangeHeightData[index][1],
         ])
 
+        // add current LineString as one feature in GeoJSON
         features.push({
           type: 'Feature',
           geometry: {
@@ -86,12 +88,22 @@ export const buildHeightgraphData = (coordinates, rangeHeightData) => {
             coordinates: LineStringCoordinates,
           },
           properties: {
-            attributeType: heightClass,
+            // attributeType is previousHeightClass because it is the heightClass upto this point in current LineString
+            // this is closing the linestring with all the points having same heightClass
+            attributeType: previousHeightClass || 0,
           },
         })
+        // reset LineStringCoordinates and prepare it for new GeoJSON feature
         LineStringCoordinates = []
       }
-      heightClasses.push(heightClass)
+      // current point is also the stratting point for new LineString
+      LineStringCoordinates.push([
+        coordinates[index][0],
+        coordinates[index][1],
+        rangeHeightData[index][1],
+      ])
+      // replace previousHeightClass with current heightClass
+      previousHeightClass = heightClass
     }
   })
 

@@ -209,7 +209,7 @@ class Waypoints extends Component {
                 size="small"
                 type="text"
                 minCharacters={3}
-                className={'pt2 pl3'}
+                className={'pt2 pb2 pl3'}
                 input={{ icon: 'search', iconPosition: 'left' }}
                 onSearchChange={this.handleSearchChange}
                 onResultSelect={this.handleResultSelect}
