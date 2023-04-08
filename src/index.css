@@ -34,7 +34,7 @@ i.help.grey.icon {
 .custom-label {
   font-size: 0.85em;
   font-weight: bold;
-  color: #000000de;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
