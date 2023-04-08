@@ -17,7 +17,7 @@ import axios from 'axios'
 import * as R from 'ramda'
 import ExtraMarkers from './extraMarkers'
 import { Button, Label, Icon, Popup } from 'semantic-ui-react'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   fetchReverseGeocode,
@@ -281,7 +281,7 @@ class Map extends React.Component {
 
     const getHeightData = this.getHeightData
     const { showDirectionsPanel } = this.props
-    
+
     this.hg = L.control.heightgraph({
       mappings: colorMappings,
       graphStyle: {
@@ -644,11 +644,13 @@ class Map extends React.Component {
   updateExcludePolygons() {
     const excludePolygons = []
     excludePolygonsLayer.eachLayer((layer) => {
-      const lngLatArray = []
-      for (const coords of layer._latlngs[0]) {
-        lngLatArray.push([coords.lng, coords.lat])
+      if (layer._latlngs) {
+        const lngLatArray = []
+        for (const coords of layer._latlngs[0]) {
+          lngLatArray.push([coords.lng, coords.lat])
+        }
+        excludePolygons.push(lngLatArray)
       }
-      excludePolygons.push(lngLatArray)
     })
     const { dispatch } = this.props
     const name = 'exclude_polygons'
@@ -718,46 +720,57 @@ class Map extends React.Component {
 
   getHeightData = () => {
     const { results } = this.props.directions
-    const { dispatch } = this.props
+    if (Object.keys(results[VALHALLA_OSM_URL].data).length === 0) {
+      document.querySelector('.heightgraph-close-icon').click()
+      const msg = () => (
+        <>
+          <h4 style={{ marginBottom: '5px', color: '#e6bd17' }}>Warning!</h4>
+          <p>Place Waypoints before displaying heigh graph.</p>
+        </>
+      )
+      toast.warning(msg)
+    } else {
+      const { dispatch } = this.props
 
-    const heightPayload = buildHeightRequest(
-      results[VALHALLA_OSM_URL].data.decodedGeometry
-    )
+      const heightPayload = buildHeightRequest(
+        results[VALHALLA_OSM_URL].data.decodedGeometry
+      )
 
-    if (!R.equals(this.state.heightPayload, heightPayload)) {
-      this.hg._removeChart()
-      this.setState({ isHeightLoading: true, heightPayload })
-      axios
-        .post(VALHALLA_OSM_URL + '/height', heightPayload, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(({ data }) => {
-          this.setState({ isHeightLoading: false })
-          // lets build geojson object with steepness for the height graph
-          const reversedGeometry = JSON.parse(
-            JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
-          ).map((pair) => {
-            return [...pair.reverse()]
+      if (!R.equals(this.state.heightPayload, heightPayload)) {
+        this.hg._removeChart()
+        this.setState({ isHeightLoading: true, heightPayload })
+        axios
+          .post(VALHALLA_OSM_URL + '/height', heightPayload, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           })
-          const heightData = buildHeightgraphData(
-            reversedGeometry,
-            data.range_height
-          )
-          const { inclineTotal, declineTotal } = heightData[0].properties
-          dispatch(
-            updateInclineDeclineTotal({
-              inclineTotal,
-              declineTotal,
+          .then(({ data }) => {
+            this.setState({ isHeightLoading: false })
+            // lets build geojson object with steepness for the height graph
+            const reversedGeometry = JSON.parse(
+              JSON.stringify(results[VALHALLA_OSM_URL].data.decodedGeometry)
+            ).map((pair) => {
+              return [...pair.reverse()]
             })
-          )
+            const heightData = buildHeightgraphData(
+              reversedGeometry,
+              data.range_height
+            )
+            const { inclineTotal, declineTotal } = heightData[0].properties
+            dispatch(
+              updateInclineDeclineTotal({
+                inclineTotal,
+                declineTotal,
+              })
+            )
 
-          this.hg.addData(heightData)
-        })
-        .catch(({ response }) => {
-          console.log(response) //eslint-disable-line
-        })
+            this.hg.addData(heightData)
+          })
+          .catch(({ response }) => {
+            console.log(response) //eslint-disable-line
+          })
+      }
     }
   }
 
@@ -1047,6 +1060,7 @@ class Map extends React.Component {
             draggable
             pauseOnHover
             theme="light"
+            style={{ width: '21%' }}
           />
           <div id="map" className="map-style" />
           <button
