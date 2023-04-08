@@ -54,19 +54,16 @@ class MainControl extends React.Component {
 
     this.getLastUpdate()
 
-    toast.success(
-      'Welcome to Valhalla! Global Routing Service - funded by FOSSGIS e.V.',
-      {
-        position: 'bottom-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      }
+    const msg = () => (
+      <>
+        <h4 style={{ marginBottom: '5px', color: '#117314' }}>
+          Welcome to Valhalla!
+        </h4>
+        <p>Global Routing Service - funded by FOSSGIS e.V.</p>
+      </>
     )
+
+    toast.success(msg)
 
     const params = Object.fromEntries(new URL(document.location).searchParams)
 
