@@ -2,7 +2,7 @@
   "name": "converter-demo-app",
   "version": "0.0.1",
   "private": false,
-  "homepage": "https://converter.gis-ops.com",
+  "homepage": "https://valhalla.openstreetmap.de",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

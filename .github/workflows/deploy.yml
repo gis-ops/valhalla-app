@@ -8,6 +8,7 @@ on:
     paths:
       - 'src/**'
       - 'public/**'
+      - 'package*.json'
 
 jobs:
   deploy:
@@ -17,9 +18,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - name: 🛠 Create build
+      - name: 🔧 Create build
         run: |
-          npm install
+          npm ci
           npm run build
       - name: 🚀 Deploy
         uses: appleboy/scp-action@master
