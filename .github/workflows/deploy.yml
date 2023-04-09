@@ -1,9 +1,13 @@
 name: Deploy to host server
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+    paths:
+      - 'src/**'
+      - 'public/**'
 
 jobs:
   deploy:
@@ -13,18 +17,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - name: Create build
+      - name: 🛠 Create build
         run: |
           npm install
           npm run build
-      - name: Deploy
+      - name: 🚀 Deploy
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.HOST_IP }}
-          username: ${{ secrets.HOST_USERNAME }}
+          host: ${{ vars.HOST_IP }}
+          username: ${{ vars.HOST_USERNAME }}
           passphrase: ${{ secrets.PASSPHRASE }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build"
-          target: "${{ secrets.HOST_TARGET_DIR }}"
+          target: "${{ vars.HOST_TARGET_DIR }}"
           strip_components: 1
           overwrite: true
