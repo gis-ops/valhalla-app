@@ -9,6 +9,8 @@ on:
       - 'src/**'
       - 'public/**'
       - 'package*.json'
+      - '.env'
+      - 'jsconfig.json'
 
 jobs:
   deploy:
@@ -20,7 +22,7 @@ jobs:
           node-version: '16.x'
       - name: 🔧 Create build
         run: |
-          npm ci
+          npm install
           npm run build
       - name: 🚀 Deploy
         uses: appleboy/scp-action@master
@@ -32,4 +34,4 @@ jobs:
           source: "build"
           target: "${{ vars.HOST_TARGET_DIR }}"
           strip_components: 1
-          overwrite: true
+          rm: true
