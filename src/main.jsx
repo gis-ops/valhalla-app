@@ -9,6 +9,13 @@ import thunk from 'redux-thunk'
 
 import reducer from './reducers'
 
+import './index.css'
+import 'semantic-ui-css/semantic.css'
+import 'leaflet/dist/leaflet.css'
+import 'tachyons/css/tachyons.css'
+import 'react-toastify/dist/ReactToastify.css'
+import 'leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css'
+
 const middleware = [thunk]
 
 const store = createStore(
