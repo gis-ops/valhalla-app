@@ -134,7 +134,7 @@ class MainControl extends React.Component {
   componentDidUpdate = (prevProps) => {
     const { message } = this.props
     if (message.receivedAt > prevProps.message.receivedAt) {
-      toast.message.type(message.description, {
+      toast[message.type](message.description, {
         position: 'bottom-center',
         autoClose: 5000,
         hideProgressBar: false,
