@@ -25,13 +25,7 @@ jobs:
           npm install
           npm run build
       - name: 🚀 Deploy
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ vars.HOST_IP }}
-          username: ${{ vars.HOST_USERNAME }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "build"
-          target: "${{ vars.HOST_TARGET_DIR }}"
-          strip_components: 1
-          rm: true
+        run: |
+          eval $(ssh-agent -s)
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+          rsync -r --delete -e "ssh -o StrictHostKeyChecking=no" ./build/ ${{ vars.HOST_USERNAME }}@${{ vars.HOST_IP }}:${{ vars.HOST_TARGET_DIR }}
