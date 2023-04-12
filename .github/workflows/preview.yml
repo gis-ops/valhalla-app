@@ -2,26 +2,34 @@ name: PR preview
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, closed]
     paths:
       - 'src/**'
       - 'public/**'
       - 'package*.json'
       - '.env'
       - 'jsconfig.json'
-      
+
 env:
   PULL_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
-  preview:
+  clean-up:
     runs-on: ubuntu-latest
+    if: ${{ github.event.action == 'closed' }}
+    steps:
+      - name: 🧹 Remove preview dir
+        run: |
+          eval $(ssh-agent -s)
+          ssh-add - <<< "${{ secrets.PREVIEW_SSH_PRIVATE_KEY }}"
+          ssh -o StrictHostKeyChecking=no ${{ vars.PREVIEW_HOST_USERNAME }}@${{ vars.PREVIEW_HOST_IP }} "rm -rf ${{ vars.PREVIEW_HOST_TARGET_DIR }}/$PULL_NUMBER"
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.action != 'closed' }}
     steps:
       - uses: actions/checkout@v2
-      - name: 🌐 Update homepage URL
-        run: |
-          NEW_HOMEPAGE="https://valhalla.openstreetmap.de/$PULL_NUMBER"
-          jq --arg homepage "$NEW_HOMEPAGE" '. + {homepage: $homepage}' package.json > tmp.json
-          mv tmp.json package.json
+      - name: 🏠 Replace homepage URL
+        run: sed -i "s/https:\/\/valhalla.openstreetmap.de/https:\/\/valhalla-app-tests.gis-ops.com\/${PULL_NUMBER}/g" package.json
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
@@ -29,8 +37,21 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: 🚀 Preview deployment
+      - name: 🚀 Preview deploy
         run: |
           eval $(ssh-agent -s)
-          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
-          rsync -r --delete --rsync-path="mkdir -p ${{ vars.HOST_TARGET_DIR }}/$PULL_NUMBER && rsync" -e "ssh -p 23432 -o StrictHostKeyChecking=no" ./build/ ${{ vars.HOST_USERNAME }}@${{ vars.HOST_IP }}:${{ vars.HOST_TARGET_DIR }}/$PULL_NUMBER
+           ssh-add - <<< "${{ secrets.PREVIEW_SSH_PRIVATE_KEY }}"
+           rsync -r --delete --rsync-path="mkdir -p ${{ vars.PREVIEW_HOST_TARGET_DIR }}/$PULL_NUMBER && rsync" -e "ssh -o StrictHostKeyChecking=no" ./build/ ${{ vars.PREVIEW_HOST_USERNAME }}@${{ vars.PREVIEW_HOST_IP }}:${{ vars.PREVIEW_HOST_TARGET_DIR }}/$PULL_NUMBER
+      - name: 🌐 Preview URL
+        if: success()
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.PAT }}
+          script: |
+            const body = `Preview is ready! 🚀 You can view it here: https://valhalla-app-tests.gis-ops.com/${{ github.event.pull_request.number }}`;
+            const { data } = await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
