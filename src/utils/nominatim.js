@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-export const NOMINATIM_URL = `${process.env.REACT_APP_NOMINATIM_URL}/search`
-export const NOMINATIME_URL_REVERSE = `${process.env.REACT_APP_NOMINATIM_URL}/reverse`
+export const NOMINATIM_URL = `${import.meta.env.VITE_NOMINATIM_URL}/search`
+export const NOMINATIME_URL_REVERSE = `${import.meta.env.VITE_NOMINATIM_URL}/reverse`
 
 export const forward_geocode = (userInput) =>
   axios.get(NOMINATIM_URL, {

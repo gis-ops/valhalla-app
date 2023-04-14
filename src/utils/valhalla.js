@@ -1,6 +1,6 @@
 import { decode } from './polyline'
 
-export const VALHALLA_OSM_URL = process.env.REACT_APP_VALHALLA_URL
+export const VALHALLA_OSM_URL = import.meta.env.VITE_VALHALLA_URL
 
 export const buildLocateRequest = (latLng, profile) => {
   let valhalla_profile = profile
