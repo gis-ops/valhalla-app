@@ -6,9 +6,6 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@fortawesome/fontawesome-svg-core": "^6.4.0",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@geoman-io/leaflet-geoman-free": "^2.13.1",
     "@mui/material": "^5.10.14",
     "@turf/turf": "^6.5.0",
@@ -20,7 +17,6 @@
     "leaflet-easybutton": "^2.4.0",
     "leaflet-extra-markers": "^1.2.1",
     "leaflet.heightgraph": "^1.4.0",
-    "leaflet.pm": "^2.2.0",
     "prop-types": "^15.8.1",
     "ramda": "^0.28.0",
     "react": "^17.0.0",
