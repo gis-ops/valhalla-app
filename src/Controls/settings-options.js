@@ -628,6 +628,19 @@ const maxHikingDifficulty = {
   },
 }
 
+const legalSpeed = {
+  name: 'Legal Speed',
+  param: 'legal_speed',
+  description:
+    'Maximum speed of roads (OSM tag maxspeed<:forward/:backward) the vehicle can travel on. The default value is unlimited.',
+  unit: 'kph',
+  settings: {
+    min: 0,
+    max: 252,
+    step: 1,
+  },
+}
+
 export const settingsInit = {
   maneuver_penalty: 5,
   country_crossing_penalty: 0,
@@ -680,6 +693,7 @@ export const settingsInit = {
   include_hot: false,
   transit_start_end_max_distance: 2145,
   transit_transfer_max_distance: 800,
+  legal_speed: 252,
 }
 
 export const settingsInitTruckOverride = {
@@ -708,6 +722,7 @@ export const profile_settings = {
       serviceFactor,
       countryCrossingCost,
       countryCrossingPenality,
+      legalSpeed,
     ],
     boolean: [hazardousMaterials, shortest],
     enum: [],
@@ -727,6 +742,7 @@ export const profile_settings = {
       gatePenalty,
       countryCrossingCost,
       countryCrossingPenality,
+      legalSpeed,
     ],
     boolean: [shortest, includeHOV2, includeHOV3, includeHot],
     enum: [],
@@ -748,6 +764,7 @@ export const profile_settings = {
       serviceFactor,
       countryCrossingCost,
       countryCrossingPenality,
+      legalSpeed,
     ],
     boolean: [shortest, includeHOV2, includeHOV3, includeHot],
     enum: [],
@@ -778,6 +795,7 @@ export const profile_settings = {
       gatePenalty,
       countryCrossingCost,
       countryCrossingPenality,
+      legalSpeed,
     ],
     boolean: [shortest],
     enum: [],
@@ -791,6 +809,7 @@ export const profile_settings = {
       maneuverPenalty,
       gateCost,
       gatePenalty,
+      legalSpeed,
     ],
     boolean: [shortest],
     enum: [bicycleType],
