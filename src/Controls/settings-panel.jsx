@@ -130,7 +130,10 @@ class SettingsPanel extends React.Component {
       this.setState({ generalSettings, extraSettings })
     }
 
-    if (!R.equals(settings, nextProps.settings)) {
+    if (
+      R.equals(profile, nextProps.profile) &&
+      !R.equals(settings, nextProps.settings)
+    ) {
       if (activeTab === 0) {
         dispatch(makeRequest())
       } else {
