@@ -76,7 +76,7 @@ export const buildIsochronesRequest = ({
     json: {
       costing: valhalla_profile,
       costing_options: {
-        [profile]: { ...settings },
+        [valhalla_profile]: { ...settings },
       },
       contours: makeContours({ maxRange, interval }),
       locations: makeLocations([center]),
