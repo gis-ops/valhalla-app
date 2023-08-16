@@ -422,6 +422,13 @@ const useGeocoding = {
   param: 'use_geocoding',
 }
 
+const ignoreHierarchies = {
+  name: 'Disable Hierarchies',
+  description:
+    'Forces routing algorithms to not use hierarchies (or shortcuts)',
+  param: 'disable_hierarchy_pruning',
+}
+
 const bicycleType = {
   name: 'Bicycle Type',
   description: `The type of bicycle. The default type is Hybrid.
@@ -680,6 +687,7 @@ export const settingsInit = {
   include_hot: false,
   transit_start_end_max_distance: 2145,
   transit_transfer_max_distance: 800,
+  disable_hierarchy_pruning: false,
 }
 
 export const settingsInitTruckOverride = {
@@ -709,7 +717,7 @@ export const profile_settings = {
       countryCrossingCost,
       countryCrossingPenality,
     ],
-    boolean: [hazardousMaterials, shortest],
+    boolean: [hazardousMaterials, shortest, ignoreHierarchies],
     enum: [],
   },
   car: {
@@ -728,7 +736,13 @@ export const profile_settings = {
       countryCrossingCost,
       countryCrossingPenality,
     ],
-    boolean: [shortest, includeHOV2, includeHOV3, includeHot],
+    boolean: [
+      shortest,
+      includeHOV2,
+      includeHOV3,
+      includeHot,
+      ignoreHierarchies,
+    ],
     enum: [],
   },
   bus: {
@@ -749,7 +763,13 @@ export const profile_settings = {
       countryCrossingCost,
       countryCrossingPenality,
     ],
-    boolean: [shortest, includeHOV2, includeHOV3, includeHot],
+    boolean: [
+      shortest,
+      includeHOV2,
+      includeHOV3,
+      includeHot,
+      ignoreHierarchies,
+    ],
     enum: [],
   },
   pedestrian: {
@@ -779,7 +799,7 @@ export const profile_settings = {
       countryCrossingCost,
       countryCrossingPenality,
     ],
-    boolean: [shortest],
+    boolean: [shortest, ignoreHierarchies],
     enum: [],
   },
   bicycle: {
