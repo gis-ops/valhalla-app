@@ -33,7 +33,7 @@ jobs:
         run: sed -i "s/https:\/\/valhalla.openstreetmap.de/https:\/\/valhalla-app-tests.gis-ops.com\/${PULL_NUMBER}/g" package.json
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '20.x'
       - name: 🔧 Create build
         run: |
           npm install
