@@ -16,6 +16,7 @@ const iconMap = {
   pedestrian: <PedestrianSvg />,
   motor_scooter: <ScooterSvg />,
   bus: <BusSvg />,
+  motorcycle: <BikeSvg />,
 }
 
 export const ProfilePicker = ({

@@ -815,6 +815,31 @@ export const profile_settings = {
     boolean: [shortest],
     enum: [bicycleType],
   },
+  motorcycle: {
+    numeric: [
+      width,
+      height,
+      topSpeed,
+      fixedSpeed,
+      privateAccessPenalty,
+      closureFactor,
+      servicePenalty,
+      serviceFactor,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
+      countryCrossingCost,
+      countryCrossingPenality,
+    ],
+    boolean: [
+      shortest,
+      includeHOV2,
+      includeHOV3,
+      includeHot,
+      ignoreHierarchies,
+    ],
+    enum: [],
+  },
 }
 
 export const settings_general = {
@@ -907,6 +932,24 @@ export const settings_general = {
       serviceFactor,
     ],
     boolean: [],
+    enum: [],
+  },
+  motorcycle: {
+    numeric: [
+      turnPenalityCost,
+      countryCrossingPenality,
+      countryCrossingCost,
+      useHighways,
+      useTollways,
+      tollBoothCost,
+      tollBoothPenalty,
+      useFerry,
+      ferryCost,
+      useLivingStreets,
+      useTracks,
+      excludeUnpaved,
+    ],
+    boolean: [ignoreClosures, excludeCashOnlyTolls],
     enum: [],
   },
   all: {
