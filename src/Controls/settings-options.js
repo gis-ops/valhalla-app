@@ -643,7 +643,7 @@ const useTrails = {
   settings: {
     min: 0,
     max: 1,
-    step: '0.1',
+    step: 0.1,
   },
 }
 
@@ -700,7 +700,7 @@ export const settingsInit = {
   transit_start_end_max_distance: 2145,
   transit_transfer_max_distance: 800,
   disable_hierarchy_pruning: false,
-  use_trails: 1,
+  use_trails: 0,
 }
 
 export const settingsInitTruckOverride = {
