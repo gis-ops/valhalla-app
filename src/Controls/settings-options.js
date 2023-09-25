@@ -635,6 +635,18 @@ const maxHikingDifficulty = {
   },
 }
 
+const useTrails = {
+  name: 'Use Trails',
+  param: 'use_trails',
+  unit: 'willingness',
+  description: `A riders's desire for adventure in their routes. This is a range of values from 0 to 1, where 0 will avoid trails, tracks, unclassified or bad surfaces and values towards 1 will tend to avoid major roads and route on secondary roads. The default value is 0.0.`,
+  settings: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
+}
+
 export const settingsInit = {
   maneuver_penalty: 5,
   country_crossing_penalty: 0,
@@ -688,6 +700,7 @@ export const settingsInit = {
   transit_start_end_max_distance: 2145,
   transit_transfer_max_distance: 800,
   disable_hierarchy_pruning: false,
+  use_trails: 0,
 }
 
 export const settingsInitTruckOverride = {
@@ -815,6 +828,31 @@ export const profile_settings = {
     boolean: [shortest],
     enum: [bicycleType],
   },
+  motorcycle: {
+    numeric: [
+      width,
+      height,
+      topSpeed,
+      fixedSpeed,
+      privateAccessPenalty,
+      closureFactor,
+      servicePenalty,
+      serviceFactor,
+      maneuverPenalty,
+      gateCost,
+      gatePenalty,
+      countryCrossingCost,
+      countryCrossingPenality,
+    ],
+    boolean: [
+      shortest,
+      includeHOV2,
+      includeHOV3,
+      includeHot,
+      ignoreHierarchies,
+    ],
+    enum: [],
+  },
 }
 
 export const settings_general = {
@@ -907,6 +945,25 @@ export const settings_general = {
       serviceFactor,
     ],
     boolean: [],
+    enum: [],
+  },
+  motorcycle: {
+    numeric: [
+      turnPenalityCost,
+      countryCrossingPenality,
+      countryCrossingCost,
+      useHighways,
+      useTrails,
+      useTollways,
+      tollBoothCost,
+      tollBoothPenalty,
+      useFerry,
+      ferryCost,
+      useLivingStreets,
+      useTracks,
+      excludeUnpaved,
+    ],
+    boolean: [ignoreClosures, excludeCashOnlyTolls],
     enum: [],
   },
   all: {

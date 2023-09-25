@@ -8,6 +8,7 @@ import { ReactComponent as CarSvg } from 'images/car.svg'
 import { ReactComponent as TruckSvg } from 'images/truck.svg'
 import { ReactComponent as BikeSvg } from 'images/bike.svg'
 import { ReactComponent as PedestrianSvg } from 'images/pedestrian.svg'
+import { ReactComponent as MotorbikeSvg } from 'images/motorbike.svg'
 
 const iconMap = {
   truck: <TruckSvg />,
@@ -16,6 +17,7 @@ const iconMap = {
   pedestrian: <PedestrianSvg />,
   motor_scooter: <ScooterSvg />,
   bus: <BusSvg />,
+  motorcycle: <MotorbikeSvg />,
 }
 
 export const ProfilePicker = ({
