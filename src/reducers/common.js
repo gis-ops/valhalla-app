@@ -8,11 +8,13 @@ import {
   ZOOM_TO,
   RESET_SETTINGS,
   TOGGLE_DIRECTIONS,
+  UPDATE_DATETIME,
 } from 'actions/types'
 import {
   settingsInit,
   settingsInitTruckOverride,
 } from 'Controls/settings-options'
+import moment from 'moment'
 
 const initialState = {
   activeTab: 0,
@@ -29,6 +31,10 @@ const initialState = {
   },
   profile: 'bicycle',
   settings: { ...settingsInit },
+  date_time: {
+    type: 0,
+    value: moment().format('yyyy-MM-DDTHH:mm'),
+  },
 }
 
 export const common = (state = initialState, action) => {
@@ -102,6 +108,17 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         profile,
+      }
+    }
+
+    case UPDATE_DATETIME: {
+      const { key, value } = action.payload
+      return {
+        ...state,
+        date_time: {
+          ...state.date_time,
+          [key]: value,
+        },
       }
     }
 

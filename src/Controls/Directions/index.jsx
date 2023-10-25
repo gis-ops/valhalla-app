@@ -9,6 +9,7 @@ import { ProfilePicker } from 'components/profile-picker'
 import { SettingsButton } from 'components/SettingsButton'
 import { SettingsFooter } from 'components/SettingsFooter'
 import { Settings } from './settings'
+import { DateTimePicker } from 'components/datetime-picker'
 
 import {
   doAddWaypoint,
@@ -21,6 +22,7 @@ import {
   doShowSettings,
   updatePermalink,
   resetSettings,
+  doUpdateDateTime,
 } from 'actions/commonActions'
 
 class DirectionsControl extends React.Component {
@@ -28,6 +30,7 @@ class DirectionsControl extends React.Component {
     profile: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     loading: PropTypes.bool,
+    date_time: PropTypes.object,
   }
 
   handleUpdateProfile = (event, data) => {
@@ -62,8 +65,24 @@ class DirectionsControl extends React.Component {
     dispatch(doShowSettings())
   }
 
+  handleDateTime = (type, value) => {
+    const { dispatch } = this.props
+    dispatch(doUpdateDateTime(type, value))
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { date_time } = this.props
+    const shouldUpdate =
+      date_time.type !== nextProps.date_time.type ||
+      date_time.value !== nextProps.date_time.value
+    if (shouldUpdate) {
+      this.props.dispatch(makeRequest())
+    }
+    return shouldUpdate
+  }
+
   render() {
-    const { profile, loading } = this.props
+    const { profile, loading, date_time } = this.props
     return (
       <React.Fragment>
         <div className="flex flex-column content-between">
@@ -104,6 +123,11 @@ class DirectionsControl extends React.Component {
                 handleRemoveWaypoints={this.handleRemoveWaypoints}
               />
             </div>
+            <DateTimePicker
+              type={date_time.type}
+              value={date_time.value}
+              onChange={this.handleDateTime}
+            />
           </div>
           <Divider fitted />
           <SettingsFooter />
@@ -114,10 +138,11 @@ class DirectionsControl extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { profile, loading } = state.common
+  const { profile, loading, date_time } = state.common
   return {
     profile,
     loading,
+    date_time,
   }
 }
 

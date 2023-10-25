@@ -29,6 +29,7 @@ export const buildDirectionsRequest = ({
   profile,
   activeWaypoints,
   settings,
+  date_time,
 }) => {
   let valhalla_profile = profile
   if (profile === 'car') {
@@ -47,6 +48,7 @@ export const buildDirectionsRequest = ({
         units: 'kilometers',
       },
       id: 'valhalla_directions',
+      date_time,
     },
   }
 }
