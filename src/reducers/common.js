@@ -32,7 +32,7 @@ const initialState = {
   profile: 'bicycle',
   settings: { ...settingsInit },
   date_time: {
-    type: 0,
+    type: -1,
     value: moment().format('yyyy-MM-DDTHH:mm'),
   },
 }

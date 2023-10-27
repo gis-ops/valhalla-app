@@ -30,7 +30,10 @@ class DirectionsControl extends React.Component {
     profile: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     loading: PropTypes.bool,
-    date_time: PropTypes.object,
+    date_time: PropTypes.shape({
+      type: PropTypes.number,
+      value: PropTypes.string,
+    }),
   }
 
   handleUpdateProfile = (event, data) => {
@@ -124,7 +127,8 @@ class DirectionsControl extends React.Component {
               />
             </div>
             <DateTimePicker
-              type={-1}
+              type={date_time.type}
+              value={date_time.value}
               onChange={this.handleDateTime}
             />
           </div>
