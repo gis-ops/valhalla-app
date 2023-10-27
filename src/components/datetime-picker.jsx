@@ -15,6 +15,11 @@ export const DateTimePicker = ({ type, value, onChange }) => {
         clearable
         options={[
           {
+            key: 0,
+            text: 'Nonspecific time',
+            value: -1,
+          },
+          {
             key: 1,
             text: 'Leave now',
             value: 0,
@@ -43,6 +48,7 @@ export const DateTimePicker = ({ type, value, onChange }) => {
           type="datetime-local"
           value={value}
           onChange={(e) => onChange('value', e.target.value)}
+          disabled={type < 0}
         />
       </Input>
     </div>

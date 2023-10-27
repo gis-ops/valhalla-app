@@ -36,7 +36,7 @@ export const buildDirectionsRequest = ({
     valhalla_profile = 'auto'
   }
 
-  return {
+  const req = {
     json: {
       costing: valhalla_profile,
       costing_options: {
@@ -48,9 +48,13 @@ export const buildDirectionsRequest = ({
         units: 'kilometers',
       },
       id: 'valhalla_directions',
-      date_time,
     },
   }
+
+  if (date_time.type > -1) {
+    req.json.date_time = date_time
+  }
+  return req
 }
 
 export const parseDirectionsGeometry = (data) => {

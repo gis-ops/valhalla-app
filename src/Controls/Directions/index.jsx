@@ -124,8 +124,7 @@ class DirectionsControl extends React.Component {
               />
             </div>
             <DateTimePicker
-              type={date_time.type}
-              value={date_time.value}
+              type={-1}
               onChange={this.handleDateTime}
             />
           </div>
