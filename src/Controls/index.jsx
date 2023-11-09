@@ -22,6 +22,7 @@ import {
   fetchReverseGeocodeIso,
   updateIsoSettings,
 } from 'actions/isochronesActions'
+import { VALHALLA_OSM_URL } from 'utils/valhalla'
 
 const pairwise = (arr, func) => {
   let cnt = 0
@@ -42,7 +43,7 @@ class MainControl extends React.Component {
   }
 
   async getLastUpdate() {
-    const response = await fetch('https://valhalla1.openstreetmap.de/status')
+    const response = await fetch(`${VALHALLA_OSM_URL}/status`)
     const data = await response.json()
     this.setState({
       lastUpdate: new Date(data.tileset_last_modified * 1000),
