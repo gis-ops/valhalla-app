@@ -13,6 +13,7 @@ import {
   updateProfile,
   doShowSettings,
   updatePermalink,
+  resetSettings,
 } from 'actions/commonActions'
 import { clearIsos, makeIsochronesRequest } from 'actions/isochronesActions'
 
@@ -26,6 +27,7 @@ class IsochronesControl extends React.Component {
   handleUpdateProfile = (event, data) => {
     const { dispatch } = this.props
     dispatch(updateProfile({ profile: data.valhalla_profile }))
+    dispatch(resetSettings())
     dispatch(updatePermalink())
   }
 
