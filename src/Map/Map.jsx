@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import L from 'leaflet'
+import 'leaflet-easybutton'
 import * as $ from 'jquery'
 import 'jquery-ui-bundle'
 import 'jquery-ui-bundle/jquery-ui.css'
@@ -33,6 +34,7 @@ import {
 import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
 import formatDuration from 'utils/date_time'
 import './Map.css'
+import { green } from '@mui/material/colors'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:
     '<a href="https://map.project-osrm.org/about.html" target="_blank">About this service and privacy policy</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -160,6 +162,44 @@ class Map extends React.Component {
     }
 
     this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map)
+
+    //Adding locate button
+    const locateButton = L.easyButton({
+      position: 'topright',
+      color: green,
+      states: [
+        {
+          stateName: 'unlocated',
+          icon: '<div class="icon-container"><i class="location-icon map marker alternate icon"></i></div>',
+          title: 'Locate me',
+          onClick: () => {
+            // get the user's current location
+            // navigator.geolocation is part of the Web API,
+            // which is a set of standardized APIs provided by web browsers to enable
+            // web applications to interact with the browser and the device on which it is running.
+            // Find more at https://developer.mozilla.org/en-US/docs/Web/API/Geolocation
+            if (navigator.geolocation) {
+              const confirmed = window.confirm(
+                'This website would like to use your location. Do you give permission?'
+              )
+              if (confirmed) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                  const lat = position.coords.latitude
+                  const lng = position.coords.longitude
+                  this.map.flyTo([lat, lng], 16)
+                })
+              } else {
+                alert('Permission denied')
+              }
+            } else {
+              console.log('Geolocation is not supported by this browser.')
+            }
+          },
+        },
+      ],
+    })
+    locateButton.button.classList.add('leaflet-control-easy-button')
+    locateButton.addTo(this.map)
 
     // we do want a zoom control
     L.control
