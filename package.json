@@ -16,7 +16,6 @@
     "leaflet": "^1.9.3",
     "leaflet-extra-markers": "^1.2.1",
     "leaflet.heightgraph": "^1.4.0",
-    "moment": "^2.29.4",
     "prop-types": "^15.8.1",
     "ramda": "^0.28.0",
     "react": "^17.0.0",

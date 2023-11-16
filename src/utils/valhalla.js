@@ -29,7 +29,7 @@ export const buildDirectionsRequest = ({
   profile,
   activeWaypoints,
   settings,
-  date_time,
+  dateTime,
 }) => {
   let valhalla_profile = profile
   if (profile === 'car') {
@@ -51,8 +51,8 @@ export const buildDirectionsRequest = ({
     },
   }
 
-  if (date_time.type > -1) {
-    req.json.date_time = date_time
+  if (dateTime.type > -1) {
+    req.json.date_time = dateTime
   }
   return req
 }

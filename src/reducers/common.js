@@ -14,7 +14,6 @@ import {
   settingsInit,
   settingsInitTruckOverride,
 } from 'Controls/settings-options'
-import moment from 'moment'
 
 const initialState = {
   activeTab: 0,
@@ -31,9 +30,9 @@ const initialState = {
   },
   profile: 'bicycle',
   settings: { ...settingsInit },
-  date_time: {
+  dateTime: {
     type: -1,
-    value: moment().format('yyyy-MM-DDTHH:mm'),
+    value: new Date(Date.now()).toISOString().slice(0, 16),
   },
 }
 
@@ -115,8 +114,8 @@ export const common = (state = initialState, action) => {
       const { key, value } = action.payload
       return {
         ...state,
-        date_time: {
-          ...state.date_time,
+        dateTime: {
+          ...state.dateTime,
           [key]: value,
         },
       }

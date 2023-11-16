@@ -9,7 +9,7 @@ import { ProfilePicker } from 'components/profile-picker'
 import { SettingsButton } from 'components/SettingsButton'
 import { SettingsFooter } from 'components/SettingsFooter'
 import { Settings } from './settings'
-import { DateTimePicker } from 'components/datetime-picker'
+import { DateTimePicker } from 'components/DateTimePicker'
 
 import {
   doAddWaypoint,
@@ -30,7 +30,7 @@ class DirectionsControl extends React.Component {
     profile: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     loading: PropTypes.bool,
-    date_time: PropTypes.shape({
+    dateTime: PropTypes.shape({
       type: PropTypes.number,
       value: PropTypes.string,
     }),
@@ -74,10 +74,10 @@ class DirectionsControl extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { date_time } = this.props
+    const { dateTime } = this.props
     const shouldUpdate =
-      date_time.type !== nextProps.date_time.type ||
-      date_time.value !== nextProps.date_time.value
+      dateTime.type !== nextProps.dateTime.type ||
+      dateTime.value !== nextProps.dateTime.value
     if (shouldUpdate) {
       this.props.dispatch(makeRequest())
     }
@@ -85,7 +85,7 @@ class DirectionsControl extends React.Component {
   }
 
   render() {
-    const { profile, loading, date_time } = this.props
+    const { profile, loading, dateTime } = this.props
     return (
       <React.Fragment>
         <div className="flex flex-column content-between">
@@ -127,8 +127,8 @@ class DirectionsControl extends React.Component {
               />
             </div>
             <DateTimePicker
-              type={date_time.type}
-              value={date_time.value}
+              type={dateTime.type}
+              value={dateTime.value}
               onChange={this.handleDateTime}
             />
           </div>
@@ -141,11 +141,11 @@ class DirectionsControl extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { profile, loading, date_time } = state.common
+  const { profile, loading, dateTime } = state.common
   return {
     profile,
     loading,
-    date_time,
+    dateTime,
   }
 }
 

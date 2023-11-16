@@ -43,7 +43,7 @@ const serverMapping = {
 export const makeRequest = () => (dispatch, getState) => {
   dispatch(updatePermalink())
   const { waypoints } = getState().directions
-  const { profile, date_time } = getState().common
+  const { profile, dateTime } = getState().common
   let { settings } = getState().common
   // if 2 results are selected
   const activeWaypoints = getActiveWaypoints(waypoints)
@@ -53,7 +53,7 @@ export const makeRequest = () => (dispatch, getState) => {
       profile,
       activeWaypoints,
       settings,
-      date_time,
+      dateTime,
     })
     dispatch(fetchValhallaDirections(valhallaRequest))
   }
