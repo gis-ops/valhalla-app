@@ -5,9 +5,9 @@ import { Divider } from 'semantic-ui-react'
 
 import Waypoints from './Waypoints'
 
-import { ProfilePicker } from 'components/profile-picker'
-import { SettingsButton } from 'components/SettingsButton'
-import { SettingsFooter } from 'components/SettingsFooter'
+import { ProfilePicker } from '../../components/profile-picker'
+import { SettingsButton } from '../../components/SettingsButton'
+import { SettingsFooter } from '../../components/SettingsFooter'
 import { Settings } from './settings'
 
 import {
@@ -15,13 +15,13 @@ import {
   doRemoveWaypoint,
   makeRequest,
   clearRoutes,
-} from 'actions/directionsActions'
+} from '../../actions/directionsActions'
 import {
   updateProfile,
   doShowSettings,
   updatePermalink,
   resetSettings,
-} from 'actions/commonActions'
+} from '../../actions/commonActions'
 
 class DirectionsControl extends React.Component {
   static propTypes = {

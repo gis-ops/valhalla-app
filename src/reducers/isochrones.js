@@ -6,7 +6,7 @@ import {
   UPDATE_TEXTINPUT_ISO,
   TOGGLE_PROVIDER_ISO,
   CLEAR_ISOS,
-} from 'actions/types'
+} from '../actions/types'
 
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
 

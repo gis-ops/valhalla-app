@@ -8,7 +8,7 @@ import {
   doAddWaypoint,
   setWaypoints,
   makeRequest,
-} from 'actions/directionsActions'
+} from '../../../actions/directionsActions'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)

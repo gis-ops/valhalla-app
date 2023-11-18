@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as R from 'ramda'
 import { Header, Icon, Divider, Popup } from 'semantic-ui-react'
 
-import { highlightManeuver, zoomToManeuver } from 'actions/directionsActions'
+import { highlightManeuver, zoomToManeuver } from '../../actions/directionsActions'
 
 const getLength = (length) => {
   const visibleLength = length * 1000

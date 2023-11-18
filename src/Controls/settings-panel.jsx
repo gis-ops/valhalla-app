@@ -24,11 +24,11 @@ import {
   doShowSettings,
   filterProfileSettings,
   resetSettings,
-} from 'actions/commonActions'
+} from '../actions/commonActions'
 
 import CustomSlider from '../components/CustomSlider'
-import { makeRequest } from 'actions/directionsActions'
-import { makeIsochronesRequest } from 'actions/isochronesActions'
+import { makeRequest } from '../actions/directionsActions'
+import { makeIsochronesRequest } from '../actions/isochronesActions'
 
 const Checkbox = (props) => {
   const { settings, option, dispatch } = props

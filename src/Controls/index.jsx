@@ -16,13 +16,13 @@ import {
   zoomTo,
   resetSettings,
   toggleDirections,
-} from 'actions/commonActions'
-import { fetchReverseGeocodePerma } from 'actions/directionsActions'
+} from '../actions/commonActions'
+import { fetchReverseGeocodePerma } from '../actions/directionsActions'
 import {
   fetchReverseGeocodeIso,
   updateIsoSettings,
-} from 'actions/isochronesActions'
-import { VALHALLA_OSM_URL } from 'utils/valhalla'
+} from '../actions/isochronesActions'
+import { VALHALLA_OSM_URL } from '../utils/valhalla'
 
 const pairwise = (arr, func) => {
   let cnt = 0

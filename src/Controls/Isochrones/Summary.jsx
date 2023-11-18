@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
 import { Checkbox, Icon } from 'semantic-ui-react'
-import { showProvider } from 'actions/directionsActions'
+import { showProvider } from '../../actions/directionsActions'
 
-import { downloadFile } from 'actions/commonActions'
+import { downloadFile } from '../../actions/commonActions'
 import jsonFormat from 'json-format'
-import { jsonConfig } from 'Controls/settings-options'
+import { jsonConfig } from '../../Controls/settings-options'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,

@@ -12,8 +12,8 @@ import {
   reverse_geocode,
   forward_geocode,
   parseGeocodeResponse,
-} from 'utils/nominatim'
-import { VALHALLA_OSM_URL, buildIsochronesRequest } from 'utils/valhalla'
+} from '../utils/nominatim'
+import { VALHALLA_OSM_URL, buildIsochronesRequest } from '../utils/valhalla'
 
 import {
   sendMessage,
@@ -21,7 +21,7 @@ import {
   updatePermalink,
   filterProfileSettings,
 } from './commonActions'
-import { calcArea } from 'utils/geom'
+import { calcArea } from '../utils/geom'
 
 const serverMapping = {
   [VALHALLA_OSM_URL]: 'OSM',

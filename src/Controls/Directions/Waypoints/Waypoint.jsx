@@ -8,10 +8,10 @@ import {
   fetchGeocode,
   makeRequest,
   isWaypoint,
-} from 'actions/directionsActions'
+} from '../../../actions/directionsActions'
 
-import { zoomTo } from 'actions/commonActions'
-import { isValidCoordinates } from 'utils/geom'
+import { zoomTo } from '../../../actions/commonActions'
+import { isValidCoordinates } from '../../../utils/geom'
 
 import { debounce } from 'throttle-debounce'
 

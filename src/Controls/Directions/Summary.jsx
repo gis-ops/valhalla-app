@@ -6,7 +6,7 @@ import * as R from 'ramda'
 import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
-import formatDuration from 'utils/date_time'
+import formatDuration from '../../utils/date_time'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,

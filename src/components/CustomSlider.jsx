@@ -5,7 +5,7 @@ import { debounce } from 'throttle-debounce'
 import {
   settingsInit,
   settingsInitTruckOverride,
-} from 'Controls/settings-options'
+} from '../Controls/settings-options'
 
 import PropTypes from 'prop-types'
 

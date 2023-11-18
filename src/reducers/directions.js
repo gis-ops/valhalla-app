@@ -13,7 +13,7 @@ import {
   HIGHLIGHT_MNV,
   ZOOM_TO_MNV,
   UPDATE_INCLINE_DECLINE,
-} from 'actions/types'
+} from '../actions/types'
 
 import { VALHALLA_OSM_URL } from '../utils/valhalla'
 

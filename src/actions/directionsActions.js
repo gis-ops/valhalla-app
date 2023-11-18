@@ -20,13 +20,13 @@ import {
   reverse_geocode,
   forward_geocode,
   parseGeocodeResponse,
-} from 'utils/nominatim'
+} from '../utils/nominatim'
 
 import {
   VALHALLA_OSM_URL,
   buildDirectionsRequest,
   parseDirectionsGeometry,
-} from 'utils/valhalla'
+} from '../utils/valhalla'
 
 import {
   sendMessage,
