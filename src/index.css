@@ -21,6 +21,12 @@ i.help.grey.icon {
   background-repeat: no-repeat;
 }
 
+@media (max-width: 383px) {
+  .fossgis-logo{
+    margin-bottom: 1.5rem;
+  }
+}
+
 .valhalla-logo {
   background-image: url('images/valhalla.png');
   height: 100px;
