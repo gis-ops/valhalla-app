@@ -7,15 +7,18 @@ import Waypoints from './Waypoints'
 
 import { ProfilePicker } from '../../components/profile-picker'
 import { SettingsButton } from '../../components/SettingsButton'
-import { SettingsFooter } from 'components/SettingsFooter'
+import { SettingsFooter } from '../../components/SettingsFooter'
 
 import {
   updateProfile,
   doShowSettings,
   updatePermalink,
   resetSettings,
-} from 'actions/commonActions'
-import { clearIsos, makeIsochronesRequest } from 'actions/isochronesActions'
+} from '../../actions/commonActions'
+import {
+  clearIsos,
+  makeIsochronesRequest,
+} from '../../actions/isochronesActions'
 
 class IsochronesControl extends React.Component {
   static propTypes = {

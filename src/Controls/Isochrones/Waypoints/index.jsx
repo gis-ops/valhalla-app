@@ -7,16 +7,16 @@ import { Slider } from '@mui/material'
 
 import { Settings } from '../settings'
 
-import { isValidCoordinates } from 'utils/geom'
+import { isValidCoordinates } from '../../../utils/geom'
 import {
   updateTextInput,
   updateIsoSettings,
   fetchGeocode,
   makeIsochronesRequest,
   clearIsos,
-} from 'actions/isochronesActions'
+} from '../../../actions/isochronesActions'
 
-import { updatePermalink, zoomTo } from 'actions/commonActions'
+import { updatePermalink, zoomTo } from '../../../actions/commonActions'
 
 import { debounce } from 'throttle-debounce'
 

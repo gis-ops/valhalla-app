@@ -22,16 +22,16 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   fetchReverseGeocode,
   updateInclineDeclineTotal,
-} from 'actions/directionsActions'
-import { fetchReverseGeocodeIso } from 'actions/isochronesActions'
-import { updateSettings } from 'actions/commonActions'
+} from '../actions/directionsActions'
+import { fetchReverseGeocodeIso } from '../actions/isochronesActions'
+import { updateSettings } from '../actions/commonActions'
 import {
   VALHALLA_OSM_URL,
   buildHeightRequest,
   buildLocateRequest,
-} from 'utils/valhalla'
-import { colorMappings, buildHeightgraphData } from 'utils/heightgraph'
-import formatDuration from 'utils/date_time'
+} from '../utils/valhalla'
+import { colorMappings, buildHeightgraphData } from '../utils/heightgraph'
+import formatDuration from '../utils/date_time'
 import './Map.css'
 const OSMTiles = L.tileLayer(process.env.REACT_APP_TILE_SERVER_URL, {
   attribution:

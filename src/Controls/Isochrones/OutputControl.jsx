@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { Segment, Divider } from 'semantic-ui-react'
 
 import Summary from './Summary'
-import { makeIsochronesRequest } from 'actions/isochronesActions'
+import { makeIsochronesRequest } from '../../actions/isochronesActions'
 import ContoursInformation from './ContoursInformation'
-import { VALHALLA_OSM_URL } from 'utils/valhalla'
+import { VALHALLA_OSM_URL } from '../../utils/valhalla'
 
 class OutputControl extends React.Component {
   static propTypes = {

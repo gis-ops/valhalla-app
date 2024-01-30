@@ -8,11 +8,11 @@ import {
   ZOOM_TO,
   RESET_SETTINGS,
   TOGGLE_DIRECTIONS,
-} from 'actions/types'
+} from '../actions/types'
 import {
   settingsInit,
   settingsInitTruckOverride,
-} from 'Controls/settings-options'
+} from '../Controls/settings-options'
 
 const initialState = {
   activeTab: 0,
