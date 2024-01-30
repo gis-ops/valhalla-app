@@ -8,6 +8,7 @@ import {
   ZOOM_TO,
   RESET_SETTINGS,
   TOGGLE_DIRECTIONS,
+  UPDATE_DATETIME,
 } from './types'
 
 import {
@@ -58,6 +59,11 @@ export const resetSettings = () => ({
 export const zoomTo = (coords) => ({
   type: ZOOM_TO,
   payload: coords,
+})
+
+export const doUpdateDateTime = (key, value) => ({
+  type: UPDATE_DATETIME,
+  payload: { key, value },
 })
 
 export const updatePermalink = () => (dispatch, getState) => {

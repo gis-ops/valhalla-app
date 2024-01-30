@@ -8,6 +8,7 @@ import {
   ZOOM_TO,
   RESET_SETTINGS,
   TOGGLE_DIRECTIONS,
+  UPDATE_DATETIME,
 } from 'actions/types'
 import {
   settingsInit,
@@ -29,6 +30,10 @@ const initialState = {
   },
   profile: 'bicycle',
   settings: { ...settingsInit },
+  dateTime: {
+    type: -1,
+    value: new Date(Date.now()).toISOString().slice(0, 16),
+  },
 }
 
 export const common = (state = initialState, action) => {
@@ -102,6 +107,17 @@ export const common = (state = initialState, action) => {
       return {
         ...state,
         profile,
+      }
+    }
+
+    case UPDATE_DATETIME: {
+      const { key, value } = action.payload
+      return {
+        ...state,
+        dateTime: {
+          ...state.dateTime,
+          [key]: value,
+        },
       }
     }
 

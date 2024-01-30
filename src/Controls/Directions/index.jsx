@@ -9,6 +9,7 @@ import { ProfilePicker } from 'components/profile-picker'
 import { SettingsButton } from 'components/SettingsButton'
 import { SettingsFooter } from 'components/SettingsFooter'
 import { Settings } from './settings'
+import { DateTimePicker } from 'components/DateTimePicker'
 
 import {
   doAddWaypoint,
@@ -21,6 +22,7 @@ import {
   doShowSettings,
   updatePermalink,
   resetSettings,
+  doUpdateDateTime,
 } from 'actions/commonActions'
 
 class DirectionsControl extends React.Component {
@@ -28,6 +30,10 @@ class DirectionsControl extends React.Component {
     profile: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     loading: PropTypes.bool,
+    dateTime: PropTypes.shape({
+      type: PropTypes.number,
+      value: PropTypes.string,
+    }),
   }
 
   handleUpdateProfile = (event, data) => {
@@ -62,8 +68,24 @@ class DirectionsControl extends React.Component {
     dispatch(doShowSettings())
   }
 
+  handleDateTime = (type, value) => {
+    const { dispatch } = this.props
+    dispatch(doUpdateDateTime(type, value))
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { dateTime } = this.props
+    const shouldUpdate =
+      dateTime.type !== nextProps.dateTime.type ||
+      dateTime.value !== nextProps.dateTime.value
+    if (shouldUpdate) {
+      this.props.dispatch(makeRequest())
+    }
+    return shouldUpdate
+  }
+
   render() {
-    const { profile, loading } = this.props
+    const { profile, loading, dateTime } = this.props
     return (
       <React.Fragment>
         <div className="flex flex-column content-between">
@@ -104,6 +126,11 @@ class DirectionsControl extends React.Component {
                 handleRemoveWaypoints={this.handleRemoveWaypoints}
               />
             </div>
+            <DateTimePicker
+              type={dateTime.type}
+              value={dateTime.value}
+              onChange={this.handleDateTime}
+            />
           </div>
           <Divider fitted />
           <SettingsFooter />
@@ -114,10 +141,11 @@ class DirectionsControl extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { profile, loading } = state.common
+  const { profile, loading, dateTime } = state.common
   return {
     profile,
     loading,
+    dateTime,
   }
 }
 
