@@ -125,6 +125,23 @@ class MainControl extends React.Component {
               })
             )
           }
+
+          if ('denoise' in params) {
+            dispatch(
+              updateIsoSettings({
+                denoiseName: 'denoise',
+                value: params.denoise,
+              })
+            )
+          }
+          if ('generalize' in params) {
+            dispatch(
+              updateIsoSettings({
+                generalizeName: 'generalize',
+                value: params.generalize,
+              })
+            )
+          }
         }
       })
       dispatch(zoomTo(processedCoords))

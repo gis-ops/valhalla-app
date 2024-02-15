@@ -18,6 +18,8 @@ const initialState = {
   selectedAddress: '',
   maxRange: 10,
   interval: 10,
+  denoise: 0.1,
+  generalize: 0,
   results: {
     [VALHALLA_OSM_URL]: {
       data: {},
@@ -68,6 +70,8 @@ export const isochrones = (state = initialState, action) => {
         ...state,
         [payload.maxRangeName]: payload.value,
         [payload.intervalName]: payload.value,
+        [payload.generalizeName]: payload.value,
+        [payload.denoiseName]: payload.value,
       }
 
     case UPDATE_TEXTINPUT_ISO:

@@ -14,7 +14,6 @@ import {
 import {
   profile_settings,
   settings_general,
-  settings_isochrone,
 } from '../Controls/settings-options'
 
 export const showLoading = (loading) => ({
@@ -69,7 +68,8 @@ export const doUpdateDateTime = (key, value) => ({
 
 export const updatePermalink = () => (dispatch, getState) => {
   const { waypoints } = getState().directions
-  const { geocodeResults, maxRange, interval } = getState().isochrones
+  const { geocodeResults, maxRange, interval, generalize, denoise } =
+    getState().isochrones
   const { profile, /*settings,*/ activeTab } = getState().common
   const queryParams = new URLSearchParams()
   queryParams.set('profile', profile)
@@ -101,6 +101,8 @@ export const updatePermalink = () => (dispatch, getState) => {
     }
     queryParams.set('range', maxRange)
     queryParams.set('interval', interval)
+    queryParams.set('generalize', generalize)
+    queryParams.set('denoise', denoise)
   }
   window.history.replaceState(null, null, path + queryParams.toString())
 }
@@ -155,12 +157,6 @@ export const filterProfileSettings = (profile, settings) => {
       }
     }
     for (const item of profile_settings[profile].enum) {
-      if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
-      }
-    }
-
-    for (const item of settings_isochrone.numeric) {
       if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }

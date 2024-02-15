@@ -28,7 +28,8 @@ const serverMapping = {
 }
 
 export const makeIsochronesRequest = () => (dispatch, getState) => {
-  const { geocodeResults, maxRange, interval } = getState().isochrones
+  const { geocodeResults, maxRange, interval, denoise, generalize } =
+    getState().isochrones
   const { profile } = getState().common
   let { settings } = getState().common
 
@@ -53,6 +54,8 @@ export const makeIsochronesRequest = () => (dispatch, getState) => {
       center,
       settings,
       maxRange,
+      denoise,
+      generalize,
       interval,
     })
     dispatch(fetchValhallaIsochrones(valhallaRequest))
