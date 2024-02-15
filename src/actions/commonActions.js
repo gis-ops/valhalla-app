@@ -68,7 +68,8 @@ export const doUpdateDateTime = (key, value) => ({
 
 export const updatePermalink = () => (dispatch, getState) => {
   const { waypoints } = getState().directions
-  const { geocodeResults, maxRange, interval } = getState().isochrones
+  const { geocodeResults, maxRange, interval, generalize, denoise } =
+    getState().isochrones
   const { profile, /*settings,*/ activeTab } = getState().common
   const queryParams = new URLSearchParams()
   queryParams.set('profile', profile)
@@ -100,6 +101,8 @@ export const updatePermalink = () => (dispatch, getState) => {
     }
     queryParams.set('range', maxRange)
     queryParams.set('interval', interval)
+    queryParams.set('generalize', generalize)
+    queryParams.set('denoise', denoise)
   }
   window.history.replaceState(null, null, path + queryParams.toString())
 }

@@ -81,6 +81,7 @@ class SettingsPanel extends React.Component {
       activeIndexGeneral: 0,
       generalSettings: {},
       extraSettings: {},
+      isochroneSettings: {},
       copied: false,
     }
   }
@@ -99,7 +100,7 @@ class SettingsPanel extends React.Component {
   // we however only want this component to update if the
   // settings really change, therefor deep check with ramda
   shouldComponentUpdate(nextProps, nextState) {
-    const { settings, profile, showSettings } = this.props
+    const { settings, profile, showSettings, activeTab } = this.props
 
     if (!R.equals(settings, nextProps.settings)) {
       return true
@@ -111,6 +112,9 @@ class SettingsPanel extends React.Component {
       return true
     }
     if (!R.equals(this.state, nextState)) {
+      return true
+    }
+    if (!R.equals(activeTab, nextProps.activeTab)) {
       return true
     }
     return false

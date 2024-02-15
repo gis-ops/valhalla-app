@@ -55,6 +55,7 @@ const convertDDToDMS = (decimalDegrees) =>
 // for this app we create two leaflet layer groups to control, one for the isochrone centers and one for the isochrone contours
 const isoCenterLayer = L.featureGroup()
 const isoPolygonLayer = L.featureGroup()
+const isoLocationsLayer = L.featureGroup()
 const routeMarkersLayer = L.featureGroup()
 const routeLineStringLayer = L.featureGroup()
 const highlightRouteSegmentlayer = L.featureGroup()
@@ -95,6 +96,7 @@ const mapParams = {
     isoCenterLayer,
     routeMarkersLayer,
     isoPolygonLayer,
+    isoLocationsLayer,
     routeLineStringLayer,
     highlightRouteSegmentlayer,
     highlightRouteIndexLayer,
@@ -157,6 +159,7 @@ class Map extends React.Component {
       'Isochrone Center': isoCenterLayer,
       Routes: routeLineStringLayer,
       Isochrones: isoPolygonLayer,
+      'Isochrones (locations)': isoLocationsLayer,
     }
 
     this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map)
@@ -432,6 +435,7 @@ class Map extends React.Component {
     }
     if (!isochrones.successful) {
       isoPolygonLayer.clearLayers()
+      isoLocationsLayer.clearLayers()
     }
   }
 
@@ -504,6 +508,16 @@ class Map extends React.Component {
     `
   }
 
+  getIsoLocationTooltip = () => {
+    return `
+    <div class="ui list">
+        <div class="item">
+          Snapped location
+        </div>
+      </div>
+    `
+  }
+
   handleHighlightSegment = () => {
     const { highlightSegment, results } = this.props.directions
 
@@ -532,6 +546,7 @@ class Map extends React.Component {
   addIsochrones = () => {
     const { results } = this.props.isochrones
     isoPolygonLayer.clearLayers()
+    isoLocationsLayer.clearLayers()
 
     for (const provider of [VALHALLA_OSM_URL]) {
       if (
@@ -543,27 +558,47 @@ class Map extends React.Component {
           for (const latLng of feature.geometry.coordinates) {
             coords_reversed.push([latLng[1], latLng[0]])
           }
+          if (['Polygon', 'MultiPolygon'].includes(feature.geometry.type)) {
+            L.geoJSON(feature, {
+              style: (feat) => ({
+                ...feat.properties,
+                color: '#fff',
+                opacity: 1,
+              }),
+            })
+              .bindTooltip(
+                this.getIsoTooltip(
+                  feature.properties.contour,
+                  feature.properties.area.toFixed(2),
+                  provider
+                ),
+                {
+                  permanent: false,
+                  sticky: true,
+                }
+              )
+              .addTo(isoPolygonLayer)
+          } else {
+            // locations
 
-          L.polygon(coords_reversed, {
-            ...feature.properties,
-            color: 'white',
-            weight: 2,
-            opacity: 1.0,
-            pane: 'isochronesPane',
-            pmIgnore: true,
-          })
-            .bindTooltip(
-              this.getIsoTooltip(
-                feature.properties.contour,
-                feature.properties.area.toFixed(2),
-                provider
-              ),
-              {
-                permanent: false,
-                sticky: true,
-              }
-            )
-            .addTo(isoPolygonLayer)
+            if (feature.properties.type === 'input') {
+              return
+            }
+            L.geoJSON(feature, {
+              pointToLayer: (feat, ll) => {
+                return L.circleMarker(ll, {
+                  radius: 6,
+                  color: '#000',
+                  fillColor: '#fff',
+                  fill: true,
+                  fillOpacity: 1,
+                }).bindTooltip(this.getIsoLocationTooltip(), {
+                  permanent: false,
+                  sticky: true,
+                })
+              },
+            }).addTo(isoLocationsLayer)
+          }
         }
       }
     }

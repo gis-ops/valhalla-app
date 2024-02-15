@@ -26,30 +26,34 @@ class ContoursInformation extends React.Component {
     return (
       <React.Fragment>
         {features ? (
-          features.map((feature, key) => {
-            return (
-              <div className={'flex pb2'} key={key}>
-                <div
-                  className={'flex'}
-                  style={{
-                    alignSelf: 'center',
-                    flexBasis: '140px',
-                  }}
-                >
-                  <Icon circular name={'time'} />
-                  <div className={'pr2 f6 b pt1 pb1'}>
-                    {feature.properties.contour + ' minutes'}
+          features
+            .filter((feature) => !feature.properties.type)
+            .map((feature, key) => {
+              return (
+                <div className={'flex pb2'} key={key}>
+                  <div
+                    className={'flex'}
+                    style={{
+                      alignSelf: 'center',
+                      flexBasis: '140px',
+                    }}
+                  >
+                    <Icon circular name={'time'} />
+                    <div className={'pr2 f6 b pt1 pb1'}>
+                      {feature.properties.contour + ' minutes'}
+                    </div>
+                  </div>
+                  <div className={'flex'} style={{ alignSelf: 'center' }}>
+                    <Icon circular name={'move'} />
+                    <div className={'pa1 b f6'}>
+                      {(feature.properties.area > 1
+                        ? feature.properties.area.toFixed(0)
+                        : feature.properties.area.toFixed(1)) + ' km²'}
+                    </div>
                   </div>
                 </div>
-                <div className={'flex'} style={{ alignSelf: 'center' }}>
-                  <Icon circular name={'move'} />
-                  <div className={'pa1 b f6'}>
-                    {feature.properties.area.toFixed(0) + ' km²'}
-                  </div>
-                </div>
-              </div>
-            )
-          })
+              )
+            })
         ) : (
           <div>No isochrones found</div>
         )}

@@ -16,6 +16,12 @@ import {
   clearIsos,
 } from 'actions/isochronesActions'
 
+import {
+  denoise as denoiseParam,
+  generalize as generalizeParam,
+  settingsInit,
+} from 'Controls/settings-options'
+
 import { updatePermalink, zoomTo } from 'actions/commonActions'
 
 import { debounce } from 'throttle-debounce'
@@ -115,6 +121,28 @@ class Waypoints extends Component {
     })
   }
 
+  handleDenoiseChange = (e, { value }) => {
+    value = isNaN(parseFloat(value)) ? settingsInit.denoise : parseFloat(value)
+
+    const denoiseName = 'denoise'
+
+    this.handleIsoSliderUpdateSettings({
+      denoiseName,
+      value,
+    })
+  }
+
+  handleGeneralizeChange = (e, { value }) => {
+    value = isNaN(parseInt(value)) ? settingsInit.generalize : parseInt(value)
+
+    const generalizeName = 'generalize'
+
+    this.handleIsoSliderUpdateSettings({
+      generalizeName,
+      value,
+    })
+  }
+
   handleRangeChange = (e, { value }) => {
     value = isNaN(parseInt(value)) ? 0 : parseInt(value)
     if (value > 120) {
@@ -132,14 +160,22 @@ class Waypoints extends Component {
     this.makeIsochronesRequest()
   }
 
-  handleIsoSliderUpdateSettings = ({ value, maxRangeName, intervalName }) => {
+  handleIsoSliderUpdateSettings = ({
+    value,
+    maxRangeName,
+    intervalName,
+    denoiseName,
+    generalizeName,
+  }) => {
     const { dispatch } = this.props
     // maxRangeName can be undefined if interval is being updated
     dispatch(
       updateIsoSettings({
         maxRangeName,
         intervalName,
-        value: parseInt(value),
+        denoiseName,
+        generalizeName,
+        value: parseFloat(value),
       })
     )
 
@@ -165,8 +201,15 @@ class Waypoints extends Component {
   )
 
   render() {
-    const { isFetching, geocodeResults, userInput, maxRange, interval } =
-      this.props.isochrones
+    const {
+      isFetching,
+      geocodeResults,
+      userInput,
+      maxRange,
+      interval,
+      denoise,
+      generalize,
+    } = this.props.isochrones
     const { activeIndex } = this.state
 
     const controlSettings = {
@@ -192,6 +235,8 @@ class Waypoints extends Component {
           step: 1,
         },
       },
+      generalize: generalizeParam,
+      denoise: denoiseParam,
     }
 
     return (
@@ -369,6 +414,123 @@ class Waypoints extends Component {
                         const intervalName = controlSettings.interval.param
                         this.handleIsoSliderUpdateSettings({
                           intervalName,
+                          value: e.target.value,
+                        })
+                      }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className={'pt3 pl3 pr3'}>
+                  <Form.Group inline>
+                    <Form.Input
+                      width={12}
+                      size="small"
+                      label={
+                        <div className="flex flex-row align-top">
+                          <span className="custom-label">
+                            {controlSettings.denoise.name}
+                          </span>
+                          <Popup
+                            content={controlSettings.denoise.description}
+                            size={'tiny'}
+                            trigger={
+                              <Icon
+                                className="pl2"
+                                color="grey"
+                                name="help circle"
+                              />
+                            }
+                          />
+                        </div>
+                      }
+                      value={denoise}
+                      placeholder="Enter Value"
+                      name={controlSettings.denoise.param}
+                      onChange={this.handleDenoiseChange}
+                    />
+                  </Form.Group>
+                  <div className={'mb2 pa2'}>
+                    <Slider
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      value={denoise}
+                      color="secondary"
+                      aria-label="Default"
+                      valueLabelDisplay="auto"
+                      onChange={(e) => {
+                        const param = controlSettings.denoise.param
+                        this.handleIsoSliderUpdateSettings({
+                          denoiseName: param,
+                          value: e.target.value,
+                        })
+                      }}
+                      onChangeCommitted={() => {
+                        this.makeIsochronesRequest()
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className={'pt3 pl3 pr3'}>
+                  <Form.Group inline>
+                    <Form.Input
+                      width={12}
+                      size="small"
+                      label={
+                        <div className="flex flex-row align-top">
+                          <span className="custom-label">
+                            {controlSettings.generalize.name}
+                          </span>
+                          <Popup
+                            content={controlSettings.generalize.description}
+                            size={'tiny'}
+                            trigger={
+                              <Icon
+                                className="pl2"
+                                color="grey"
+                                name="help circle"
+                              />
+                            }
+                          />
+                        </div>
+                      }
+                      value={generalize}
+                      placeholder="Enter Value"
+                      name={controlSettings.generalize.param}
+                      onChange={this.handleGeneralizeChange}
+                    />
+                    <Popup
+                      content={'Units'}
+                      size={'tiny'}
+                      trigger={
+                        <Label
+                          basic
+                          size={'small'}
+                          style={{
+                            cursor: 'default',
+                          }}
+                        >
+                          {controlSettings.generalize.unit}
+                        </Label>
+                      }
+                    />
+                  </Form.Group>
+                  <div className={'mb2 pa2'}>
+                    <Slider
+                      min={controlSettings.generalize.settings.min}
+                      max={controlSettings.generalize.settings.max}
+                      step={controlSettings.generalize.settings.step}
+                      value={generalize}
+                      color="secondary"
+                      aria-label="Default"
+                      valueLabelDisplay="auto"
+                      onChange={(e) => {
+                        const param = controlSettings.generalize.param
+                        this.handleIsoSliderUpdateSettings({
+                          generalizeName: param,
                           value: e.target.value,
                         })
                       }}
