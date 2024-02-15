@@ -18,7 +18,11 @@ import {
   Button,
 } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { profile_settings, settings_general } from './settings-options'
+import {
+  profile_settings,
+  settings_general,
+  settings_isochrone,
+} from './settings-options'
 import {
   updateSettings,
   doShowSettings,
@@ -81,6 +85,7 @@ class SettingsPanel extends React.Component {
       activeIndexGeneral: 0,
       generalSettings: {},
       extraSettings: {},
+      isochroneSettings: {},
       copied: false,
     }
   }
@@ -99,7 +104,7 @@ class SettingsPanel extends React.Component {
   // we however only want this component to update if the
   // settings really change, therefor deep check with ramda
   shouldComponentUpdate(nextProps, nextState) {
-    const { settings, profile, showSettings } = this.props
+    const { settings, profile, showSettings, activeTab } = this.props
 
     if (!R.equals(settings, nextProps.settings)) {
       return true
@@ -111,6 +116,9 @@ class SettingsPanel extends React.Component {
       return true
     }
     if (!R.equals(this.state, nextState)) {
+      return true
+    }
+    if (!R.equals(activeTab, nextProps.activeTab)) {
       return true
     }
     return false
@@ -411,6 +419,65 @@ class SettingsPanel extends React.Component {
                   </Form>
                 </Grid.Column>
               </Grid.Row>
+              {this.props.activeTab === 1 && (
+                <Grid.Row columns={16}>
+                  <Grid.Column width={8}>
+                    <Form size={'small'}>
+                      <div className={'flex flex-row justify-between'}>
+                        <Header as="h4">Isochrone Settings</Header>
+                      </div>
+                      <Accordion>
+                        {settings_isochrone.numeric.map((option, key) => (
+                          <Fragment key={key}>
+                            <div className="flex pointer">
+                              <div
+                                onClick={() =>
+                                  this.handleShowSettings(
+                                    'isochroneSettings',
+                                    key
+                                  )
+                                }
+                              >
+                                <Icon
+                                  name={
+                                    this.state.isochroneSettings[key]
+                                      ? 'caret down'
+                                      : 'caret right'
+                                  }
+                                />
+                                <span className="b f6">{option.name}</span>
+                              </div>
+                              <div
+                                style={{
+                                  marginLeft: 'auto',
+                                }}
+                              >
+                                <Popup
+                                  content={option.description}
+                                  size={'tiny'}
+                                  trigger={
+                                    <Icon color="grey" name="help circle" />
+                                  }
+                                />
+                              </div>
+                            </div>
+                            {this.state.isochroneSettings[key] ? (
+                              <CustomSlider
+                                key={key}
+                                option={option}
+                                dispatch={dispatch}
+                                settings={settings}
+                                profile={profile}
+                                handleUpdateSettings={this.handleUpdateSettings}
+                              />
+                            ) : null}
+                          </Fragment>
+                        ))}
+                      </Accordion>
+                    </Form>
+                  </Grid.Column>
+                </Grid.Row>
+              )}
               <Grid.Row>
                 <Grid.Column width={16}>
                   <CopyToClipboard

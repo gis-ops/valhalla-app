@@ -78,11 +78,17 @@ export const buildIsochronesRequest = ({
   if (profile === 'car') {
     valhalla_profile = 'auto'
   }
+
+  const { denoise, generalize, ...costingOptions } = settings
   return {
     json: {
+      polygons: true,
+      denoise,
+      generalize,
+      show_locations: true,
       costing: valhalla_profile,
       costing_options: {
-        [valhalla_profile]: { ...settings },
+        [valhalla_profile]: { ...costingOptions },
       },
       contours: makeContours({ maxRange, interval }),
       locations: makeLocations([center]),

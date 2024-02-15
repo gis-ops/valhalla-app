@@ -646,6 +646,31 @@ const useTrails = {
     step: 0.1,
   },
 }
+const denoise = {
+  name: 'Denoise',
+  description:
+    'A floating point value from 0 to 1 (default of 1) which can be used to remove smaller contours. A value of 1 will only return the largest contour for a given time value. A value of 0.5 drops any contours that are less than half the area of the largest contour in the set of contours for that same time value.',
+  param: 'denoise',
+  unit: '',
+  settings: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
+}
+
+const generalize = {
+  name: 'Generalize',
+  description:
+    'A floating point value in meters used as the tolerance for Douglas-Peucker generalization. Note: Generalization of contours can lead to self-intersections, as well as intersections of adjacent contours.',
+  param: 'generalize',
+  unit: 'meters',
+  settings: {
+    min: 0,
+    max: 1000,
+    step: 1,
+  },
+}
 
 export const settingsInit = {
   maneuver_penalty: 5,
@@ -701,6 +726,8 @@ export const settingsInit = {
   transit_transfer_max_distance: 800,
   disable_hierarchy_pruning: false,
   use_trails: 0,
+  denoise: 0.1,
+  generalize: 0,
 }
 
 export const settingsInitTruckOverride = {
@@ -974,4 +1001,8 @@ export const settings_general = {
 export const jsonConfig = {
   type: 'space',
   size: 2,
+}
+
+export const settings_isochrone = {
+  numeric: [denoise, generalize],
 }

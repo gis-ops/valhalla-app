@@ -14,6 +14,7 @@ import {
 import {
   profile_settings,
   settings_general,
+  settings_isochrone,
 } from '../Controls/settings-options'
 
 export const showLoading = (loading) => ({
@@ -154,6 +155,12 @@ export const filterProfileSettings = (profile, settings) => {
       }
     }
     for (const item of profile_settings[profile].enum) {
+      if (setting === item.param) {
+        filteredSettings[setting] = settings[setting]
+      }
+    }
+
+    for (const item of settings_isochrone.numeric) {
       if (setting === item.param) {
         filteredSettings[setting] = settings[setting]
       }
