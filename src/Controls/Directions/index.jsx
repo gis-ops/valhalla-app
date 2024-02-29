@@ -74,10 +74,11 @@ class DirectionsControl extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dateTime } = this.props
+    const { dateTime, profile } = this.props
     const shouldUpdate =
       dateTime.type !== nextProps.dateTime.type ||
-      dateTime.value !== nextProps.dateTime.value
+      dateTime.value !== nextProps.dateTime.value ||
+      profile !== nextProps.profile
     if (shouldUpdate) {
       this.props.dispatch(makeRequest())
     }
