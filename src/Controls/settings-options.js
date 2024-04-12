@@ -966,7 +966,7 @@ export const settings_general = {
     boolean: [
       ignoreClosures,
       ignoreRestrictions,
-      ignoreAccess, 
+      ignoreAccess,
       excludeCashOnlyTolls,
     ],
     enum: [],
@@ -1021,7 +1021,7 @@ export const settings_general = {
     boolean: [
       ignoreClosures,
       ignoreRestrictions,
-      ignoreAccess, 
+      ignoreAccess,
       excludeCashOnlyTolls,
     ],
     enum: [],
