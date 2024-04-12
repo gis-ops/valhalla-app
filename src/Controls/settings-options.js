@@ -944,7 +944,7 @@ export const settings_general = {
       ignoreClosures,
       ignoreRestrictions,
       ignoreAccess,
-      excludeCashOnlyTolls
+      excludeCashOnlyTolls,
     ],
     enum: [],
   },
@@ -967,7 +967,7 @@ export const settings_general = {
       ignoreClosures,
       ignoreRestrictions,
       ignoreAccess, 
-      excludeCashOnlyTolls
+      excludeCashOnlyTolls,
     ],
     enum: [],
   },
@@ -1022,7 +1022,7 @@ export const settings_general = {
       ignoreClosures,
       ignoreRestrictions,
       ignoreAccess, 
-      excludeCashOnlyTolls
+      excludeCashOnlyTolls,
     ],
     enum: [],
   },
