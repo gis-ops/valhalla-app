@@ -349,6 +349,20 @@ const ignoreClosures = {
   param: 'ignore_closures',
 }
 
+const ignoreRestrictions = {
+  name: 'Ignore Restrictions',
+  description:
+    'If set to true, ignores any restrictions (e.g. turn/dimensional/conditional restrictions). Especially useful for matching GPS traces to the road network regardless of restrictions.',
+  param: 'ignore_restrictions',
+}
+
+const ignoreAccess = {
+  name: 'Ignore Access',
+  description:
+    'If set to true, Will ignore mode-specific access tags. Especially useful for matching GPS traces to the road network regardless of restrictions.',
+  param: 'ignore_access',
+}
+
 const closureFactor = {
   name: 'Closure Factor',
   param: 'closure_factor',
@@ -690,6 +704,8 @@ export const settingsInit = {
   use_tracks: 0,
   private_access_penalty: 450,
   ignore_closures: false,
+  ignore_restrictions: false,
+  ignore_access: false,
   closure_factor: 9,
   service_penalty: 15,
   service_factor: 1,
@@ -900,6 +916,8 @@ export const settings_general = {
     ],
     boolean: [
       ignoreClosures,
+      ignoreRestrictions,
+      ignoreAccess,
       excludeCashOnlyTolls,
       includeHOV3,
       includeHOV2,
@@ -922,7 +940,12 @@ export const settings_general = {
       useTracks,
       excludeUnpaved,
     ],
-    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    boolean: [
+      ignoreClosures,
+      ignoreRestrictions,
+      ignoreAccess,
+      excludeCashOnlyTolls,
+    ],
     enum: [],
   },
   bus: {
@@ -940,7 +963,12 @@ export const settings_general = {
       useTracks,
       excludeUnpaved,
     ],
-    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    boolean: [
+      ignoreClosures,
+      ignoreRestrictions,
+      ignoreAccess,
+      excludeCashOnlyTolls,
+    ],
     enum: [],
   },
   pedestrian: {
@@ -990,7 +1018,12 @@ export const settings_general = {
       useTracks,
       excludeUnpaved,
     ],
-    boolean: [ignoreClosures, excludeCashOnlyTolls],
+    boolean: [
+      ignoreClosures,
+      ignoreRestrictions,
+      ignoreAccess,
+      excludeCashOnlyTolls,
+    ],
     enum: [],
   },
   all: {
