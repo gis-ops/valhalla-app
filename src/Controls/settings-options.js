@@ -672,6 +672,19 @@ const useTrails = {
     step: 0.1,
   },
 }
+
+const useTruckRoutes = {
+  name: 'Use Truck Routes',
+  param: 'use_truck_route',
+  unit: 'willingness',
+  description: `A riders's desire for adventure in their routes. This is a range of values from 0 to 1, where 0 will avoid trails, tracks, unclassified or bad surfaces and values towards 1 will tend to avoid major roads and route on secondary roads. The default value is 0.0.`,
+  settings: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
+}
+
 export const denoise = {
   name: 'Denoise',
   description:
@@ -785,6 +798,7 @@ export const profile_settings = {
       serviceFactor,
       countryCrossingCost,
       countryCrossingPenality,
+      useTruckRoutes,
     ],
     boolean: [hazardousMaterials, shortest, ignoreHierarchies],
     enum: [],
