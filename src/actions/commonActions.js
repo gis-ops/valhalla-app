@@ -126,39 +126,43 @@ export const downloadFile = ({ data, fileName, fileType }) => {
 
 export const filterProfileSettings = (profile, settings) => {
   const filteredSettings = {
-    exclude_polygons: settings.exclude_polygons,
+    costing: {},
+    directions: {
+      alternates: settings.alternates,
+      exclude_polygons: settings.exclude_polygons,
+    },
   }
   for (const setting in settings) {
     for (const item of settings_general[profile].numeric) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
     for (const item of settings_general[profile].boolean) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
     for (const item of settings_general[profile].enum) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
 
     for (const item of profile_settings[profile].numeric) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
 
     for (const item of profile_settings[profile].boolean) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
     for (const item of profile_settings[profile].enum) {
       if (setting === item.param) {
-        filteredSettings[setting] = settings[setting]
+        filteredSettings.costing[setting] = settings[setting]
       }
     }
   }

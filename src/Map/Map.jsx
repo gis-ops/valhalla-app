@@ -108,6 +108,7 @@ const mapParams = {
 const routeObjects = {
   [VALHALLA_OSM_URL]: {
     color: '#cc0000',
+    alternativeColor: '#ea9898',
     name: 'OSM',
   },
 }
@@ -636,8 +637,34 @@ class Map extends React.Component {
       Object.keys(results[VALHALLA_OSM_URL].data).length > 0 &&
       results[VALHALLA_OSM_URL].show
     ) {
-      const coords = results[VALHALLA_OSM_URL].data.decodedGeometry
-      const summary = results[VALHALLA_OSM_URL].data.trip.summary
+      const response = results[VALHALLA_OSM_URL].data
+      // show alternates if they exist on the respsonse
+      if (response.alternates) {
+        for (let i = 0; i < response.alternates.length; i++) {
+          const alternate = response.alternates[i]
+          const coords = alternate.decodedGeometry
+          const summary = alternate.trip.summary
+          L.polyline(coords, {
+            color: '#FFF',
+            weight: 9,
+            opacity: 1,
+            pmIgnore: true,
+          }).addTo(routeLineStringLayer)
+          L.polyline(coords, {
+            color: routeObjects[VALHALLA_OSM_URL].alternativeColor,
+            weight: 5,
+            opacity: 1,
+            pmIgnore: true,
+          })
+            .addTo(routeLineStringLayer)
+            .bindTooltip(this.getRouteToolTip(summary, VALHALLA_OSM_URL), {
+              permanent: false,
+              sticky: true,
+            })
+        }
+      }
+      const coords = response.decodedGeometry
+      const summary = response.trip.summary
       L.polyline(coords, {
         color: '#FFF',
         weight: 9,
@@ -655,6 +682,7 @@ class Map extends React.Component {
           permanent: false,
           sticky: true,
         })
+
       if (this.hg._showState === true) {
         this.hg._expand()
       }
