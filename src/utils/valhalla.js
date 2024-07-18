@@ -40,13 +40,12 @@ export const buildDirectionsRequest = ({
     json: {
       costing: valhalla_profile,
       costing_options: {
-        [valhalla_profile]: { ...settings },
+        [valhalla_profile]: { ...settings.costing },
       },
-      exclude_polygons: settings.exclude_polygons,
+      exclude_polygons: settings.directions.exclude_polygons,
       locations: makeLocations(activeWaypoints),
-      directions_options: {
-        units: 'kilometers',
-      },
+      units: 'kilometers',
+      alternates: settings.directions.alternates,
       id: 'valhalla_directions',
     },
   }
@@ -93,9 +92,7 @@ export const buildIsochronesRequest = ({
       },
       contours: makeContours({ maxRange, interval }),
       locations: makeLocations([center]),
-      directions_options: {
-        units: 'kilometers',
-      },
+      units: 'kilometers',
       id: `valhalla_isochrones_lonlat_${center.displaylnglat.toString()}_range_${maxRange.toString()}_interval_${interval.toString()}`,
     },
   }

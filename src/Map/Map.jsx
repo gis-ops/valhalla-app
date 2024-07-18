@@ -108,6 +108,7 @@ const mapParams = {
 const routeObjects = {
   [VALHALLA_OSM_URL]: {
     color: '#cc0000',
+    alternativeColor: '#ea9898',
     name: 'OSM',
   },
 }
@@ -521,9 +522,16 @@ class Map extends React.Component {
   handleHighlightSegment = () => {
     const { highlightSegment, results } = this.props.directions
 
-    const coords = results[VALHALLA_OSM_URL].data.decodedGeometry
+    const { startIndex, endIndex, alternate } = highlightSegment
 
-    const { startIndex, endIndex } = highlightSegment
+    let coords
+    if (alternate == -1) {
+      coords = results[VALHALLA_OSM_URL].data.decodedGeometry
+    } else {
+      coords =
+        results[VALHALLA_OSM_URL].data.alternates[alternate].decodedGeometry
+    }
+
     if (startIndex > -1 && endIndex > -1) {
       L.polyline(coords.slice(startIndex, endIndex + 1), {
         color: 'yellow',
@@ -632,12 +640,41 @@ class Map extends React.Component {
     const { results } = this.props.directions
     routeLineStringLayer.clearLayers()
 
-    if (
-      Object.keys(results[VALHALLA_OSM_URL].data).length > 0 &&
-      results[VALHALLA_OSM_URL].show
-    ) {
-      const coords = results[VALHALLA_OSM_URL].data.decodedGeometry
-      const summary = results[VALHALLA_OSM_URL].data.trip.summary
+    if (Object.keys(results[VALHALLA_OSM_URL].data).length > 0) {
+      const response = results[VALHALLA_OSM_URL].data
+      // show alternates if they exist on the respsonse
+      if (response.alternates) {
+        for (let i = 0; i < response.alternates.length; i++) {
+          if (!results[VALHALLA_OSM_URL].show[i]) {
+            continue
+          }
+          const alternate = response.alternates[i]
+          const coords = alternate.decodedGeometry
+          const summary = alternate.trip.summary
+          L.polyline(coords, {
+            color: '#FFF',
+            weight: 9,
+            opacity: 1,
+            pmIgnore: true,
+          }).addTo(routeLineStringLayer)
+          L.polyline(coords, {
+            color: routeObjects[VALHALLA_OSM_URL].alternativeColor,
+            weight: 5,
+            opacity: 1,
+            pmIgnore: true,
+          })
+            .addTo(routeLineStringLayer)
+            .bindTooltip(this.getRouteToolTip(summary, VALHALLA_OSM_URL), {
+              permanent: false,
+              sticky: true,
+            })
+        }
+      }
+      if (!results[VALHALLA_OSM_URL].show[-1]) {
+        return
+      }
+      const coords = response.decodedGeometry
+      const summary = response.trip.summary
       L.polyline(coords, {
         color: '#FFF',
         weight: 9,
@@ -655,6 +692,7 @@ class Map extends React.Component {
           permanent: false,
           sticky: true,
         })
+
       if (this.hg._showState === true) {
         this.hg._expand()
       }

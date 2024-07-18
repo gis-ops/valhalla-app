@@ -257,17 +257,8 @@ class MainControl extends React.Component {
                 <ServiceTabs />
               </div>
             </Segment>
-            {/* because apparently on small screens it's not showing both, so we switch the order on tab switch */}
-            {(activeTab === 0 && (
-              <>
-                <DirectionOutputControl />
-                <IsochronesOutputControl />
-              </>
-            )) || (
-              <>
-                <IsochronesOutputControl />
-                <DirectionOutputControl />
-              </>
+            {(activeTab === 0 && <DirectionOutputControl />) || (
+              <IsochronesOutputControl />
             )}
           </div>
           <div

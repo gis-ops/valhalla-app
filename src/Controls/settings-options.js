@@ -436,6 +436,18 @@ const useGeocoding = {
   param: 'use_geocoding',
 }
 
+const alternates = {
+  name: 'Alternates',
+  description: 'You want more?',
+  param: 'alternates',
+  unit: 'alternates',
+  settings: {
+    min: 0,
+    max: 5,
+    step: 1,
+  },
+}
+
 const ignoreHierarchies = {
   name: 'Disable Hierarchies',
   description:
@@ -744,6 +756,7 @@ export const settingsInit = {
   use_trails: 0,
   denoise: 0.1,
   generalize: 0,
+  alternates: 0,
 }
 
 export const settingsInitTruckOverride = {
@@ -1028,6 +1041,7 @@ export const settings_general = {
   },
   all: {
     boolean: [useGeocoding],
+    numeric: [alternates],
   },
 }
 

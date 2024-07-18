@@ -87,6 +87,14 @@ const fetchValhallaDirections = (valhallaRequest) => (dispatch) => {
     .get(VALHALLA_OSM_URL + '/route', config)
     .then(({ data }) => {
       data.decodedGeometry = parseDirectionsGeometry(data)
+
+      if (data.alternates) {
+        for (let i = 0; i < data.alternates.length; i++) {
+          const alternate = data.alternates[i]
+          data.alternates[i].decodedGeometry =
+            parseDirectionsGeometry(alternate)
+        }
+      }
       dispatch(registerRouteResponse(VALHALLA_OSM_URL, data))
       dispatch(zoomTo(data.decodedGeometry))
     })
@@ -392,10 +400,11 @@ export const setWaypoints = (waypoints) => ({
   payload: waypoints,
 })
 
-export const showProvider = (provider, show) => ({
+export const showProvider = (provider, show, idx) => ({
   type: TOGGLE_PROVIDER_ISO,
   payload: {
     provider,
     show,
+    idx,
   },
 })

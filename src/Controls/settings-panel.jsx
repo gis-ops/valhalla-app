@@ -81,6 +81,7 @@ class SettingsPanel extends React.Component {
       activeIndexGeneral: 0,
       generalSettings: {},
       extraSettings: {},
+      directionsSettings: {},
       isochroneSettings: {},
       copied: false,
     }
@@ -131,7 +132,12 @@ class SettingsPanel extends React.Component {
       const { extraSettings } = this.state
       Object.keys(extraSettings).forEach((v) => (extraSettings[v] = false))
 
-      this.setState({ generalSettings, extraSettings })
+      const { directionsSettings } = this.state
+      Object.keys(directionsSettings).forEach(
+        (v) => (directionsSettings[v] = false)
+      )
+
+      this.setState({ generalSettings, extraSettings, directionsSettings })
     }
 
     if (
@@ -410,6 +416,54 @@ class SettingsPanel extends React.Component {
                             />
                           </div>
                         </div>
+                      )
+                    })}
+                    {settings_general.all.numeric.map((option, key) => {
+                      return (
+                        <Fragment key={key}>
+                          <div className="flex pointer">
+                            <div
+                              onClick={() =>
+                                this.handleShowSettings(
+                                  'directionsSettings',
+                                  key
+                                )
+                              }
+                            >
+                              <Icon
+                                name={
+                                  this.state.generalSettings[key]
+                                    ? 'caret down'
+                                    : 'caret right'
+                                }
+                              />
+                              <span className="b f6">{option.name}</span>
+                            </div>
+                            <div
+                              style={{
+                                marginLeft: 'auto',
+                              }}
+                            >
+                              <Popup
+                                content={option.description}
+                                size={'tiny'}
+                                trigger={
+                                  <Icon color="grey" name="help circle" />
+                                }
+                              />
+                            </div>
+                          </div>
+                          {this.state.directionsSettings[key] ? (
+                            <CustomSlider
+                              key={key}
+                              option={option}
+                              dispatch={dispatch}
+                              settings={settings}
+                              profile={profile}
+                              handleUpdateSettings={this.handleUpdateSettings}
+                            />
+                          ) : null}
+                        </Fragment>
                       )
                     })}
                   </Form>

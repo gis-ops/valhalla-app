@@ -1,37 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 
 import { Icon, Checkbox, Popup } from 'semantic-ui-react'
 import { showProvider } from '../../actions/directionsActions'
 
 import formatDuration from 'utils/date_time'
+import { VALHALLA_OSM_URL } from 'utils/valhalla'
 class Summary extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     results: PropTypes.object,
     inclineDeclineTotal: PropTypes.object,
-    header: PropTypes.string,
+    summary: PropTypes.object.isRequired,
+    header: PropTypes.string.isRequired,
+    idx: PropTypes.number.isRequired,
     provider: PropTypes.string,
   }
 
   handleChange = (event, data) => {
-    const { dispatch } = this.props
-    dispatch(showProvider(data.provider, data.checked))
+    const { dispatch, idx } = this.props
+    dispatch(showProvider(data.provider, data.checked, idx))
   }
 
   render() {
-    const { provider, results, inclineDeclineTotal } = this.props
-
-    const summary = R.path([provider, 'data', 'trip', 'summary'], results)
+    const { results, summary, inclineDeclineTotal, header, idx } = this.props
 
     return (
       <React.Fragment>
         {summary ? (
           <React.Fragment>
             <div className="flex mb1">
-              <span className="b">Directions</span>
+              <span className="b">{header}</span>
               {summary.has_highway && (
                 <div style={{ marginLeft: '1em' }}>
                   <Popup
@@ -119,9 +119,9 @@ class Summary extends React.Component {
                 <Checkbox
                   slider
                   label={'Map'}
-                  checked={results[provider].show}
-                  provider={provider}
-                  onChange={this.handleChange}
+                  checked={results[VALHALLA_OSM_URL].show[idx]}
+                  provider={VALHALLA_OSM_URL}
+                  onChange={(event, data) => this.handleChange(event, data)}
                 />
               </div>
             </div>

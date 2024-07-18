@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 import { Header, Icon, Divider, Popup } from 'semantic-ui-react'
 
 import { highlightManeuver, zoomToManeuver } from 'actions/directionsActions'
@@ -17,15 +16,17 @@ const getLength = (length) => {
 class Maneuvers extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    results: PropTypes.object,
+    legs: PropTypes.object.isRequired,
+    idx: PropTypes.number.isRequired,
     header: PropTypes.string,
-    provider: PropTypes.string,
     profile: PropTypes.string,
   }
 
   highlightMnv = (sIdx, eIdx) => {
-    const { dispatch } = this.props
-    dispatch(highlightManeuver({ startIndex: sIdx, endIndex: eIdx }))
+    const { dispatch, idx } = this.props
+    dispatch(
+      highlightManeuver({ startIndex: sIdx, endIndex: eIdx, alternate: idx })
+    )
   }
 
   zoomToMnv = (sIdx) => {
@@ -34,9 +35,7 @@ class Maneuvers extends React.Component {
   }
 
   render() {
-    const { provider, results } = this.props
-
-    const legs = R.path([provider, 'data', 'trip', 'legs'], results)
+    const { legs } = this.props
 
     const startIndices = {
       0: 0,
