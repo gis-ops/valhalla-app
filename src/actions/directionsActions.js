@@ -400,10 +400,11 @@ export const setWaypoints = (waypoints) => ({
   payload: waypoints,
 })
 
-export const showProvider = (provider, show) => ({
+export const showProvider = (provider, show, idx) => ({
   type: TOGGLE_PROVIDER_ISO,
   payload: {
     provider,
     show,
+    idx,
   },
 })

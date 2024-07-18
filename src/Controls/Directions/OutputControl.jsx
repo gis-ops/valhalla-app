@@ -24,8 +24,20 @@ class OutputControl extends React.Component {
   constructor(props) {
     super(props)
 
+    const { results } = this.props
+    const { data } = results[VALHALLA_OSM_URL]
+
+    let alternates = []
+
+    if (data.alternates) {
+      alternates = data.alternates.map((_, i) => i)
+    }
+
     this.state = {
-      showResults: false,
+      showResults: {
+        '-1': false,
+        ...alternates.reduce((acc, v) => ({ ...acc, [v]: false }), {}),
+      },
     }
     this.showManeuvers = this.showManeuvers.bind(this)
   }
@@ -37,14 +49,16 @@ class OutputControl extends React.Component {
     if (nextProps.activeTab === 0 && this.props.activeTab === 1) {
       nextProps.dispatch(makeRequest())
     }
-    // if (nextProps.activeTab === 1) {
-    //   return false
-    // }
     return true
   }
 
-  showManeuvers() {
-    this.setState({ showResults: !this.state.showResults })
+  showManeuvers(idx) {
+    this.setState({
+      showResults: {
+        ...this.state.showResults,
+        [idx]: !this.state.showResults[idx],
+      },
+    })
   }
 
   dateNow() {
@@ -83,53 +97,129 @@ class OutputControl extends React.Component {
   }
 
   render() {
-    const { successful } = this.props
+    const { results, successful } = this.props
 
-    return (
-      <Segment
-        style={{
-          margin: '0 1rem 10px',
-          display: successful ? 'block' : 'none',
-        }}
-      >
-        <div className={'flex-column'}>
-          <Summary provider={VALHALLA_OSM_URL} />
-          <div className={'flex justify-between'}>
-            <Button
-              size="mini"
-              toggle
-              active={this.state.showResults}
-              onClick={this.showManeuvers}
-            >
-              {this.state.showResults ? 'Hide Maneuvers' : 'Show Maneuvers'}
-            </Button>
-            <div className={'flex'}>
-              <div
-                className={'flex pointer'}
-                style={{ alignSelf: 'center' }}
-                onClick={this.exportToJson}
-              >
-                <Icon circular name={'download'} />
-                <div className={'pa1 b f6'}>{'JSON'}</div>
-              </div>
-              <div
-                className={'ml2 flex pointer'}
-                style={{ alignSelf: 'center' }}
-                onClick={this.exportToGeoJson}
-              >
-                <Icon circular name={'download'} />
-                <div className={'pa1 b f6'}>{'GeoJSON'}</div>
-              </div>
-            </div>
-          </div>
+    const data = results[VALHALLA_OSM_URL].data
 
-          {this.state.showResults ? (
+    let alternates = []
+    if (data.alternates) {
+      alternates = data.alternates.map((alternate, i) => {
+        const legs = alternate.trip.legs
+        return (
+          <Segment
+            key={`alternate_${i}`}
+            style={{
+              margin: '0 1rem 10px',
+              display: successful ? 'block' : 'none',
+            }}
+          >
             <div className={'flex-column'}>
-              <Maneuvers provider={VALHALLA_OSM_URL} />
+              <Summary
+                header={`Alternate ${i + 1}`}
+                idx={i}
+                summary={alternate.trip.summary}
+              />
+              <div className={'flex justify-between'}>
+                <Button
+                  size="mini"
+                  toggle
+                  active={this.state.showResults[i]}
+                  onClick={() => this.showManeuvers(i)}
+                >
+                  {this.state.showResults[i]
+                    ? 'Hide Maneuvers'
+                    : 'Show Maneuvers'}
+                </Button>
+                <div className={'flex'}>
+                  <div
+                    className={'flex pointer'}
+                    style={{ alignSelf: 'center' }}
+                    onClick={this.exportToJson}
+                  >
+                    <Icon circular name={'download'} />
+                    <div className={'pa1 b f6'}>{'JSON'}</div>
+                  </div>
+                  <div
+                    className={'ml2 flex pointer'}
+                    style={{ alignSelf: 'center' }}
+                    onClick={this.exportToGeoJson}
+                  >
+                    <Icon circular name={'download'} />
+                    <div className={'pa1 b f6'}>{'GeoJSON'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {this.state.showResults[i] ? (
+                <div className={'flex-column'}>
+                  <Maneuvers legs={legs} idx={i} />
+                </div>
+              ) : null}
             </div>
-          ) : null}
-        </div>
-      </Segment>
+          </Segment>
+        )
+      })
+    }
+    if (!data.trip) {
+      return ''
+    }
+    return (
+      <>
+        <Segment
+          style={{
+            margin: '0 1rem 10px',
+            display: successful ? 'block' : 'none',
+          }}
+        >
+          <div className={'flex-column'}>
+            <Summary
+              header={'Directions'}
+              summary={data.trip.summary}
+              idx={-1}
+            />
+            <div className={'flex justify-between'}>
+              <Button
+                size="mini"
+                toggle
+                active={this.state.showResults[-1]}
+                onClick={() => this.showManeuvers(-1)}
+              >
+                {this.state.showResults[-1]
+                  ? 'Hide Maneuvers'
+                  : 'Show Maneuvers'}
+              </Button>
+              <div className={'flex'}>
+                <div
+                  className={'flex pointer'}
+                  style={{ alignSelf: 'center' }}
+                  onClick={this.exportToJson}
+                >
+                  <Icon circular name={'download'} />
+                  <div className={'pa1 b f6'}>{'JSON'}</div>
+                </div>
+                <div
+                  className={'ml2 flex pointer'}
+                  style={{ alignSelf: 'center' }}
+                  onClick={this.exportToGeoJson}
+                >
+                  <Icon circular name={'download'} />
+                  <div className={'pa1 b f6'}>{'GeoJSON'}</div>
+                </div>
+              </div>
+            </div>
+
+            {this.state.showResults[-1] ? (
+              <div className={'flex-column'}>
+                <Maneuvers
+                  legs={data.trip ? data.trip.legs : undefined}
+                  idx={-1}
+                />
+              </div>
+            ) : null}
+          </div>
+        </Segment>
+        {alternates.length ? alternates : ''}
+      </>
     )
   }
 }

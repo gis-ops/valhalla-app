@@ -22,6 +22,8 @@ const initialState = {
   highlightSegment: {
     startIndex: -1,
     endIndex: -1,
+    // -1 is main route, other values are indices into the alternate array
+    alternate: -1,
   },
   waypoints: [],
   zoomObj: {
@@ -32,13 +34,14 @@ const initialState = {
   results: {
     [VALHALLA_OSM_URL]: {
       data: {},
-      show: true,
+      show: {
+        '-1': true,
+      },
     },
   },
 }
 
 export const directions = (state = initialState, action) => {
-  // console.log(action) //eslint-disable-line
   switch (action.type) {
     case UPDATE_INCLINE_DECLINE:
       return {
@@ -53,7 +56,10 @@ export const directions = (state = initialState, action) => {
           ...state.results,
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
-            show: action.payload.show,
+            show: {
+              ...state.results[action.payload.provider].show,
+              [action.payload.idx]: action.payload.show,
+            },
           },
         },
       }
@@ -72,7 +78,15 @@ export const directions = (state = initialState, action) => {
         },
       }
 
-    case RECEIVE_ROUTE_RESULTS:
+    case RECEIVE_ROUTE_RESULTS: {
+      const { alternates } = action.payload.data
+
+      const show = {}
+      if (alternates) {
+        for (let i = 0; i < alternates.length; ++i) {
+          show[i] = true
+        }
+      }
       return {
         ...state,
         inclineDeclineTotal: undefined,
@@ -81,10 +95,15 @@ export const directions = (state = initialState, action) => {
           [action.payload.provider]: {
             ...state.results[action.payload.provider],
             data: action.payload.data,
+            show: {
+              '-1': true,
+              ...show,
+            },
           },
         },
         successful: true,
       }
+    }
 
     case RECEIVE_GEOCODE_RESULTS:
       return {

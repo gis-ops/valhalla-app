@@ -522,9 +522,16 @@ class Map extends React.Component {
   handleHighlightSegment = () => {
     const { highlightSegment, results } = this.props.directions
 
-    const coords = results[VALHALLA_OSM_URL].data.decodedGeometry
+    const { startIndex, endIndex, alternate } = highlightSegment
 
-    const { startIndex, endIndex } = highlightSegment
+    let coords
+    if (alternate == -1) {
+      coords = results[VALHALLA_OSM_URL].data.decodedGeometry
+    } else {
+      coords =
+        results[VALHALLA_OSM_URL].data.alternates[alternate].decodedGeometry
+    }
+
     if (startIndex > -1 && endIndex > -1) {
       L.polyline(coords.slice(startIndex, endIndex + 1), {
         color: 'yellow',
@@ -633,14 +640,14 @@ class Map extends React.Component {
     const { results } = this.props.directions
     routeLineStringLayer.clearLayers()
 
-    if (
-      Object.keys(results[VALHALLA_OSM_URL].data).length > 0 &&
-      results[VALHALLA_OSM_URL].show
-    ) {
+    if (Object.keys(results[VALHALLA_OSM_URL].data).length > 0) {
       const response = results[VALHALLA_OSM_URL].data
       // show alternates if they exist on the respsonse
       if (response.alternates) {
         for (let i = 0; i < response.alternates.length; i++) {
+          if (!results[VALHALLA_OSM_URL].show[i]) {
+            continue
+          }
           const alternate = response.alternates[i]
           const coords = alternate.decodedGeometry
           const summary = alternate.trip.summary
@@ -662,6 +669,9 @@ class Map extends React.Component {
               sticky: true,
             })
         }
+      }
+      if (!results[VALHALLA_OSM_URL].show[-1]) {
+        return
       }
       const coords = response.decodedGeometry
       const summary = response.trip.summary
