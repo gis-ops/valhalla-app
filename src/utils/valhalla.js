@@ -88,7 +88,7 @@ export const buildIsochronesRequest = ({
       show_locations: true,
       costing: valhalla_profile,
       costing_options: {
-        [valhalla_profile]: settings,
+        [valhalla_profile]: { ...settings.costing },
       },
       contours: makeContours({ maxRange, interval }),
       locations: makeLocations([center]),
